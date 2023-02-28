@@ -49,7 +49,7 @@ export function Hero() {
         <YoutubeEmbed 
           videoId="PKy4OA3EmFg" 
           height={ mobile ? Math.floor(height / 1.8) : Math.floor(height / 1.5) } 
-          width={ mobile ? Math.floor(width / 1.1) : Math.floor(width / 2.5) }/>
+          width={ mobile ? Math.floor(width / 1.1) : Math.floor(width / 2) }/>
         </div>
       </div>
       <div className="mt-36 lg:mt-20">
