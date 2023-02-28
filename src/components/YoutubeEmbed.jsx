@@ -1,10 +1,10 @@
 import YouTube from 'react-youtube';
 
-function YoutubeEmbed({ videoId }) {
+function YoutubeEmbed({ videoId, height, width }) {
 
   const opts = {
-    height: '390',
-    width: '640',
+    height: height,
+    width: width,
     playerVars: {
       autoplay: 0,
     },
