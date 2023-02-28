@@ -44,7 +44,7 @@ export function Hero() {
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
         Use our our intuitive AI tool to create amazing meeting notes without lifting a finger.
       </p>
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-10 bg-blue-200 rounded-md sm:mx-48 p-4">
         <div>
         <YoutubeEmbed 
           videoId="PKy4OA3EmFg" 
