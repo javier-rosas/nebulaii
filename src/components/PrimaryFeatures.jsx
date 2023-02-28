@@ -12,27 +12,27 @@ import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
 
 const features = [
   {
-    title: 'Payroll',
+    title: 'Save 10 minutes every meeting',
     description:
-      "Keep track of everyone's salaries and whether or not they've been paid. Direct deposit not supported.",
+      "Get meeting notes in seconds. Highlight the ones that matter most.",
     image: screenshotPayroll,
   },
   {
-    title: 'Claim expenses',
+    title: 'Stay focused on the conversation',
     description:
-      "All of your receipts organized into one place, as long as you don't mind typing in the data by hand.",
+      "No more multi-tasking. Stay engaged and we'll handle the rest.",
     image: screenshotExpenses,
   },
   {
-    title: 'VAT handling',
+    title: 'Send notes to your CRM & ATS',
     description:
-      "We only sell our software to companies who don't deal with VAT at all, so technically we do all the VAT stuff they need.",
+      "Hubspot, Salesforce, & Pipedrive Integrations help you close the loop.",
     image: screenshotVatReturns,
   },
   {
-    title: 'Reporting',
+    title: 'Create notes in multiple languages',
     description:
-      'Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.',
+      'Including English, Spanish, and more coming soon.',
     image: screenshotReporting,
   },
 ]
@@ -72,11 +72,10 @@ export function PrimaryFeatures() {
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            Everything you need to run your books.
+            Enhance remote work.
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            Well everything you need if you aren’t that picky about minor
-            details like tax compliance.
+            Finally, a way to make meetings tolerable (and even fun!)
           </p>
         </div>
         <Tab.Group

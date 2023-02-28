@@ -14,10 +14,10 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>TaxPal - Accounting made simple for small businesses</title>
+        <title>Nebulaii - AI note taker. </title>
         <meta
           name="description"
-          content="Most bookkeeping software is accurate, but hard to use. We make the opposite trade-off, and hope you don’t get audited."
+          content="Our AI is so good, it's like having a personal secretary that never takes a coffee break"
         />
       </Head>
       <Header />
