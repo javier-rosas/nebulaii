@@ -10,6 +10,7 @@ import logoTransistor from '@/images/logos/transistor.svg'
 import logoTuple from '@/images/logos/tuple.svg'
 import YoutubeEmbed from './YoutubeEmbed';
 import useWindowDimensions from '../hooks/useWindowDimensions'
+import { useState, useEffect } from 'react'
 
 export function Hero() {
   // window height and width
@@ -43,15 +44,15 @@ export function Hero() {
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
         Use our our intuitive AI tool to create amazing meeting notes without lifting a finger.
       </p>
-      <div className="flex justify-center	mt-10">
+      <div className="flex justify-center mt-10">
         <div>
         <YoutubeEmbed 
           videoId="PKy4OA3EmFg" 
-          height={ mobile ? Math.floor(height / 2.5) : Math.floor(height / 2) } 
-          width={ mobile ? Math.floor(height / 3) : Math.floor(width / 2.5) }/>
+          height={ mobile ? Math.floor(height / 1.5) : Math.floor(height / 1.5) } 
+          width={ mobile ? Math.floor(width / 1.1) : Math.floor(width / 2) }/>
         </div>
       </div>
-      <div className="mt-36 lg:mt-44">
+      <div className="mt-36 lg:mt-20">
         <p className="font-display text-base text-slate-900">
           Trusted by these six companies so far
         </p>
