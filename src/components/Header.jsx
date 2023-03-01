@@ -82,7 +82,8 @@ function MobileNavigation() {
             <MobileNavLink href="#pricing">Pricing</MobileNavLink>
             <hr className="m-2 border-slate-300/40" />
             {/* <MobileNavLink href="/login">Sign in</MobileNavLink> */}
-            <a className="block w-full p-2" href="/api/auth/login">Login</a>
+            {/* <a className="block w-full p-2" href="/api/auth/login">Login</a> */}
+            <Link className="block w-full p-2" href="/api/auth/login">Login</Link>
           </Popover.Panel>
         </Transition.Child>
       </Transition.Root>
@@ -107,7 +108,8 @@ export function Header() {
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
             <div className="hidden md:block">
-              <a className="block w-full p-2" href="/api/auth/login">Login</a>
+              {/* <a className="block w-full p-2" href="/api/auth/login">Login</a> */}
+              <Link className="block w-full p-2" href="/api/auth/login">Login</Link>
             </div>
             <Button href="/register" color="blue">
               <span>

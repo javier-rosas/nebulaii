@@ -1,5 +1,6 @@
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image'
+import Link from 'next/link'
 
 function Dashboard(): any {
   const { user, error, isLoading } = useUser();
@@ -13,7 +14,7 @@ function Dashboard(): any {
         <Image src={user.picture} alt={user.name} width={500} height={500} />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
-        <a href="/api/auth/logout">Logout</a>
+        <Link href="/api/auth/logout">Logout</Link>
       </div>
       
     )
