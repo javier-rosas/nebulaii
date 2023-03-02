@@ -8,24 +8,24 @@ import logoStatamic from '@/images/logos/statamic.svg'
 import logoStaticKit from '@/images/logos/statickit.svg'
 import logoTransistor from '@/images/logos/transistor.svg'
 import logoTuple from '@/images/logos/tuple.svg'
-import YoutubeEmbed from './YoutubeEmbed';
+import YoutubeEmbed from './YoutubeEmbed'
 import useWindowDimensions from '../hooks/useWindowDimensions'
 import { useState, useEffect } from 'react'
 
 export function Hero() {
   // window height and width
-  const { height, width } = useWindowDimensions();
-  const [ mobile, setMobile ] = useState(false);
+  const { height, width } = useWindowDimensions()
+  const [mobile, setMobile] = useState(false)
 
-    // set mobile or desktop size
-    useEffect(() => {
-      if (!width) return;
-      if (width < 640) {
-        setMobile(true);
-      } else {
-        setMobile(false);
-      }
-    }, [width]);
+  // set mobile or desktop size
+  useEffect(() => {
+    if (!width) return
+    if (width < 640) {
+      setMobile(true)
+    } else {
+      setMobile(false)
+    }
+  }, [width])
 
   return (
     <Container className="pt-20 pb-16 text-center lg:pt-32">
@@ -44,14 +44,15 @@ export function Hero() {
         </span>{' '}
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-        Use our our intuitive AI tool to create amazing meeting notes without lifting a finger.
+        Use our our intuitive AI tool to create amazing meeting notes without
+        lifting a finger.
       </p>
-      <div className="flex justify-center mt-10 rounded-lg p-2 mr-10 ml-10">
-        <div className=''>
-        <YoutubeEmbed 
-          videoId="PKy4OA3EmFg" 
-          height={ mobile ? '197rem' : '282rem'} 
-          width={ mobile? '350rem' : '500rem'}
+      <div className="mt-10 mr-10 ml-10 flex justify-center rounded-lg p-2">
+        <div>
+          <YoutubeEmbed
+            videoId="PKy4OA3EmFg"
+            height={mobile ? '197rem' : '282rem'}
+            width={mobile ? '350rem' : '500rem'}
           />
         </div>
       </div>
