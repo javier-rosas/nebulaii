@@ -22,6 +22,8 @@ export function Hero() {
       if (!width) return;
       if (width < 640) {
         setMobile(true);
+      } else {
+        setMobile(false);
       }
     }, [width]);
 
@@ -44,12 +46,13 @@ export function Hero() {
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
         Use our our intuitive AI tool to create amazing meeting notes without lifting a finger.
       </p>
-      <div className="flex justify-center mt-10 bg-blue-200 rounded-lg sm:mx-48 p-4">
-        <div>
+      <div className="flex justify-center mt-10  rounded-lg sm:mx-60 p-2">
+        <div className=''>
         <YoutubeEmbed 
           videoId="PKy4OA3EmFg" 
-          height={ mobile ? Math.floor(height / 3.2) : Math.floor(height / 1.7) } 
-          width={ mobile ? Math.floor(width / 1.2) : Math.floor(width / 1.9) }/>
+          height={ mobile ? '197rem' :  '282rem'} 
+          width={ mobile ? '350rem' : '500rem'}
+          />
         </div>
       </div>
       <div className="mt-36 lg:mt-20">
