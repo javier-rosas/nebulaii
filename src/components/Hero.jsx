@@ -50,8 +50,8 @@ export function Hero() {
         <div className=''>
         <YoutubeEmbed 
           videoId="PKy4OA3EmFg" 
-          height={ !!mobile ? '197rem' :  '282rem'} 
-          width={ !!mobile ? '350rem' : '500rem'}
+          height={ '282rem'} 
+          width={ '500rem'}
           />
         </div>
       </div>
