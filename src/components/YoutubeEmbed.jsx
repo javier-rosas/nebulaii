@@ -14,7 +14,7 @@ function YoutubeEmbed({ videoId, height, width }) {
       <YouTube
         videoId={videoId}
         opts={opts}
-        className="w-full h-full aspect-video"
+        className="w-full h-full aspect-video mx-12"
       />
   );
 }

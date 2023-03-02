@@ -47,7 +47,7 @@ export function Hero() {
         Use our our intuitive AI tool to create amazing meeting notes without lifting a finger.
       </p>
       <div className="flex justify-center mt-10 rounded-lg p-2">
-        <div className='mx-60'>
+        <div className=''>
         <YoutubeEmbed 
           videoId="PKy4OA3EmFg" 
           height={ '282rem'} 
