@@ -26,6 +26,9 @@
       ],
       "@/images/*": [
         "src/images/*"
+      ],
+      "@/services/*": [
+        "src/services/*"
       ]
     },
     "skipLibCheck": true,
