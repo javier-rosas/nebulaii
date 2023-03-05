@@ -1,5 +1,4 @@
 import Head from 'next/head'
-
 import { CallToAction } from '@/components/CallToAction'
 import { Faqs } from '@/components/Faqs'
 import { Footer } from '@/components/Footer'
@@ -9,21 +8,20 @@ import { Pricing } from '@/components/Pricing'
 import { PrimaryFeatures } from '@/components/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/SecondaryFeatures'
 import { Testimonials } from '@/components/Testimonials'
-
-import { useEffect } from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { useUser } from '@auth0/nextjs-auth0/client'
 
 export default function Home() {
 
-  const { user } = useUser();
+  const { user } = useUser()
   const router = useRouter();
 
   useEffect(() => {
     if (user) {
-      router.push('/dashboard');
+      router.push('/dashboard')
     }
-  }, [user, router]);
+  }, [user, router])
 
   return (
     <>

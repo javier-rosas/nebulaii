@@ -17,11 +17,10 @@ const initialState: UserState = {
 // authenticate User
 export const apiAuthenticateUser = createAsyncThunk(
   'user/authenticate',
-  async (payload, { rejectWithValue }) => {
+  async (payload: any, { rejectWithValue }) => {
     try {
       const response = await authenticateUser(payload)
-      console.log('From the bakend', response.data.token)
-      return response.data.token
+      return response
     } catch (e: any) {
       if (!e.response) throw e
       return rejectWithValue(e.response.data)
@@ -41,6 +40,7 @@ export const userSlice = createSlice({
       })
       .addCase(apiAuthenticateUser.fulfilled, (state, action) => {
         state.status = 'succeeded'
+        console.log("slice action payload", action.payload)
         localStorage.setItem('user_token', action.payload)
       })
       .addCase(apiAuthenticateUser.rejected, (state, action) => {

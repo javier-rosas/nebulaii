@@ -29,6 +29,9 @@
       ],
       "@/services/*": [
         "src/services/*"
+      ],
+      "@/redux/*": [
+        "src/redux/*"
       ]
     },
     "skipLibCheck": true,

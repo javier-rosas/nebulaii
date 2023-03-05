@@ -1,24 +1,20 @@
-const authApi = process.env.AWS_AUTHENTICATION_API
+const authApi = process.env.NEXT_PUBLIC_AWS_AUTHENTICATION_API
 
 export async function authenticateUser(userData: any) {
-  return fetch(`${authApi}/authenticate`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(userData)
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to authenticate user');
-      }
-      return response.json();
+  try {
+    const response = await fetch(`${authApi}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
     })
-    .then((data) => {
-      console.log('From the backend', data.token);
-      return data.token;
-    })
-    .catch((error) => {
-      throw error;
-    });
+    if (!response.ok) {
+      throw new Error('Failed to authenticate user')
+    }
+    const data = await response.json()
+    return data.token
+  } catch (error) {
+    throw error
+  }
 }
