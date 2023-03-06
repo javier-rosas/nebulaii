@@ -32,16 +32,19 @@
       ],
       "@/redux/*": [
         "src/redux/*"
+      ],
+      "@/types/*": [
+        "src/types/*"
       ]
     },
     "skipLibCheck": true,
     "incremental": true
-  },
+  },  
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/components/Header.jsx", "src/pages/dashboard/Main.jsx"  ],
   "exclude": [
     "node_modules"
   ]

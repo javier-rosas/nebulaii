@@ -1,11 +1,13 @@
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client'
-import Link from 'next/link'
+import { useUser, withPageAuthRequired, UserContext } from '@auth0/nextjs-auth0/client'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { apiAuthenticateUser } from '@/redux/userSlice'
+import Upload from './Upload'
+import Main from './Main'
 
 function Dashboard(): JSX.Element | undefined {
-  const { user, error, isLoading } = useUser()
+
+  const { user, error, isLoading }: UserContext = useUser()
 
   const dispatch = useDispatch()
 
@@ -17,13 +19,10 @@ function Dashboard(): JSX.Element | undefined {
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>{error.message}</div>
-  if (!user || !user.name) return
 
   return (
     <div>
-      <h2>{user.name}</h2>
-      <p>{user.email}</p>
-      <Link href="/api/auth/logout">Logout</Link>
+      <Main upload={<Upload/>}/>
     </div>
   )
 }

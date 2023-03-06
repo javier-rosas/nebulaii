@@ -1,6 +1,7 @@
 const authApi = process.env.NEXT_PUBLIC_AWS_AUTHENTICATION_API
+import { User } from '@/types/User'
 
-export async function authenticateUser(userData: any) {
+export async function authenticateUser(userData: User) {
   try {
     const response = await fetch(`${authApi}`, {
       method: 'POST',

@@ -1,6 +1,4 @@
 import Image from 'next/image'
-
-import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import logoLaravel from '@/images/logos/laravel.svg'
 import logoMirage from '@/images/logos/mirage.svg'
@@ -13,11 +11,10 @@ import useWindowDimensions from '../hooks/useWindowDimensions'
 import { useState, useEffect } from 'react'
 
 export function Hero() {
-  // window height and width
-  const { height, width } = useWindowDimensions()
+
+  const { width } = useWindowDimensions()
   const [mobile, setMobile] = useState(false)
 
-  // set mobile or desktop size
   useEffect(() => {
     if (!width) return
     if (width < 640) {
