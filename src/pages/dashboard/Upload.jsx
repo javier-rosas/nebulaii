@@ -97,7 +97,7 @@ export default function Upload() {
               />
             </label>
           </div>
-          <h1 className="mt-2 text-base">{file.name}</h1>
+          <h1 className="mt-2 text-base">{file?.name}</h1>
         </div>
       </div>
     </div>
