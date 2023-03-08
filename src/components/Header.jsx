@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
-import { useUser } from '@auth0/nextjs-auth0/client'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
@@ -44,8 +43,6 @@ function MobileNavIcon({ open }) {
 }
 
 function MobileNavigation() {
-  const { user } = useUser()
-
   return (
     <Popover>
       <Popover.Button
@@ -79,22 +76,15 @@ function MobileNavigation() {
             as="div"
             className="absolute inset-x-0 top-full mt-4 flex origin-top flex-col rounded-2xl bg-white p-4 text-lg tracking-tight text-slate-900 shadow-xl ring-1 ring-slate-900/5"
           >
-            {!user && (
-              <>
-                <MobileNavLink href="#features">Features</MobileNavLink>
-                <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
-                <MobileNavLink href="#pricing">Pricing</MobileNavLink>
-              </>
-            )}
+            <MobileNavLink href="#features">Features</MobileNavLink>
+            <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
+            <MobileNavLink href="#pricing">Pricing</MobileNavLink>
 
             <hr className="m-2 border-slate-300/40" />
-            {user ? (
-              <Link href="/api/auth/logout">Logout</Link>
-            ) : (
-              <Link className="block w-full p-2" href="/api/auth/login">
-                Login
-              </Link>
-            )}
+
+            <Link className="block w-full p-2" href="/api/auth/login">
+              Login
+            </Link>
           </Popover.Panel>
         </Transition.Child>
       </Transition.Root>
@@ -103,8 +93,6 @@ function MobileNavigation() {
 }
 
 export function Header() {
-  const { user } = useUser()
-
   return (
     <header className="py-10">
       <Container>
@@ -113,32 +101,26 @@ export function Header() {
             <Link href="#" aria-label="Home">
               <Logo className="h-10 w-auto" />
             </Link>
-            {!user && (
-              <div className="hidden md:flex md:gap-x-6">
-                <NavLink href="#features">Features</NavLink>
-                <NavLink href="#testimonials">Testimonials</NavLink>
-                <NavLink href="#pricing">Pricing</NavLink>
-              </div>
-            )}
+
+            <div className="hidden md:flex md:gap-x-6">
+              <NavLink href="#features">Features</NavLink>
+              <NavLink href="#testimonials">Testimonials</NavLink>
+              <NavLink href="#pricing">Pricing</NavLink>
+            </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            {user && <h1> Settings </h1>}
             <div className="hidden md:block">
-              {user ? (
-                <Link href="/api/auth/logout">Logout</Link>
-              ) : (
-                <Link className="block w-full p-2" href="/api/auth/login">
-                  Login
-                </Link>
-              )}
+              <Link className="block w-full p-2" href="/api/auth/login">
+                Login
+              </Link>
             </div>
-            {!user && (
-              <Button href="/register" color="blue">
-                <span>
-                  Get started <span className="hidden lg:inline">today</span>
-                </span>
-              </Button>
-            )}
+
+            <Button href="/register" color="blue">
+              <span>
+                Get started <span className="hidden lg:inline">today</span>
+              </span>
+            </Button>
+
             <div className="-mr-1 md:hidden">
               <MobileNavigation />
             </div>

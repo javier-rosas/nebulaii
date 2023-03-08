@@ -40,7 +40,7 @@ export const userSlice = createSlice({
       })
       .addCase(apiAuthenticateUser.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        console.log("slice action payload", action.payload)
+        console.log('slice action payload', action.payload)
         localStorage.setItem('user_token', action.payload)
       })
       .addCase(apiAuthenticateUser.rejected, (state, action) => {

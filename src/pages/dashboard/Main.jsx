@@ -1,17 +1,3 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import Link from 'next/link'
 import { Logo } from '@/components/Logo'
 import { Fragment, useState } from 'react'
@@ -31,11 +17,11 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+  { name: 'Meetings', href: '#', icon: UsersIcon, current: false },
+  // { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+  // { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+  // { name: 'Documents', href: '#', icon: InboxIcon, current: false },
+  // { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '/' },
@@ -52,14 +38,6 @@ export default function Main(props) {
   const Upload = props.upload
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 lg:hidden" onClose={setSidebarOpen}>
@@ -251,7 +229,7 @@ export default function Main(props) {
           </div>
           <main>
             <div className="py-6">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex w-full items-center justify-center">
                 {Upload}
               </div>
             </div>

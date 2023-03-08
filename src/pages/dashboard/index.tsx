@@ -12,7 +12,7 @@ function Dashboard(): JSX.Element | undefined {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!localStorage.getItem('user_token') && user) {
+    if (user) {
       dispatch(apiAuthenticateUser(user) as any)
     }
   }, [user])
@@ -20,6 +20,7 @@ function Dashboard(): JSX.Element | undefined {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>{error.message}</div>
 
+  console.log("rendered dashboard")
   return (
     <div>
       <Main upload={<Upload/>}/>
