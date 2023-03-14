@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { postAudioFile } from '@/services/postAudioFile'
+import { useSelector } from 'react-redux'
 import Spinner from '@/components/Spinner'
 
 export default function Upload() {
@@ -7,6 +8,7 @@ export default function Upload() {
   const [file, setFile] = useState(null)
   const [showUploadButton, setShowUploadButton] = useState(false)
   const [showSpinner, setShowSpinner] = useState(false)
+  const user = useSelector(state => state.user.user)
 
   const handleDragEnter = (e) => {
     e.preventDefault()
@@ -50,9 +52,9 @@ export default function Upload() {
     getBase64(file)
       .then(() => setShowSpinner(true))
       .then((base64) =>
-        postAudioFile(base64, localStorage.getItem('user_token'))
+        postAudioFile(base64, user?.token)
       )
-      .then(() => setShowSpinner(false))
+      .then(() => { setShowSpinner(false); setFile(null) })
       .catch((error) => console.error(error))
   }
 
@@ -62,10 +64,10 @@ export default function Upload() {
   }, [file])
 
   return (
-    <div className="bg-white shadow sm:rounded-lg w-1/2">
+    <div className="bg-white shadow sm:rounded-lg w-1/2 h-1/6 overflow-auto">
       <div className="px-4 py-5 sm:p-6">
         <h3 className="text-base font-semibold leading-6 text-gray-900">
-          Upload any video or audio file!
+          Upload any audio file!
         </h3>
         <div className="mt-2 max-w-xl text-sm text-gray-500">
           <p>
@@ -85,12 +87,12 @@ export default function Upload() {
               onDrop={handleDrop}
             >
               <label
-                for="dropzone-file"
+                htmlFor="dropzone-file"
                 className={`dropzone ${
                   drag ? 'bg-indigo-600' : ''
                 } h-30 dark:hover:bg-bray-800 flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-indigo-600`}
               >
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <div className="flex flex-col items-center justify-center p-6">
                   <svg
                     aria-hidden="true"
                     className="mb-3 h-10 w-10 text-black"
@@ -100,22 +102,23 @@ export default function Upload() {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                     ></path>
                   </svg>
-                  <p className="mb-2 text-sm text-black">
+                  <p className="mb-2 text-sm text-black text-center">
                     <span className="font-semibold">Click to upload</span> or
                     drag and drop
                   </p>
-                  <p className="text-xs text-black">
+                  <p className="text-xs text-black text-center">
                     MP3, MP4, WAV or M4A (MAX. 8 hours)
                   </p>
                 </div>
                 <input
                   id="dropzone-file"
+                  accept=".mp3,.mp4,.wav,.m4a"
                   type="file"
                   className="hidden"
                   onChange={handleFileSelect}

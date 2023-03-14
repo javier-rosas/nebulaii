@@ -1,5 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { authenticateUser } from '@/services/userService'
+import { createSlice } from '@reduxjs/toolkit'
 
 type UserState = {
   user: any
@@ -14,41 +13,21 @@ const initialState: UserState = {
   error: null,
 }
 
-// authenticate User
-export const apiAuthenticateUser = createAsyncThunk(
-  'user/authenticate',
-  async (payload: any, { rejectWithValue }) => {
-    try {
-      const response = await authenticateUser(payload)
-      return response
-    } catch (e: any) {
-      if (!e.response) throw e
-      return rejectWithValue(e.response.data)
-    }
-  }
-)
-
 // userSlice
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(apiAuthenticateUser.pending, (state) => {
-        state.status = 'loading'
-      })
-      .addCase(apiAuthenticateUser.fulfilled, (state, action) => {
-        state.status = 'succeeded'
-        console.log('slice action payload', action.payload)
-        localStorage.setItem('user_token', action.payload)
-      })
-      .addCase(apiAuthenticateUser.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.error.message || null
-      })
+  reducers: {
+    getMongoUser: (state, action) => {
+      const user = action.payload
+      state.user = user
+      state.status = 'succeeded'
+    },
   },
 })
+
+//action selector
+export const { getMongoUser } = userSlice.actions
 
 // state selector
 export const selectUser = (state: UserState) => state.user.user

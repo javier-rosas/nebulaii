@@ -20,7 +20,7 @@ export function Logo(props) {
       </div>
     )
   } else if (router.pathname === '/dashboard'){
-    // You are not in the about page
+    // You are in the dashboard page
     return (
       <div className="flex flex-row items-center	">
         <svg aria-hidden="true" viewBox="0 0 60 40" {...props}>

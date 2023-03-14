@@ -87,8 +87,8 @@ export default function Main(props) {
                   <div className="flex flex-shrink-0 items-center px-4">
                     <img
                       className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
-                      alt="Your Company"
+                      src="/favicon.ico"
+                      alt="Nebulaii"
                     />
                   </div>
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">

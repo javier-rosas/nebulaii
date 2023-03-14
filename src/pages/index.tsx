@@ -9,13 +9,13 @@ import { PrimaryFeatures } from '@/components/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/SecondaryFeatures'
 import { Testimonials } from '@/components/Testimonials'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { UserContext } from '@auth0/nextjs-auth0/client'
+import { useEffect } from 'react'
 
 export default function Home() {
-
-  const { user } = useUser()
-  const router = useRouter();
+  const { user }: UserContext = useUser()
+  const router = useRouter()
 
   useEffect(() => {
     if (user) {
