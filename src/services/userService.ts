@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { User } from '@/types/User'
 
 const authApi = process.env.NEXT_PUBLIC_AWS_AUTHENTICATION_API

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Logo } from '@/components/Logo'
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
@@ -85,7 +86,7 @@ export default function Main(props) {
                     </div>
                   </Transition.Child>
                   <div className="flex flex-shrink-0 items-center px-4">
-                    <img
+                    <Image
                       className="h-8 w-auto"
                       src="/favicon.ico"
                       alt="Nebulaii"
@@ -189,7 +190,7 @@ export default function Main(props) {
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
-                      <img
+                      <Image
                         className="h-8 w-8 rounded-full"
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                         alt=""

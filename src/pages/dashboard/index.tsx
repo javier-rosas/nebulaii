@@ -32,7 +32,7 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
       dispatch(getMongoUser(userData) as any)
       createOrUpdateUser(userData) 
     }
-  }, [user])
+  }, [user, token, dispatch])
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>{error.message}</div>
