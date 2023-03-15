@@ -43,18 +43,9 @@ export default function Upload() {
 
   const upload = async (file) => {
     setShowSpinner(true)
-    const filename = encodeURIComponent(file.name);
-    const res = await fetch(`/api/upload-url?file=${filename}`);
-    const resJson = await res.json()
-    const url = resJson.url
-    const formData = new FormData();
-
-    formData.append('audioFile', file);
-
-    postAudioFile(url, formData)
+    postAudioFile(file)
       .then(() => { setShowSpinner(false); setFile(null) })
       .catch((error) => console.error(error))
-
   }
 
   useEffect(() => {
