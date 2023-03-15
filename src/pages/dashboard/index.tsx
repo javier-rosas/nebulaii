@@ -8,7 +8,7 @@ import Upload from './Upload'
 import Main from './Main'
 import { GetServerSidePropsContext } from 'next'
 import { authenticateUser } from '@/services/userService'
-import { getMongoUser } from '@/redux/userSlice'
+import { setMongoUser } from '@/redux/userSlice'
 import { useDispatch } from 'react-redux'
 import { User } from '@/types/User'
 import { useEffect, useRef } from 'react'
@@ -29,7 +29,7 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
         ...user,
         token
       }
-      dispatch(getMongoUser(userData) as any)
+      dispatch(setMongoUser(userData) as any)
       createOrUpdateUser(userData) 
     }
   }, [user, token, dispatch])

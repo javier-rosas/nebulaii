@@ -11,6 +11,7 @@
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.2.1",
+    "@google-cloud/storage": "^6.9.4",
     "@headlessui/react": "^1.7.8",
     "@heroicons/react": "^2.0.16",
     "@reduxjs/toolkit": "^1.9.3",

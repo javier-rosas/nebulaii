@@ -8,7 +8,7 @@ export default function Upload() {
   const [file, setFile] = useState(null)
   const [showUploadButton, setShowUploadButton] = useState(false)
   const [showSpinner, setShowSpinner] = useState(false)
-  const user = useSelector(state => state.user.user)
+  const user = useSelector((state) => state.user.user)
 
   const handleDragEnter = (e) => {
     e.preventDefault()
@@ -31,31 +31,30 @@ export default function Upload() {
     e.preventDefault()
     e.stopPropagation()
     setDrag(false)
+    if (!e.dataTransfer) return
     setFile(e.dataTransfer.files[0])
   }
 
   const handleFileSelect = (event) => {
     event.preventDefault()
+    if (!event.target.files) return
     setFile(event.target.files[0])
   }
 
-  const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = (error) => reject(error)
-    })
-  }
+  const upload = async (file) => {
+    setShowSpinner(true)
+    const filename = encodeURIComponent(file.name);
+    const res = await fetch(`/api/upload-url?file=${filename}`);
+    const resJson = await res.json()
+    const url = resJson.url
+    const formData = new FormData();
 
-  const upload = (file) => {
-    getBase64(file)
-      .then(() => setShowSpinner(true))
-      .then((base64) =>
-        postAudioFile(base64, user?.token)
-      )
+    formData.append('audioFile', file);
+
+    postAudioFile(url, formData)
       .then(() => { setShowSpinner(false); setFile(null) })
       .catch((error) => console.error(error))
+
   }
 
   useEffect(() => {

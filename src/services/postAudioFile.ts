@@ -1,17 +1,14 @@
-const postAudioFileApi = process.env.NEXT_PUBLIC_AWS_POST_AUDIO_FILE_API
-
 export async function postAudioFile(
+  url: string,
   file: string | ArrayBuffer | null,
-  token: string
 ) {
   try {
-    const response = await fetch(`${postAudioFileApi}`, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: token,
       },
-      body: JSON.stringify({ event: `${file}` }),
+      body: file,
     })
     const result = await response.json()
     console.log(result)

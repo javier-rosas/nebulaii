@@ -44,7 +44,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/components/Header.jsx", "src/pages/dashboard/Main.jsx"  ],
+, "src/components/Header.jsx", "src/pages/dashboard/Main.jsx", "src/pages/_app.jsx", "src/pages/dashboard/Upload.jsx"  ],
   "exclude": [
     "node_modules"
   ]

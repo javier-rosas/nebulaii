@@ -18,7 +18,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    getMongoUser: (state, action) => {
+    setMongoUser: (state, action) => {
       const user = action.payload
       state.user = user
       state.status = 'succeeded'
@@ -27,7 +27,7 @@ export const userSlice = createSlice({
 })
 
 //action selector
-export const { getMongoUser } = userSlice.actions
+export const { setMongoUser } = userSlice.actions
 
 // state selector
 export const selectUser = (state: UserState) => state.user.user
