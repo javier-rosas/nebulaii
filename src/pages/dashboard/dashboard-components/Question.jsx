@@ -27,10 +27,10 @@ export default function Question({ upload, file }) {
 
   const cancelButtonRef = useRef(null)
 
-  const uploadFile = async (file) => {
-    setOpen(false)
-    upload(file)
-  }
+  // const uploadFile = async (file) => {
+  //   setOpen(false)
+  //   upload(file)
+  // }
 
   const clickNext = () => {
     setQuestionTextIndex(questionTextIndex + 1)
@@ -91,6 +91,7 @@ export default function Question({ upload, file }) {
                 </div>
                 {questionTextIndex === 0 && (
                   <div className="mt-5 mb-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+
                     {!showNumberInput && (
                       <button
                         type="button"
@@ -100,6 +101,7 @@ export default function Question({ upload, file }) {
                         It has more than one speaker
                       </button>
                     )}
+
                     {showNumberInput && <NumberInput />}
                     <button
                       type="button"
@@ -111,6 +113,7 @@ export default function Question({ upload, file }) {
                     </button>
                   </div>
                 )}
+
                 {questionTextIndex === 1 && (
                   <div className="mt-2 mb-5 flex justify-center">
                     <Dropdown />
@@ -118,6 +121,7 @@ export default function Question({ upload, file }) {
                 )}
 
                 <div className="mb-10 flex justify-center">
+
                   {questionTextIndex === 0 && showNumberInput && (
                     <button
                       type="button"
@@ -128,6 +132,7 @@ export default function Question({ upload, file }) {
                       Next
                     </button>
                   )}
+
                   {questionTextIndex === 1 && (
                     <button
                       type="button"
@@ -138,6 +143,7 @@ export default function Question({ upload, file }) {
                       Upload
                     </button>
                   )}
+
                 </div>
                 <Steps index={questionTextIndex} />
               </Dialog.Panel>
