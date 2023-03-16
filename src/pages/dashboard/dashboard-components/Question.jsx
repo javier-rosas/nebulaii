@@ -105,7 +105,7 @@ export default function Question({ upload, file }) {
                       onClick={() => clickNext()}
                       ref={cancelButtonRef}
                     >
-                      I don't know
+                      I don&apos;t know
                     </button>
                   </div>
                 )}
