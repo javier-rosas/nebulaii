@@ -9,8 +9,7 @@ import Dropdown from './Dropdown'
 const questions = [
   {
     main: 'Do you know if the audio has more than one speaker?',
-    description:
-      "Our AI can transcribe and summarize audio more accurately when it knows how many speakers are involved in the conversation. If you're not sure about the exact number of speakers, simply provide your best estimate.",
+    description: "Our AI can transcribe and summarize audio more accurately when it knows how many speakers are involved in the conversation. If you&apos;re not sure about the exact number of speakers, simply provide your best estimate.",
   },
   {
     main: 'Which language is the audio in?',
