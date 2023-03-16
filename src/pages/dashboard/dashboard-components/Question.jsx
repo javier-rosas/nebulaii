@@ -9,10 +9,8 @@ import Dropdown from './Dropdown'
 const questions = [
   {
     main: 'Do you know if the audio has more than one speaker?',
-    description: `Our AI is better at transcribing and summarizing audio
-    if it knows how many speakers are in the conversation.
-    If you don't know exactly how many speakers, just
-    provide an estimate.`,
+    description:
+      "Our AI can transcribe and summarize audio more accurately when it knows how many speakers are involved in the conversation. If you're not sure about the exact number of speakers, simply provide your best estimate.",
   },
   {
     main: 'Which language is the audio in?',
@@ -91,7 +89,6 @@ export default function Question({ upload, file }) {
                 </div>
                 {questionTextIndex === 0 && (
                   <div className="mt-5 mb-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-
                     {!showNumberInput && (
                       <button
                         type="button"
@@ -121,7 +118,6 @@ export default function Question({ upload, file }) {
                 )}
 
                 <div className="mb-10 flex justify-center">
-
                   {questionTextIndex === 0 && showNumberInput && (
                     <button
                       type="button"
@@ -143,7 +139,6 @@ export default function Question({ upload, file }) {
                       Upload
                     </button>
                   )}
-
                 </div>
                 <Steps index={questionTextIndex} />
               </Dialog.Panel>
