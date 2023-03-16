@@ -37,7 +37,7 @@ export default function Dropdown() {
           <div className="py-1">
             {languages.map((language) => {
               return (
-                <Menu.Item id={language.id}>
+                <Menu.Item key={language.id}>
                   {({ active }) => (
                     <button
                       className={classNames(
