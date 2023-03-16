@@ -37,10 +37,9 @@ export default function Dropdown() {
           <div className="py-1">
             {languages.map((language) => {
               return (
-                <Menu.Item>
+                <Menu.Item id={language.id}>
                   {({ active }) => (
                     <button
-                      id={language.id}
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                         'block px-2 py-2 text-sm'
