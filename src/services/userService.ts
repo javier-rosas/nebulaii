@@ -1,8 +1,7 @@
 import { User } from '@/types/User'
 
-const authApi = process.env.NEXT_PUBLIC_AWS_AUTHENTICATION_API
+const authApi = process.env.AWS_AUTHENTICATION_API
 const mongoUserModelAndDaoApiUrl = process.env.NEXT_PUBLIC_AWS_MONGO_USER_MODEL_AND_DAO
-
 
 export async function authenticateUser(userData: User) {
   try {

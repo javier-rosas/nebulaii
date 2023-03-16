@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { postAudioFile } from '@/services/postAudioFile'
 import { useSelector } from 'react-redux'
 import Spinner from '@/components/Spinner'
+import Question from './Question'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
@@ -117,15 +118,16 @@ export default function Upload() {
             </div>
             <h1 className="mt-2 text-base">{file?.name}</h1>
             {showUploadButton && file && (
-              <div className="mt-5">
-                <button
-                  onClick={() => upload(file)}
-                  type="button"
-                  className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                >
-                  Upload
-                </button>
-              </div>
+              <Question upload={upload} file={file}/>
+              // <div className="mt-5">
+              //   <button
+              //     onClick={() => upload(file)}
+              //     type="button"
+              //     className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              //   >
+              //     Upload
+              //   </button>
+              // </div>
             )}
           </div>
         )}
