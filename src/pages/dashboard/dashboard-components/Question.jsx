@@ -1,6 +1,8 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { useDispatch } from 'react-redux'
+import { setEnableSpeakerDiarization } from '@/redux/fileSlice'
 
 import NumberInput from './NumberInput'
 import Steps from './Steps'
@@ -9,7 +11,8 @@ import Dropdown from './Dropdown'
 const questions = [
   {
     main: 'Do you know if the audio has more than one speaker?',
-    description: "Our AI can transcribe and summarize audio more accurately when it knows how many speakers are involved in the conversation. If you&apos;re not sure about the exact number of speakers, simply provide your best estimate.",
+    description:
+      'Our AI can transcribe and summarize audio more accurately when it knows how many speakers are involved in the conversation. If you&apos;re not sure about the exact number of speakers, simply provide your best estimate.',
   },
   {
     main: 'Which language is the audio in?',
@@ -17,17 +20,18 @@ const questions = [
   },
 ]
 
-export default function Question({ upload, file }) {
+export default function Question({ upload, file, setFile }) {
   const [open, setOpen] = useState(true)
   const [showNumberInput, setNumberInput] = useState(false)
+  const [isUploadBtnActivated, setIsUploadBtnActivated] = useState(false)
   const [questionTextIndex, setQuestionTextIndex] = useState(0)
-
+  const dispatch = useDispatch()
   const cancelButtonRef = useRef(null)
 
-  // const uploadFile = async (file) => {
-  //   setOpen(false)
-  //   upload(file)
-  // }
+  const closePopUp = (isClosed) => {
+    setOpen(isClosed)
+    setFile(null)
+  }
 
   const clickNext = () => {
     setQuestionTextIndex(questionTextIndex + 1)
@@ -39,7 +43,7 @@ export default function Question({ upload, file }) {
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={setOpen}
+        onClose={closePopUp}
       >
         <Transition.Child
           as={Fragment}
@@ -92,7 +96,10 @@ export default function Question({ upload, file }) {
                       <button
                         type="button"
                         className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-                        onClick={() => setNumberInput(true)}
+                        onClick={() => {
+                          setNumberInput(true)
+                          dispatch(setEnableSpeakerDiarization(true))
+                        }}
                       >
                         It has more than one speaker
                       </button>
@@ -102,7 +109,10 @@ export default function Question({ upload, file }) {
                     <button
                       type="button"
                       className="mt-3 w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                      onClick={() => clickNext()}
+                      onClick={() => {
+                        clickNext()
+                        dispatch(setEnableSpeakerDiarization(false))
+                      }}
                       ref={cancelButtonRef}
                     >
                       I don&apos;t know
@@ -112,8 +122,15 @@ export default function Question({ upload, file }) {
 
                 {questionTextIndex === 1 && (
                   <div className="mt-2 mb-5 flex justify-center">
-                    <Dropdown />
+                    <Dropdown
+                      setIsUploadBtnActivated={setIsUploadBtnActivated}
+                    />
                   </div>
+                )}
+                {!isUploadBtnActivated && (
+                  <p className="m-3 flex justify-center text-red-400">
+                    Choose a language before uploading.
+                  </p>
                 )}
 
                 <div className="mb-10 flex justify-center">
@@ -130,6 +147,7 @@ export default function Question({ upload, file }) {
 
                   {questionTextIndex === 1 && (
                     <button
+                      disabled={!isUploadBtnActivated}
                       type="button"
                       onClick={() => upload(file)}
                       ref={cancelButtonRef}

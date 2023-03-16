@@ -1,10 +1,14 @@
-const generateSignedUrl = async (file: File) => {
+const generateSignedUrl = async (file: File, userEmail: string) => {
   const response = await fetch('/api/upload-url', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ fileName: file.name, contentType: file.type }),
+    body: JSON.stringify({ 
+      fileName: file.name, 
+      contentType: file.type,
+      userEmail
+    }),
   })
   if (response.ok) {
     const data = await response.json()
@@ -14,9 +18,9 @@ const generateSignedUrl = async (file: File) => {
   }
 }
 
-export async function postAudioFile(file: File) {
+export async function postAudioFile(file: File, userEmail: string) {
   try {
-    const signedUrl = await generateSignedUrl(file)
+    const signedUrl = await generateSignedUrl(file, userEmail)
     const requestOptions = {
       method: 'PUT',
       headers: {

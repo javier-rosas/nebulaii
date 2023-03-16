@@ -1,11 +1,11 @@
 import { Storage } from '@google-cloud/storage'
 const storage = new Storage()
-const bucketName = 'nebulaii-audio-files'
+const bucketName = process.env.GCP_BUCKET_NAME
 
 // Generate signed URL
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { fileName, contentType } = req.body
+    const { fileName, contentType, userEmail } = req.body
 
     try {
       const options = {
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
       const signedUrl = await storage
         .bucket(bucketName)
-        .file(fileName)
+        .file(`${userEmail}/${fileName}`)
         .getSignedUrl(options)
 
       res.status(200).json({ url: signedUrl[0] })

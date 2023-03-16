@@ -1,22 +1,35 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setMinSpeakerCount } from '@/redux/fileSlice';
+import { setMaxSpeakerCount } from '@/redux/fileSlice';
 
 const NumberInput = () => {
   const [count, setCount] = useState(1);
+  const dispatch = useDispatch()
+
+  const setSpeakerCount = (count) => {
+    dispatch(setMinSpeakerCount(count));
+    dispatch(setMaxSpeakerCount(count))
+  }
 
   const increment = () => {
     setCount(count + 1);
+    setSpeakerCount(count)
   };
 
   const decrement = () => {
     if (count > 0) {
       setCount(count - 1);
+      setSpeakerCount(count)
     } else {
       setCount(0);
+      setSpeakerCount(count)
     }
   };
 
   const handleChange = (event) => {
     setCount(parseInt(event.target.value));
+    setSpeakerCount(count)
   };
 
   return (

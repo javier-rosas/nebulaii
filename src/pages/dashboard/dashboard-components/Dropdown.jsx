@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useDispatch } from 'react-redux'
+import { setLanguage } from '@/redux/fileSlice'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -11,7 +13,10 @@ const languages = [
   { id: '2', language: 'English' },
 ]
 
-export default function Dropdown() {
+export default function Dropdown({ setIsUploadBtnActivated }) {
+
+  const dispatch = useDispatch()
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -40,6 +45,10 @@ export default function Dropdown() {
                 <Menu.Item key={language.id}>
                   {({ active }) => (
                     <button
+                      onClick={() => {
+                        dispatch(setLanguage(language.language));
+                        setIsUploadBtnActivated(true)
+                      }}
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                         'block px-2 py-2 text-sm'

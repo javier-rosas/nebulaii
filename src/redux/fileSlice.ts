@@ -32,10 +32,10 @@ export const fileSlice = createSlice({
       state.enableSpeakerDiarization = action.payload
     },
     setMinSpeakerCount: (state, action) => {
-      state.filename = action.payload
+      state.minSpeakerCount = action.payload
     },
     setMaxSpeakerCount: (state, action) => {
-      state.filename = action.payload
+      state.maxSpeakerCount = action.payload
     },
   },
 })

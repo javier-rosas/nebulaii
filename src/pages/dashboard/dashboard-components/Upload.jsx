@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react'
 import { postAudioFile } from '@/services/postAudioFile'
-import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { setFilename } from '@/redux/fileSlice'
 import Spinner from '@/components/Spinner'
 import Question from './Question'
+import { useSelector } from 'react-redux'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
   const [file, setFile] = useState(null)
   const [showUploadButton, setShowUploadButton] = useState(false)
   const [showSpinner, setShowSpinner] = useState(false)
+  const dispatch = useDispatch()
+  const fileState = useSelector((state) => state.file)
   const user = useSelector((state) => state.user.user)
+
 
   const handleDragEnter = (e) => {
     e.preventDefault()
@@ -43,15 +48,16 @@ export default function Upload() {
   }
 
   const upload = async (file) => {
+    if (!user || !user.email || !file) return 
     setShowSpinner(true)
-    postAudioFile(file)
+    postAudioFile(file, user.email)
       .then(() => { setShowSpinner(false); setFile(null) })
       .catch((error) => console.error(error))
   }
 
   useEffect(() => {
     if (!file) setShowUploadButton(false)
-    else setShowUploadButton(true)
+    else { setShowUploadButton(true); dispatch(setFilename(file.name)) }
   }, [file])
 
   return (
@@ -118,16 +124,7 @@ export default function Upload() {
             </div>
             <h1 className="mt-2 text-base">{file?.name}</h1>
             {showUploadButton && file && (
-              <Question upload={upload} file={file}/>
-              // <div className="mt-5">
-              //   <button
-              //     onClick={() => upload(file)}
-              //     type="button"
-              //     className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              //   >
-              //     Upload
-              //   </button>
-              // </div>
+              <Question upload={upload} file={file} setFile={setFile}/>
             )}
           </div>
         )}
