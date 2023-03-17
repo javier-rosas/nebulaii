@@ -11,7 +11,7 @@ export default async function handler(req, res) {
       const options = {
         version: 'v4',
         action: 'write',
-        expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+        expires: Date.now() + 10000 * 60 * 1000, // 10,000 minutes or 7 days (max)
         contentType: contentType,
       }
 

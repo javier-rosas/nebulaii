@@ -9,6 +9,7 @@ import Spinner from '@/components/Spinner'
 import Question from './Question'
 
 export default function Upload() {
+  
   const [drag, setDrag] = useState(false)
   const [file, setFile] = useState(null)
   const [showUploadButton, setShowUploadButton] = useState(false)
@@ -64,6 +65,7 @@ export default function Upload() {
       setFile(null);
       const audioFileObj = getAudioFileObj(fileState);
       const res = await processAudioFile(audioFileObj, user.token);
+      // console.log(res)
       if (res.ok) {
         console.log('File processed successfully. Status code:', res.status);
       } else {
