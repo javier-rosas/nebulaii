@@ -37,6 +37,13 @@ export const fileSlice = createSlice({
     setMaxSpeakerCount: (state, action) => {
       state.maxSpeakerCount = action.payload
     },
+    resetFileState: (state, action) => {
+      state.filename = ''
+      state.language = ''
+      state.enableSpeakerDiarization = false
+      state.minSpeakerCount = null
+      state.maxSpeakerCount = null
+    },
   },
 })
 
@@ -47,6 +54,7 @@ export const {
   setEnableSpeakerDiarization,
   setMinSpeakerCount,
   setMaxSpeakerCount,
+  resetFileState
 } = fileSlice.actions
 
 // state selector

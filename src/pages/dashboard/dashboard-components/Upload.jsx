@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { postAudioFile } from '@/services/postAudioFile'
+import { processAudioFile } from '@/services/processAudioFile'
 import { useDispatch } from 'react-redux'
 import { setFilename } from '@/redux/fileSlice'
+import { resetFileState } from '@/redux/fileSlice'
+import { useSelector } from 'react-redux'
 import Spinner from '@/components/Spinner'
 import Question from './Question'
-import { useSelector } from 'react-redux'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
@@ -14,7 +16,6 @@ export default function Upload() {
   const dispatch = useDispatch()
   const fileState = useSelector((state) => state.file)
   const user = useSelector((state) => state.user.user)
-
 
   const handleDragEnter = (e) => {
     e.preventDefault()
@@ -47,21 +48,45 @@ export default function Upload() {
     setFile(event.target.files[0])
   }
 
-  const upload = async (file) => {
-    if (!user || !user.email || !file) return 
-    setShowSpinner(true)
-    postAudioFile(file, user.email)
-      .then(() => { setShowSpinner(false); setFile(null) })
-      .catch((error) => console.error(error))
+  const getAudioFileObj = (fileState) => {
+    return {
+      ...fileState,
+      description: '',
+      dateAdded: new Date(),
+    }
   }
+
+  const upload = async (file) => {
+    try {
+      if (!user || !user.email || !file) return;
+      setShowSpinner(true);
+      await postAudioFile(file, user.email);
+      setFile(null);
+      const audioFileObj = getAudioFileObj(fileState);
+      const res = await processAudioFile(audioFileObj, user.token);
+      if (res.ok) {
+        console.log('File processed successfully. Status code:', res.status);
+      } else {
+        console.error('File could not be processed. Status code:', res.status);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    setShowSpinner(false);
+    dispatch(resetFileState());
+  };
+  
 
   useEffect(() => {
     if (!file) setShowUploadButton(false)
-    else { setShowUploadButton(true); dispatch(setFilename(file.name)) }
+    else {
+      setShowUploadButton(true)
+      dispatch(setFilename(file.name))
+    }
   }, [file])
 
   return (
-    <div className="bg-white shadow sm:rounded-lg w-1/2 h-1/6 overflow-auto">
+    <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
         <h3 className="text-base font-semibold leading-6 text-gray-900">
           Upload any audio file!
@@ -105,11 +130,11 @@ export default function Upload() {
                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                     ></path>
                   </svg>
-                  <p className="mb-2 text-sm text-black text-center">
+                  <p className="mb-2 text-center text-sm text-black">
                     <span className="font-semibold">Click to upload</span> or
                     drag and drop
                   </p>
-                  <p className="text-xs text-black text-center">
+                  <p className="text-center text-xs text-black">
                     MP3, MP4, WAV or M4A (MAX. 8 hours)
                   </p>
                 </div>
@@ -124,7 +149,7 @@ export default function Upload() {
             </div>
             <h1 className="mt-2 text-base">{file?.name}</h1>
             {showUploadButton && file && (
-              <Question upload={upload} file={file} setFile={setFile}/>
+              <Question upload={upload} file={file} setFile={setFile} />
             )}
           </div>
         )}

@@ -2,6 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { useDispatch } from 'react-redux'
+import { resetFileState } from '@/redux/fileSlice'
 import { setEnableSpeakerDiarization } from '@/redux/fileSlice'
 
 import NumberInput from './NumberInput'
@@ -12,7 +13,7 @@ const questions = [
   {
     main: 'Do you know if the audio has more than one speaker?',
     description:
-      'Our AI can transcribe and summarize audio more accurately when it knows how many speakers are involved in the conversation. If you&apos;re not sure about the exact number of speakers, simply provide your best estimate.',
+      "Our AI can transcribe and summarize audio more accurately when it knows how many speakers are involved in the conversation. If you're not sure about the exact number of speakers, simply provide your best estimate.",
   },
   {
     main: 'Which language is the audio in?',
@@ -31,6 +32,7 @@ export default function Question({ upload, file, setFile }) {
   const closePopUp = (isClosed) => {
     setOpen(isClosed)
     setFile(null)
+    dispatch(resetFileState())
   }
 
   const clickNext = () => {
@@ -93,6 +95,17 @@ export default function Question({ upload, file, setFile }) {
                 {questionTextIndex === 0 && (
                   <div className="mt-5 mb-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                     {!showNumberInput && (
+                     <>
+                     <button
+                        type="button"
+                        className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                        onClick={() => {
+                          clickNext()
+                          dispatch(setEnableSpeakerDiarization(false))
+                        }}
+                      >
+                        Exactly 1 speaker
+                      </button>
                       <button
                         type="button"
                         className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
@@ -101,8 +114,9 @@ export default function Question({ upload, file, setFile }) {
                           dispatch(setEnableSpeakerDiarization(true))
                         }}
                       >
-                        It has more than one speaker
+                        More than 1 speaker
                       </button>
+                      </>
                     )}
 
                     {showNumberInput && <NumberInput />}
@@ -117,6 +131,7 @@ export default function Question({ upload, file, setFile }) {
                     >
                       I don&apos;t know
                     </button>
+
                   </div>
                 )}
 
@@ -127,7 +142,7 @@ export default function Question({ upload, file, setFile }) {
                     />
                   </div>
                 )}
-                {!isUploadBtnActivated && (
+                {!isUploadBtnActivated && questionTextIndex === 1 && (
                   <p className="m-3 flex justify-center text-red-400">
                     Choose a language before uploading.
                   </p>
@@ -149,7 +164,7 @@ export default function Question({ upload, file, setFile }) {
                     <button
                       disabled={!isUploadBtnActivated}
                       type="button"
-                      onClick={() => upload(file)}
+                      onClick={() => {upload(file); }}
                       ref={cancelButtonRef}
                       className="mt-3 inline-flex w-1/2 justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-400 sm:col-start-1 sm:mt-0"
                     >
