@@ -1,7 +1,7 @@
 import { User } from '@/types/User'
 
 const authApi = process.env.AWS_AUTHENTICATION_API
-const mongoUserModelAndDaoApiUrl = process.env.NEXT_PUBLIC_AWS_MONGO_USER_MODEL_AND_DAO
+const mongoUserModelAndDaoApiUrl = process.env.NEXT_PUBLIC_AWS_MONGO_USER_HANDLER
 
 export async function authenticateUser(userData: any) {
   try {
@@ -39,5 +39,23 @@ export async function createOrUpdateUser(userData: User) {
     return data
   } catch (error) {
     throw error
+  }
+}
+
+export async function getAllUserAudioTranscriptsAndNotes(user: User) {
+  try {
+    const response = await fetch(`${mongoUserModelAndDaoApiUrl}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: user.token
+      },
+      body: JSON.stringify({
+        type: "GET_ALL_USER_AUDIO_TRANSCRIPTS_AND_NOTES"
+      })
+    })
+    return response.json()
+  } catch (error) {
+    console.error('Error getting audio transcripts and notes from mongo', error)
   }
 }

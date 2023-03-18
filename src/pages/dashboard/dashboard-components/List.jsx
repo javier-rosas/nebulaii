@@ -3,7 +3,7 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/20/solid'
 import { useEffect } from 'react'
-import { getAllUserAudioTranscriptsAndNotes } from '@/services/getAllUserAudioTranscriptsAndNotes'
+import { getAllUserAudioTranscriptsAndNotes } from '@/services/userService'
 import { useSelector } from 'react-redux'
 
 const applications = [
@@ -54,7 +54,6 @@ export default function List() {
     getAllUserAudioTranscriptsAndNotes(user)
   }, [])
 
-  console.log(user)
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <ul role="list" className="divide-y divide-gray-200">
