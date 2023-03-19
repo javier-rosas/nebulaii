@@ -24,7 +24,7 @@ export async function authenticateUser(userData: any) {
 
 export async function createOrUpdateUser(userData: User) {
   try {
-    const response = await fetch(`${mongoUserModelAndDaoApiUrl}`, {
+    const response = await fetch(`${mongoUserModelAndDaoApiUrl}/user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,15 +44,12 @@ export async function createOrUpdateUser(userData: User) {
 
 export async function getAllUserAudioTranscriptsAndNotes(user: User) {
   try {
-    const response = await fetch(`${mongoUserModelAndDaoApiUrl}`, {
-      method: 'POST',
+    const response = await fetch(`${mongoUserModelAndDaoApiUrl}/user/${user.email}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: user.token
-      },
-      body: JSON.stringify({
-        type: "GET_ALL_USER_AUDIO_TRANSCRIPTS_AND_NOTES"
-      })
+      }
     })
     return response.json()
   } catch (error) {

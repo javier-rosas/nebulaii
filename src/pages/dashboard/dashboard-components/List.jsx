@@ -50,10 +50,14 @@ export default function List() {
   const user = useSelector((state) => state.user.user)
   
   useEffect(() => {
-    if (!user || !user.token) return
-    getAllUserAudioTranscriptsAndNotes(user)
+    const fetchTranscriptsAndNotes = async () => {
+      if (!user || !user.token) return
+      const res = await getAllUserAudioTranscriptsAndNotes(user)
+      console.log("res ", res)
+    }
+    fetchTranscriptsAndNotes()
   }, [])
-
+  console.log()
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <ul role="list" className="divide-y divide-gray-200">
