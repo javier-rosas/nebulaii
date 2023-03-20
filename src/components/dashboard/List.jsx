@@ -57,7 +57,13 @@ export default function List() {
     }
     fetchTranscriptsAndNotes()
   }, [])
-  console.log()
+
+  const formatDate = (date) => {
+    const dateObj = new Date(date);
+    const formattedDate = `${dateObj.getFullYear()}/${dateObj.getMonth()}/${dateObj.getDate()}`;
+    return formattedDate;
+  }
+
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <ul role="list" className="divide-y divide-gray-200">

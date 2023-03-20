@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import List from './List'
-import { Logo } from '@/components/Logo'
+import { Logo } from '@/components/main/Logo'
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {

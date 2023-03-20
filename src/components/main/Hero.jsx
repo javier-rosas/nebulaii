@@ -6,8 +6,8 @@ import logoStatamic from '@/images/logos/statamic.svg'
 import logoStaticKit from '@/images/logos/statickit.svg'
 import logoTransistor from '@/images/logos/transistor.svg'
 import logoTuple from '@/images/logos/tuple.svg'
-import YoutubeEmbed from './YoutubeEmbed'
-import useWindowDimensions from '../hooks/useWindowDimensions'
+import YoutubeEmbed from '../YoutubeEmbed'
+import useWindowDimensions from '../../hooks/useWindowDimensions'
 import { useState, useEffect } from 'react'
 
 export function Hero() {

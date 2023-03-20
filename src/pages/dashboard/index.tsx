@@ -4,8 +4,8 @@ import {
   UserContext,
 } from '@auth0/nextjs-auth0/client'
 import { getSession } from '@auth0/nextjs-auth0'
-import Upload from './dashboard-components/Upload'
-import Main from './dashboard-components/Main'
+import Upload from '@/components/dashboard/Upload'
+import Main from '@/components/dashboard/Main'
 import { GetServerSidePropsContext } from 'next'
 import { authenticateUser } from '@/services/userService'
 import { setMongoUser } from '@/redux/userSlice'

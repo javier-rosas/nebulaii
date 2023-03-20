@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { setFilename } from '@/redux/fileSlice'
 import { resetFileState } from '@/redux/fileSlice'
 import { useSelector } from 'react-redux'
-import Spinner from '@/components/Spinner'
+import Spinner from '@/components/main/Spinner'
 import Question from './Question'
 
 export default function Upload() {
