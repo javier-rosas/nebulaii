@@ -4,6 +4,7 @@ import { processAudioFile } from '@/services/processAudioFile'
 import { useDispatch } from 'react-redux'
 import { setFilename } from '@/redux/fileSlice'
 import { resetFileState } from '@/redux/fileSlice'
+import { apiGetProcessedFiles } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
 import Spinner from '@/components/main/Spinner'
 import Question from './Question'
@@ -65,7 +66,6 @@ export default function Upload() {
       setFile(null);
       const audioFileObj = getAudioFileObj(fileState);
       const res = await processAudioFile(audioFileObj, user.token);
-      // console.log(res)
       if (res.ok) {
         console.log('File processed successfully. Status code:', res.status);
       } else {
@@ -75,7 +75,8 @@ export default function Upload() {
       console.error(e);
     }
     setShowSpinner(false);
-    dispatch(resetFileState());
+    await dispatch(resetFileState());
+    await dispatch(apiGetProcessedFiles(user))
   };
   
 
@@ -85,7 +86,7 @@ export default function Upload() {
       setShowUploadButton(true)
       dispatch(setFilename(file.name))
     }
-  }, [file])
+  }, [file, dispatch])
 
   return (
     <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">

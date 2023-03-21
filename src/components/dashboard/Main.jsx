@@ -14,6 +14,9 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { resetMongoUser } from "@/redux/userSlice"
+import { useDispatch } from 'react-redux'
+
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -36,6 +39,8 @@ function classNames(...classes) {
 export default function Main(props) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const Upload = props.upload
+  const dispatch = useDispatch()
+
   return (
     <>
       <div>
@@ -214,7 +219,10 @@ export default function Main(props) {
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
+                        <Menu.Item 
+                        key={item.name}
+                        onClick={() => {dispatch(resetMongoUser())}}
+                        >
                           {({ active }) => (
                             <Link
                               href={item.href}

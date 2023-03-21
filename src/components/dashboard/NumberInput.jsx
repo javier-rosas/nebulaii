@@ -7,14 +7,14 @@ const NumberInput = () => {
   const [count, setCount] = useState(2);
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    setSpeakerCount(2)
-  }, [])
-
   const setSpeakerCount = (count) => {
     dispatch(setMinSpeakerCount(count));
     dispatch(setMaxSpeakerCount(count))
   }
+
+  useEffect(() => {
+    setSpeakerCount(2)
+  }, [setSpeakerCount])
 
   const increment = () => {
     setCount(count + 1);

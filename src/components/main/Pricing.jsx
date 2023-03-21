@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 
-import { Button } from '@/components/Button'
-import { Container } from '@/components/Container'
+import { Button } from '@/components/main/Button'
+import { Container } from '@/components/main/Container'
 
 function SwirlyDoodle({ className }) {
   return (

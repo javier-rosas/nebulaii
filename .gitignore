@@ -32,3 +32,5 @@ yarn-error.log*
 .vercel
 
 nebulaii-405523c10a97.json
+
+.vscode

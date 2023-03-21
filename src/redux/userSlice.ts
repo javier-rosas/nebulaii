@@ -23,11 +23,17 @@ export const userSlice = createSlice({
       state.user = user
       state.status = 'succeeded'
     },
+    resetMongoUser: (state, action) => {
+      state.user = null
+      state.status = 'succeeded'
+    }
   },
 })
 
 //action selector
 export const { setMongoUser } = userSlice.actions
+export const { resetMongoUser } = userSlice.actions
+
 
 // state selector
 export const selectUser = (state: UserState) => state.user.user
