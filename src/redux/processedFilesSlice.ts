@@ -2,21 +2,21 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { getAllUserAudioTranscriptsAndNotes } from '@/services/userService'
 import { User } from "@/types/User"
 
+type diarizedTranscript = {
+  speakerTag: number;
+  sentence: string;
+}
 
 type ProcessedFilePayload = {
   filename: string;
   transcript?: string;
-  diarizedTranscript?: string[];
+  diarizedTranscript?: diarizedTranscript[];
   notes: string;
   description: string;
   dateAdded?: string;
 };
 
 type ProcessedFilesState = ProcessedFilePayload[] | [];
-
-type ProcessedFile = {
-  payload: ProcessedFilePayload;
-};
 
 // initial user state
 const initialState: ProcessedFilesState = []
@@ -42,9 +42,7 @@ const createFileObjects = (filenames: string[], transcriptAndNotesData: any) =>
         (obj: any) => obj.filename === filename
       )
     if (diarizedTranscript) {
-      fileObject.diarizedTranscript = diarizedTranscript.transcript.map(
-        ({ sentence }: any) => sentence
-      )
+      fileObject.diarizedTranscript = diarizedTranscript.transcript
     }
     const notes = transcriptAndNotesData.notes.find(
       (obj: any) => obj.filename === filename
