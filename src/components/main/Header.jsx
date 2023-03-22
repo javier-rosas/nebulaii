@@ -82,7 +82,7 @@ function MobileNavigation() {
 
             <hr className="m-2 border-slate-300/40" />
 
-            <Link className="block w-full p-2" href="/api/v1/auth/login">
+            <Link className="block w-full p-2" href="/api/auth/login">
               Login
             </Link>
           </Popover.Panel>
@@ -110,7 +110,7 @@ export function Header() {
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
             <div className="hidden md:block">
-              <Link className="block w-full p-2" href="/api/v1/auth/login">
+              <Link className="block w-full p-2" href="/api/auth/login">
                 Login
               </Link>
             </div>
