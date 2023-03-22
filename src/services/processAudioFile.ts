@@ -1,6 +1,6 @@
 import { AudioFile } from '@/types/AudioFile'
 
-const processAudioFileApi = process.env.NEXT_PUBLIC_AWS_PROCESS_AUDIO_FILE
+const processAudioFileApi = process.env.NEXT_PUBLIC_AWS_PROCESS_AUDIO_FILE_URL
 
 export async function processAudioFile(audioFileObj: AudioFile, token: string) {
   try {
@@ -13,7 +13,7 @@ export async function processAudioFile(audioFileObj: AudioFile, token: string) {
       body: JSON.stringify(audioFileObj),
     })
     if (!response.ok) {
-      throw new Error('Failed to process audio file')
+      throw new Error('Failed to process audio file. Please try again later.')
     }
     const data = await response.json()
     return data

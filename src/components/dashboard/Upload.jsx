@@ -10,7 +10,6 @@ import Spinner from '@/components/main/Spinner'
 import Question from './Question'
 
 export default function Upload() {
-  
   const [drag, setDrag] = useState(false)
   const [file, setFile] = useState(null)
   const [showUploadButton, setShowUploadButton] = useState(false)
@@ -60,25 +59,24 @@ export default function Upload() {
 
   const upload = async (file) => {
     try {
-      if (!user || !user.email || !file) return;
-      setShowSpinner(true);
-      await postAudioFile(file, user.email);
-      setFile(null);
-      const audioFileObj = getAudioFileObj(fileState);
-      const res = await processAudioFile(audioFileObj, user.token);
+      if (!user || !user.email || !file) return
+      setShowSpinner(true)
+      await postAudioFile(file, user.email)
+      setFile(null)
+      const audioFileObj = getAudioFileObj(fileState)
+      const res = await processAudioFile(audioFileObj, user.token)
       if (res.ok) {
-        console.log('File processed successfully. Status code:', res.status);
+        console.log('File processed successfully. Status code:', res.status)
       } else {
-        console.error('File could not be processed. Status code:', res.status);
+        console.error('File could not be processed. Status code:', res.status)
       }
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
-    setShowSpinner(false);
-    await dispatch(resetFileState());
+    setShowSpinner(false)
+    await dispatch(resetFileState())
     await dispatch(apiGetProcessedFiles(user))
-  };
-  
+  }
 
   useEffect(() => {
     if (!file) setShowUploadButton(false)
@@ -134,8 +132,9 @@ export default function Upload() {
                     ></path>
                   </svg>
                   <p className="mb-2 text-center text-sm text-black">
-                    <span className="font-semibold">Click to upload</span> or
-                    drag and drop
+                    <span className="font-semibold">Click to upload</span>
+                    <br />
+                    <p className="hidden md:inline-block">or drag and drop</p>
                   </p>
                   <p className="text-center text-xs text-black">
                     MP3, MP4, WAV or M4A (MAX. 8 hours)

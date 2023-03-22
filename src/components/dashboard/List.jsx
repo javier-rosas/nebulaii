@@ -1,9 +1,10 @@
-import { CheckCircleIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { apiGetProcessedFiles } from '@/redux/processedFilesSlice'
 import Spinner from '@/components/main/Spinner'
 import Popup from '@/components/dashboard/list/Popup'
+
 
 export default function List() {
   const user = useSelector((state) => state.user.user)
@@ -56,7 +57,7 @@ export default function List() {
                         </p>
                       </div>
 
-                      <div className="sm:ml-20 flex sm:justify-between">
+                      <div className="sm:ml-20 flex justify-center sm:justify-between">
                         <button
                           type="button"
                           onClick={() => {

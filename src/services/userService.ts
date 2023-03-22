@@ -13,7 +13,7 @@ export async function authenticateUser(userData: any) {
       body: JSON.stringify(userData),
     })
     if (!response.ok) {
-      throw new Error('Failed to authenticate user')
+      throw new Error('Failed to authenticate user. Please try again later.')
     }
     const data = await response.json()
     return data.token
@@ -24,7 +24,7 @@ export async function authenticateUser(userData: any) {
 
 export async function createOrUpdateUser(userData: User) {
   try {
-    const response = await fetch(`${mongoUserModelAndDaoApiUrl}/user`, {
+    const response = await fetch(`${mongoUserModelAndDaoApiUrl}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,26 +33,11 @@ export async function createOrUpdateUser(userData: User) {
       body: JSON.stringify(userData),
     })
     if (!response.ok) {
-      throw new Error('Failed to authenticate user')
+      throw new Error('Failed to create or update user. Please try again later.')
     }
     const data = await response.json()
     return data
   } catch (error) {
     throw error
-  }
-}
-
-export async function getAllUserAudioTranscriptsAndNotes(user: User) {
-  try {
-    const response = await fetch(`${mongoUserModelAndDaoApiUrl}/user/${user.email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: user.token
-      }
-    })
-    return response.json()
-  } catch (error) {
-    console.error('Error getting audio transcripts and notes from mongo', error)
   }
 }
