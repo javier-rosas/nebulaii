@@ -22,7 +22,7 @@ export async function getNotesByUserEmail(user: User) {
 
 export async function getNotesByUserEmailAndFilename(user: User, filename: string) {
   try {
-    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/api/v1/user/${user.email}/note/${filename}`, {
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/user/${user.email}/note/${filename}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

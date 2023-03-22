@@ -3,6 +3,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import Spinner from '@/components/main/Spinner'
 import { getTranscriptByUserEmailAndFilename } from '@/services/transcriptService'
 import { getDiarizedTranscriptByUserEmailAndFilename } from '@/services/diarizedTranscriptService'
+import { getNotesByUserEmailAndFilename } from '@/services/notesService'
+import { useSelector } from 'react-redux'
 
 export default function Popup({
   setShowTranscriptPopup,
@@ -11,12 +13,13 @@ export default function Popup({
   showTranscriptPopup,
   showNotesPopup,
   showAudioPopup,
-  selectedFile
+  selectedFile,
 }) {
   const [open, setOpen] = useState(true)
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
-  const [file, setFile] = useState(null)
+
+  const user = useSelector((state) => state.user.user)
 
   const cancelButtonRef = useRef(null)
 
@@ -37,38 +40,51 @@ export default function Popup({
   }
 
   const extractNum = (str) => {
-    const numStr = str.match(/-?\d+/g)?.pop(); // match the last sequence of digits
-    return numStr ? parseInt(numStr) : undefined; // convert to number or return undefined
-  };
+    const numStr = str.match(/-?\d+/g)?.pop() // match the last sequence of digits
+    return numStr ? parseInt(numStr) : undefined // convert to number or return undefined
+  }
 
-  const getData = useCallback( async () => {
-    if (!selectedFile) return
-    const isDiarized = extractNum(selectedFile.description) > 1
-    if (isDiarized) {
-      // call api to get diarized transcript
-      const res = await getDiarizedTranscriptByUserEmailAndFilename(selectedFile.userEmail, selectedFile.filename)
-      // setFile(res)
-      console.log(res)
-    } else {
-      // call api to get non-diarized transcript
-      const res = await getTranscriptByUserEmailAndFilename(selectedFile.userEmail, selectedFile.filename)
-      console.log(res)
-
-      // setFile(res)
+  const getData = useCallback(async () => {
+    if (!selectedFile || !user) {
+      return
     }
-    // if (showTranscriptPopup) {
-    //   const text = formatArray(file.transcript)
-    //   setTitle('Transcript')
-    //   setText(text)
-    // } else if (showNotesPopup) {
-    //   setTitle('Notes')
-    //   setText(file.notes)
-    // }
-  },[])
+    const isDiarized = extractNum(selectedFile.description) > 1
+    const res = await (isDiarized
+      ? getDiarizedTranscriptByUserEmailAndFilename(user, selectedFile.filename)
+      : getTranscriptByUserEmailAndFilename(user, selectedFile.filename))
+    const notes = await getNotesByUserEmailAndFilename(
+      user,
+      selectedFile.filename
+    )
+
+    switch (true) {
+      case showTranscriptPopup:
+        const text = isDiarized ? formatArray(res.transcript) : res.transcript
+        setText(text)
+        setTitle('Transcript')
+        break
+      case showNotesPopup:
+        setText(notes.notes)
+        setTitle('Notes')
+        break
+      case showAudioPopup:
+        setTitle('Audio')
+        break
+      default:
+        break
+    }
+  }, [
+    selectedFile,
+    user,
+    showTranscriptPopup,
+    showNotesPopup,
+    setTitle,
+    setText,
+  ])
 
   useEffect(() => {
     getData()
-  }, [selectedFile, showNotesPopup, showTranscriptPopup])
+  }, [selectedFile, showNotesPopup, showTranscriptPopup, getData])
 
   return (
     <Transition.Root show={open} as={Fragment}>
