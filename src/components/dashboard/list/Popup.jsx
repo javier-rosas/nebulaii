@@ -1,8 +1,8 @@
-import { Fragment, useRef, useState, useEffect } from 'react'
+import { Fragment, useRef, useState, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
 import Spinner from '@/components/main/Spinner'
-// import { getTranscriptByUserEmailAndFilename } from '@/services/getTranscriptByUserEmailAndFilename'
+import { getTranscriptByUserEmailAndFilename } from '@/services/transcriptService'
+import { getDiarizedTranscriptByUserEmailAndFilename } from '@/services/diarizedTranscriptService'
 
 export default function Popup({
   setShowTranscriptPopup,
@@ -16,6 +16,7 @@ export default function Popup({
   const [open, setOpen] = useState(true)
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
+  const [file, setFile] = useState(null)
 
   const cancelButtonRef = useRef(null)
 
@@ -40,22 +41,33 @@ export default function Popup({
     return numStr ? parseInt(numStr) : undefined; // convert to number or return undefined
   };
 
-  useEffect(() => {
+  const getData = useCallback( async () => {
     if (!selectedFile) return
     const isDiarized = extractNum(selectedFile.description) > 1
     if (isDiarized) {
       // call api to get diarized transcript
+      const res = await getDiarizedTranscriptByUserEmailAndFilename(selectedFile.userEmail, selectedFile.filename)
+      // setFile(res)
+      console.log(res)
     } else {
       // call api to get non-diarized transcript
+      const res = await getTranscriptByUserEmailAndFilename(selectedFile.userEmail, selectedFile.filename)
+      console.log(res)
+
+      // setFile(res)
     }
-    if (showTranscriptPopup) {
-      const text = formatArray(file.transcript)
-      setTitle('Transcript')
-      setText(text)
-    } else if (showNotesPopup) {
-      setTitle('Notes')
-      setText(file.notes)
-    }
+    // if (showTranscriptPopup) {
+    //   const text = formatArray(file.transcript)
+    //   setTitle('Transcript')
+    //   setText(text)
+    // } else if (showNotesPopup) {
+    //   setTitle('Notes')
+    //   setText(file.notes)
+    // }
+  },[])
+
+  useEffect(() => {
+    getData()
   }, [selectedFile, showNotesPopup, showTranscriptPopup])
 
   return (

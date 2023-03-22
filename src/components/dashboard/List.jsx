@@ -5,7 +5,6 @@ import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import Spinner from '@/components/main/Spinner'
 import Popup from '@/components/dashboard/list/Popup'
 
-
 export default function List() {
   const user = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
@@ -29,7 +28,6 @@ export default function List() {
     fetchTranscriptsAndNotes()
   }, [user])
 
-  console.log(selectedFile)
   /**
    * Renders the list of processed files
    */
@@ -49,15 +47,13 @@ export default function List() {
                         <p className="truncate text-sm font-medium text-indigo-600">
                           {processedFile.filename}
                         </p>
-
                         <p className="flex items-center text-sm text-gray-500">
                           <span className="truncate">
                             {processedFile.description}
                           </span>
                         </p>
                       </div>
-
-                      <div className="sm:ml-20 flex justify-center sm:justify-between">
+                      <div className="flex justify-center sm:ml-20 sm:justify-between">
                         <button
                           type="button"
                           onClick={() => {
@@ -89,7 +85,6 @@ export default function List() {
                           Audio
                         </button>
                       </div>
-
                       <div className="hidden md:block">
                         <div>
                           <p className="text-sm text-gray-900">
@@ -106,7 +101,7 @@ export default function List() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex sm:justify-end justify-center">
+                      <div className="flex justify-center sm:justify-end">
                         <button
                           type="button"
                           onClick={() => {
