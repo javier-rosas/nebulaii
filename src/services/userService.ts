@@ -1,7 +1,7 @@
 import { User } from '@/types/User'
 
 const authApi = process.env.AWS_AUTHENTICATION_API
-const mongoUserModelAndDaoApiUrl = process.env.NEXT_PUBLIC_AWS_MONGO_USER_HANDLER
+const awsLambdaBaseUrl = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function authenticateUser(userData: any) {
   try {
@@ -24,7 +24,7 @@ export async function authenticateUser(userData: any) {
 
 export async function createOrUpdateUser(userData: User) {
   try {
-    const response = await fetch(`${mongoUserModelAndDaoApiUrl}/users`, {
+    const response = await fetch(`${awsLambdaBaseUrl}/user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,10 +1,10 @@
 import { User } from '@/types/User'
 
-const awsMongoHandlerURL = process.env.NEXT_PUBLIC_AWS_MONGO_HANDLER_URL
+const awsLambdaBaseUrl = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function getTranscriptsByUserEmail(user: User) {
   try {
-    const response = await fetch(`${awsMongoHandlerURL}/users/${user.email}/transcripts`, {
+    const response = await fetch(`${awsLambdaBaseUrl}/user/${user.email}/transcripts`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function getTranscriptsByUserEmail(user: User) {
 
 export async function getTranscriptByUserEmailAndFilename(user: User, filename: string) {
   try {
-    const response = await fetch(`${awsMongoHandlerURL}/users/${user.email}/transcripts/${filename}`, {
+    const response = await fetch(`${awsLambdaBaseUrl}/user/${user.email}/transcript/${filename}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

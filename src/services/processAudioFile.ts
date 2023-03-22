@@ -1,10 +1,10 @@
 import { AudioFile } from '@/types/AudioFile'
 
-const processAudioFileApi = process.env.NEXT_PUBLIC_AWS_PROCESS_AUDIO_FILE_URL
+const awsLambdaBaseUrl = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function processAudioFile(audioFileObj: AudioFile, token: string) {
   try {
-    const response = await fetch(`${processAudioFileApi}`, {
+    const response = await fetch(`${awsLambdaBaseUrl}/process-audio-file`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

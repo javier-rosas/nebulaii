@@ -1,10 +1,10 @@
 import { User } from '@/types/User'
 
-const awsMongoHandlerURL = process.env.NEXT_PUBLIC_AWS_MONGO_HANDLER_URL
+const awsLambdaBaseUrl = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function getNotesByUserEmail(user: User) {
   try {
-    const response = await fetch(`${awsMongoHandlerURL}/users/${user.email}/notes`, {
+    const response = await fetch(`${awsLambdaBaseUrl}/user/${user.email}/notes`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function getNotesByUserEmail(user: User) {
 
 export async function getNotesByUserEmailAndFilename(user: User, filename: string) {
   try {
-    const response = await fetch(`${awsMongoHandlerURL}/users/${user.email}/notes/${filename}`, {
+    const response = await fetch(`${awsLambdaBaseUrl}/api/v1/user/${user.email}/note/${filename}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -34,6 +34,6 @@ export async function getNotesByUserEmailAndFilename(user: User, filename: strin
     }
     return response.json()
   } catch (error) {
-    console.error(`Error getting notes with user email: ${user.email} and filename: ${filename}`, error)
+    console.error(`Error getting note with user email: ${user.email} and filename: ${filename}`, error)
   }
 }
