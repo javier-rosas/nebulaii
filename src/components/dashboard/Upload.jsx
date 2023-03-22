@@ -4,7 +4,7 @@ import { processAudioFile } from '@/services/processAudioFile'
 import { useDispatch } from 'react-redux'
 import { setFilename } from '@/redux/fileSlice'
 import { resetFileState } from '@/redux/fileSlice'
-import { apiGetProcessedFiles } from '@/redux/processedFilesSlice'
+import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
 import Spinner from '@/components/main/Spinner'
 import Question from './Question'
@@ -52,7 +52,6 @@ export default function Upload() {
   const getAudioFileObj = (fileState) => {
     return {
       ...fileState,
-      description: '',
       dateAdded: new Date(),
     }
   }
@@ -75,7 +74,7 @@ export default function Upload() {
     }
     setShowSpinner(false)
     await dispatch(resetFileState())
-    await dispatch(apiGetProcessedFiles(user))
+    await dispatch(apiGetFilesByUserEmail(user))
   }
 
   useEffect(() => {
@@ -134,7 +133,7 @@ export default function Upload() {
                   <p className="mb-2 text-center text-sm text-black">
                     <span className="font-semibold">Click to upload</span>
                     <br />
-                    <p className="hidden md:inline-block">or drag and drop</p>
+                    <span className="hidden md:inline-block">or drag and drop</span>
                   </p>
                   <p className="text-center text-xs text-black">
                     MP3, MP4, WAV or M4A (MAX. 8 hours)

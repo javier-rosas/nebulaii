@@ -1,7 +1,7 @@
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { apiGetProcessedFiles } from '@/redux/processedFilesSlice'
+import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import Spinner from '@/components/main/Spinner'
 import Popup from '@/components/dashboard/list/Popup'
 
@@ -14,8 +14,7 @@ export default function List() {
   const [showTranscriptPopup, setShowTranscriptPopup] = useState(false)
   const [showAudioPopup, setShowAudioPopup] = useState(false)
   const [showNotesPopup, setShowNotesPopup] = useState(false)
-  const [selectedFile, setSelectedFile] = useState('') // add state for selected file
-
+  const [selectedFile, setSelectedFile] = useState(null) // add state for selected file
 
   /**
    * Fetches the processed files from the API
@@ -24,12 +23,13 @@ export default function List() {
     const fetchTranscriptsAndNotes = async () => {
       if (!user || !user.token) return
       setShowSpinner(true)
-      await dispatch(apiGetProcessedFiles(user))
+      await dispatch(apiGetFilesByUserEmail(user))
       setShowSpinner(false)
     }
     fetchTranscriptsAndNotes()
   }, [user])
 
+  console.log(selectedFile)
   /**
    * Renders the list of processed files
    */
@@ -62,7 +62,7 @@ export default function List() {
                           type="button"
                           onClick={() => {
                             setShowTranscriptPopup(true)
-                            setSelectedFile(processedFile.filename)
+                            setSelectedFile(processedFile)
                           }}
                           className="h-12 w-28  rounded-md bg-white px-1 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
                         >
@@ -72,7 +72,7 @@ export default function List() {
                           type="button"
                           onClick={() => {
                             setShowNotesPopup(true)
-                            setSelectedFile(processedFile.filename)
+                            setSelectedFile(processedFile)
                           }}
                           className="h-12 w-28 rounded-md bg-white px-1 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
                         >
@@ -82,7 +82,7 @@ export default function List() {
                           type="button"
                           onClick={() => {
                             setShowAudioPopup(true)
-                            setSelectedFile(processedFile.filename)
+                            setSelectedFile(processedFile)
                           }}
                           className="h-12 w-28 rounded-md bg-white px-1 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
                         >
@@ -128,8 +128,7 @@ export default function List() {
                     showNotesPopup={showNotesPopup}
                     setShowNotesPopup={setShowNotesPopup}
                     setShowTranscriptPopup={setShowTranscriptPopup}
-                    processedFiles={processedFiles}
-                    filename={selectedFile}
+                    selectedFile={selectedFile}
                   />
                 )}
               </li>

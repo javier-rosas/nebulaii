@@ -1,6 +1,6 @@
 const generateSignedUrl = async (file: File, userEmail: string) => {
   try {
-    const response = await fetch('/api/v1/get-signed-url', {
+    const response = await fetch('/api/get-signed-url', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

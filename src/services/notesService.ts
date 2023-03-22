@@ -1,10 +1,10 @@
 import { User } from '@/types/User'
 
-const awsLambdaBaseUrl = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
+const AWS_LAMBDA_BASE_URL = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function getNotesByUserEmail(user: User) {
   try {
-    const response = await fetch(`${awsLambdaBaseUrl}/user/${user.email}/notes`, {
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/user/${user.email}/notes`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function getNotesByUserEmail(user: User) {
 
 export async function getNotesByUserEmailAndFilename(user: User, filename: string) {
   try {
-    const response = await fetch(`${awsLambdaBaseUrl}/api/v1/user/${user.email}/note/${filename}`, {
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/api/v1/user/${user.email}/note/${filename}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

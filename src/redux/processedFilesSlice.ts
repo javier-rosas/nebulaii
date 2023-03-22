@@ -14,6 +14,11 @@ type ProcessedFilesState = ProcessedFilePayload[] | []
 // initial user state
 const initialState: ProcessedFilesState = []
 
+/**
+ * Format date string
+ * @param {string} date - Date string
+ * @returns {string} formatted date string
+ */
 const formatDate = (date: string) => {
   const dateObj = new Date(date)
   const time = dateObj.toLocaleTimeString('en-US', {
@@ -25,9 +30,13 @@ const formatDate = (date: string) => {
   return formattedDate
 }
 
-// getProcessedFiles
-export const apiGetProcessedFiles = createAsyncThunk(
-  'processedFiles/getProcessedFiles',
+/**
+ * Get all processed files by user email
+ * @param payload - User object
+ * @returns - Array of processed files
+ */
+export const apiGetFilesByUserEmail = createAsyncThunk(
+  'processedFiles/apiGetFilesByUserEmail',
   async (payload: User, { rejectWithValue }) => {
     try {
       const res = await getFilesByUserEmail(payload)
@@ -50,7 +59,7 @@ export const processedFilesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(apiGetProcessedFiles.fulfilled, (state, action: any) => {
+    builder.addCase(apiGetFilesByUserEmail.fulfilled, (state, action: any) => {
       return action.payload
     })
   },

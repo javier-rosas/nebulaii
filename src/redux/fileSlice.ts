@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 type FileState = {
-  filename: string
-  language: string
-  enableSpeakerDiarization: boolean
-  minSpeakerCount: number | null
-  maxSpeakerCount: number | null
+  filename: string;
+  language: string;
+  enableSpeakerDiarization: boolean;
+  minSpeakerCount: number | null;
+  maxSpeakerCount: number | null;
+  description: string;
 }
 
 // initial user state
@@ -15,6 +16,7 @@ const initialState: FileState = {
   enableSpeakerDiarization: false,
   minSpeakerCount: null,
   maxSpeakerCount: null,
+  description: '',
 }
 
 // fileSlice
@@ -37,12 +39,16 @@ export const fileSlice = createSlice({
     setMaxSpeakerCount: (state, action) => {
       state.maxSpeakerCount = action.payload
     },
+    setDescription: (state, action) => {
+      state.description = action.payload
+    },
     resetFileState: (state, action) => {
       state.filename = ''
       state.language = ''
       state.enableSpeakerDiarization = false
       state.minSpeakerCount = null
       state.maxSpeakerCount = null
+      state.description = '';
     },
   },
 })

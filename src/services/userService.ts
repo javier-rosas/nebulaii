@@ -1,11 +1,11 @@
 import { User } from '@/types/User'
 
-const authApi = process.env.AWS_AUTHENTICATION_API
-const awsLambdaBaseUrl = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
+const AUTHENTICATION_API = process.env.AWS_AUTHENTICATION_API
+const AWS_LAMBDA_BASE_URL = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function authenticateUser(userData: any) {
   try {
-    const response = await fetch(`${authApi}`, {
+    const response = await fetch(`${AUTHENTICATION_API}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export async function authenticateUser(userData: any) {
 
 export async function createOrUpdateUser(userData: User) {
   try {
-    const response = await fetch(`${awsLambdaBaseUrl}/user`, {
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
