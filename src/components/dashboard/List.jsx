@@ -26,7 +26,7 @@ export default function List() {
       setShowSpinner(false)
     }
     fetchTranscriptsAndNotes()
-  }, [user])
+  }, [user, dispatch])
 
   /**
    * Renders the list of processed files

@@ -74,10 +74,11 @@ export default function Popup({
         break
     }
   }, [
-    selectedFile,
     user,
+    selectedFile,
     showTranscriptPopup,
     showNotesPopup,
+    showAudioPopup,
     setTitle,
     setText,
   ])
