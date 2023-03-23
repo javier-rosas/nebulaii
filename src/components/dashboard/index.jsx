@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import List from './List'
-import { Logo } from '@/components/main/Logo'
+import List from './list'
+import { Logo } from '@/components/landing/Logo'
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
@@ -13,9 +13,8 @@ import {
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { resetMongoUser } from "@/redux/userSlice"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 const navigation = [
@@ -40,6 +39,7 @@ export default function Main(props) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const Upload = props.upload
   const dispatch = useDispatch()
+  const processedFiles = useSelector((state) => state.processedFiles)
 
   return (
     <>
@@ -162,26 +162,7 @@ export default function Main(props) {
               <span className="sr-only">Open sidebar</span>
               <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
             </button>
-            <div className="flex flex-1 justify-between px-4">
-              <div className="flex flex-1">
-                <form className="flex w-full lg:ml-0" action="#" method="GET">
-                  <label htmlFor="search-field" className="sr-only">
-                    Search
-                  </label>
-                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
-                      <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
-                    </div>
-                    <input
-                      id="search-field"
-                      className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-0 focus:placeholder:text-gray-400 sm:text-sm"
-                      placeholder="Search"
-                      type="search"
-                      name="search"
-                    />
-                  </div>
-                </form>
-              </div>
+            <div className="flex flex-1 justify-end px-4">
               <div className="ml-4 flex items-center lg:ml-6">
                 <button
                   type="button"
@@ -195,13 +176,6 @@ export default function Main(props) {
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
-                      {/* <Image
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                        width={20}
-                        height={20}
-                      /> */}
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>

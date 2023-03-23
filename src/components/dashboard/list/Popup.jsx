@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import Spinner from '@/components/main/Spinner'
+import Spinner from '@/components/landing/Spinner'
 import { getTranscriptByUserEmailAndFilename } from '@/services/transcriptService'
 import { getDiarizedTranscriptByUserEmailAndFilename } from '@/services/diarizedTranscriptService'
 import { getNotesByUserEmailAndFilename } from '@/services/notesService'
@@ -44,6 +44,31 @@ export default function Popup({
     return numStr ? parseInt(numStr) : undefined // convert to number or return undefined
   }
 
+  const handlePopupShow = useCallback(
+    (isDiarized, res, notes) => {
+      switch (true) {
+        case showTranscriptPopup:
+          const text = isDiarized ? formatArray(res.transcript) : res.transcript
+          setText(text)
+          setTitle('Transcript')
+          break
+
+        case showNotesPopup:
+          setText(notes.notes)
+          setTitle('Notes')
+          break
+
+        case showAudioPopup:
+          setTitle('Audio')
+          break
+
+        default:
+          break
+      }
+    },
+    [showTranscriptPopup, showNotesPopup, showAudioPopup]
+  )
+
   const getData = useCallback(async () => {
     if (!selectedFile || !user) {
       return
@@ -57,31 +82,8 @@ export default function Popup({
       selectedFile.filename
     )
 
-    switch (true) {
-      case showTranscriptPopup:
-        const text = isDiarized ? formatArray(res.transcript) : res.transcript
-        setText(text)
-        setTitle('Transcript')
-        break
-      case showNotesPopup:
-        setText(notes.notes)
-        setTitle('Notes')
-        break
-      case showAudioPopup:
-        setTitle('Audio')
-        break
-      default:
-        break
-    }
-  }, [
-    user,
-    selectedFile,
-    showTranscriptPopup,
-    showNotesPopup,
-    showAudioPopup,
-    setTitle,
-    setText,
-  ])
+    handlePopupShow(isDiarized, res, notes)
+  }, [user, selectedFile, setTitle, setText])
 
   useEffect(() => {
     getData()

@@ -35,6 +35,9 @@
       ],
       "@/types/*": [
         "src/types/*"
+      ],
+      "@/utils/*": [
+        "src/utils/*"
       ]
     },
     "skipLibCheck": true,
@@ -44,7 +47,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/components/main/Header.jsx", "src/pages/dashboard/dashboard-components/Main.jsx", "src/pages/_app.jsx", "src/pages/dashboard/dashboard-components/Upload.jsx"  ],
+  ],
   "exclude": [
     "node_modules"
   ]

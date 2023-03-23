@@ -2,8 +2,9 @@ import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
-import Spinner from '@/components/main/Spinner'
+import Spinner from '@/components/landing/Spinner'
 import Popup from '@/components/dashboard/list/Popup'
+import Search from './Search'
 
 export default function List() {
   const user = useSelector((state) => state.user.user)
@@ -13,7 +14,8 @@ export default function List() {
   const [showTranscriptPopup, setShowTranscriptPopup] = useState(false)
   const [showAudioPopup, setShowAudioPopup] = useState(false)
   const [showNotesPopup, setShowNotesPopup] = useState(false)
-  const [selectedFile, setSelectedFile] = useState(null) // add state for selected file
+  const [selectedFile, setSelectedFile] = useState(null) 
+  const [showSearch, setShowSearch] = useState(false)
 
   /**
    * Fetches the processed files from the API
@@ -28,11 +30,28 @@ export default function List() {
     fetchTranscriptsAndNotes()
   }, [user, dispatch])
 
-  /**
-   * Renders the list of processed files
-   */
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
+      <div className='flex flex-row justify-between'>
+        <h2
+          className="flex flex-row items-center px-4 py-4 text-2xl font-bold tracking-tight text-gray-700 sm:px-6 sm:text-3xl"
+          onClick={() => setShowSearch(true)}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" viewBox="0 0 24 24" 
+            strokeWidth={1.5} 
+            stroke="currentColor" 
+            className="w-6 h-6 ml-4 mr-2"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+
+          Your recordings
+        </h2>
+
+        <Search styles="px-4 py-4 sm:px-6"/>
+      </div>
       {showSpinner ? (
         <Spinner />
       ) : (

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Container } from '@/components/main/Container'
+import { Container } from '@/components/landing/Container'
 import logoLaravel from '@/images/logos/laravel.svg'
 import logoMirage from '@/images/logos/mirage.svg'
 import logoStatamic from '@/images/logos/statamic.svg'

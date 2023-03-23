@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { postAudioFile } from '@/services/postAudioFile'
 import { processAudioFile } from '@/services/processAudioFile'
 import { useDispatch } from 'react-redux'
@@ -6,8 +6,8 @@ import { setFilename } from '@/redux/fileSlice'
 import { resetFileState } from '@/redux/fileSlice'
 import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
-import Spinner from '@/components/main/Spinner'
-import Question from './Question'
+import Spinner from '@/components/landing/Spinner'
+import Question from './question'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
@@ -56,27 +56,38 @@ export default function Upload() {
     }
   }
 
-  const upload = async (file) => {
+  async function uploadAudioFile(file, email) {
+    setShowSpinner(true);
+    await postAudioFile(file, email);
+    setFile(null)
+  }
+
+  async function processFile(fileState, token) {
+    const audioFileObj = getAudioFileObj(fileState);
+    const res = await processAudioFile(audioFileObj, token);
+    return res.ok;
+  }
+
+  const logFileStatus = (status) => {
+    const message = status ? 'File processed successfully.' : 'File could not be processed.';
+    console.log(message);
+  };
+
+  const upload = useCallback(async (file) => {
     try {
       if (!user || !user.email || !file) return
-      setShowSpinner(true)
-      await postAudioFile(file, user.email)
-      setFile(null)
-      const audioFileObj = getAudioFileObj(fileState)
-      const res = await processAudioFile(audioFileObj, user.token)
-      if (res.ok) {
-        console.log('File processed successfully. Status code:', res.status)
-      } else {
-        console.error('File could not be processed. Status code:', res.status)
-      }
+      await uploadAudioFile(file, user.email)
+      const status = await processFile(fileState, user.token);
+      logFileStatus(status)
     } catch (e) {
       console.error(e)
     }
     setShowSpinner(false)
     await dispatch(resetFileState())
     await dispatch(apiGetFilesByUserEmail(user))
-  }
+  }, [user, fileState, dispatch]);
 
+  
   useEffect(() => {
     if (!file) setShowUploadButton(false)
     else {

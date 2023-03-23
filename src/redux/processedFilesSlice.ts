@@ -1,18 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { getFilesByUserEmail } from '@/services/fileService'
 import { User } from '@/types/User'
-
-type ProcessedFilePayload = {
-  userEmail: string
-  filename: string
-  description: string
-  dateAdded: string
-}
-
-type ProcessedFilesState = ProcessedFilePayload[] | []
+import { ProcessedFiles } from '@/types/ProcessedFiles'
 
 // initial user state
-const initialState: ProcessedFilesState = []
+const initialState: ProcessedFiles = []
 
 /**
  * Format date string
@@ -66,6 +58,6 @@ export const processedFilesSlice = createSlice({
 })
 
 // state selector
-export const selectProccesedFiles = (state: ProcessedFilesState) => state
+export const selectProccesedFiles = (state: ProcessedFiles) => state
 
 export default processedFilesSlice.reducer
