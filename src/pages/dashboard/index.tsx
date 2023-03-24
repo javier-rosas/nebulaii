@@ -17,23 +17,19 @@ import { createOrUpdateUser } from '@/services/userService'
 function Dashboard({ user, token }: any): JSX.Element | undefined {
 
   const { error, isLoading }: UserContext = useUser()
-  const isInitialMount = useRef(true);
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!user || !token) return 
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      console.log("initial mount")
-    } else {
-      const userData = {
-        ...user,
-        token
-      }
-      console.log("not initial mount", userData)
-      dispatch(setMongoUser(userData) as any)
-      createOrUpdateUser(userData) 
+
+    const userData = {
+      ...user,
+      token
     }
+    console.log("not initial mount", userData)
+    dispatch(setMongoUser(userData) as any)
+    createOrUpdateUser(userData) 
+    
   }, [user, token, dispatch])
 
   if (isLoading) return <div>Loading...</div>
