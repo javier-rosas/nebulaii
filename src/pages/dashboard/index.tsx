@@ -24,11 +24,13 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
     if (!user || !token) return 
     if (isInitialMount.current) {
       isInitialMount.current = false;
+      console.log("initial mount")
     } else {
       const userData = {
         ...user,
         token
       }
+      console.log("not initial mount", userData)
       dispatch(setMongoUser(userData) as any)
       createOrUpdateUser(userData) 
     }
@@ -39,7 +41,7 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
 
   console.log('user', user)
   console.log('user', token)
-  
+
   return (
     <div>
       <Main upload={<Upload />} />
@@ -50,9 +52,12 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
 export default withPageAuthRequired(Dashboard as any)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  console.log("context", context)
   const session = await getSession(context.req, context.res)
+  console.log("session", session)
   const user = session?.user as User
   const token = await authenticateUser(user)
+  console.log("token", token)
 
   return {
     props: {
