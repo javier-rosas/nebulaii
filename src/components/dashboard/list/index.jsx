@@ -31,7 +31,7 @@ export default function List() {
   }, [user, dispatch])
 
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-md">
+    <div className="overflow-hidden bg-white shadow sm:rounded-md mb-20">
       <div className='flex flex-row justify-between'>
         <h2
           className="flex flex-row items-center px-4 py-4 text-2xl font-bold tracking-tight text-gray-700 sm:px-6 sm:text-3xl"
