@@ -12,6 +12,7 @@ export async function authenticateUser(userData: any) {
       },
       body: JSON.stringify(userData),
     })
+    console.log("response in authenticate user", response)
     if (!response.ok) {
       throw new Error('Failed to authenticate user. Please try again later.')
     }

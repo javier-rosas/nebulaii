@@ -38,6 +38,8 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
   if (error) return <div>{error.message}</div>
 
   console.log('user', user)
+  console.log('user', token)
+  
   return (
     <div>
       <Main upload={<Upload />} />
