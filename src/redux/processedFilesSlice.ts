@@ -2,9 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { getFilesByUserEmail } from '@/services/fileService'
 import { User } from '@/types/User'
 import { ProcessedFiles } from '@/types/ProcessedFiles'
+import { ProcessedFilePayload } from '@/types/ProcessedFiles'
 
 // initial user state
-const initialState: ProcessedFiles = []
+const initialState: ProcessedFiles = {
+  regularList: [],
+  filteredList: [],
+}
 
 /**
  * Format date string
@@ -45,17 +49,28 @@ export const apiGetFilesByUserEmail = createAsyncThunk(
   }
 )
 
+type FilterFilesAction = {
+  payload: ProcessedFilePayload[]
+}
 // processedFileSlice
 export const processedFilesSlice = createSlice({
   name: 'processedFiles',
   initialState,
-  reducers: {},
+  reducers: {
+    filterFiles: (state, action: FilterFilesAction) => {
+      state.filteredList = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(apiGetFilesByUserEmail.fulfilled, (state, action: any) => {
-      return action.payload
+      state.regularList = action.payload
+      state.filteredList = action.payload
     })
   },
 })
+
+// action creators
+export const { filterFiles } = processedFilesSlice.actions
 
 // state selector
 export const selectProccesedFiles = (state: ProcessedFiles) => state

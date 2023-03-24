@@ -1,8 +1,11 @@
-type ProcessedFilePayload = {
+export type ProcessedFilePayload = {
   userEmail: string
   filename: string
   description: string
   dateAdded: string
 }
 
-export type ProcessedFiles = ProcessedFilePayload[] | []
+export type ProcessedFiles = {
+  regularList: ProcessedFilePayload[] | [],
+  filteredList: ProcessedFilePayload[] | [],
+}

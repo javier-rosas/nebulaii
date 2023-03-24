@@ -30,6 +30,7 @@ export default function List() {
     fetchTranscriptsAndNotes()
   }, [user, dispatch])
 
+
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       <div className='flex flex-row justify-between'>
@@ -57,7 +58,7 @@ export default function List() {
       ) : (
         <ul role="list" className="divide-y divide-gray-200">
           {processedFiles &&
-            processedFiles.map((processedFile) => (
+            processedFiles.filteredList.map((processedFile) => (
               <li key={processedFile.filename}>
                 <div className="flex items-center px-4 py-4 sm:px-6">
                   <div className="flex min-w-0 flex-1 items-center">
