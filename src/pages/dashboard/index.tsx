@@ -37,6 +37,7 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>{error.message}</div>
 
+  console.log('user', user)
   return (
     <div>
       <Main upload={<Upload />} />

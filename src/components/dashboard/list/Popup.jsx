@@ -83,7 +83,7 @@ export default function Popup({
     )
 
     handlePopupShow(isDiarized, res, notes)
-  }, [user, selectedFile, setTitle, setText])
+  }, [user, selectedFile, setTitle, setText, handlePopupShow])
 
   useEffect(() => {
     getData()

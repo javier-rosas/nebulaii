@@ -85,7 +85,7 @@ export default function Upload() {
     setShowSpinner(false)
     await dispatch(resetFileState())
     await dispatch(apiGetFilesByUserEmail(user))
-  }, [user, fileState, dispatch]);
+  }, [user, fileState, dispatch, processFile]);
 
   
   useEffect(() => {

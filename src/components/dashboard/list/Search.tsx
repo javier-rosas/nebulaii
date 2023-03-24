@@ -28,7 +28,7 @@ export default function Search({ styles }: StyleProps) {
   useEffect(() => {
     if (!query) return
     dispatch(filterFiles(filteredList))
-  }, [query])
+  }, [query, dispatch, filteredList])
 
   return (
     <div className={styles}>
