@@ -23,13 +23,13 @@ export default function List() {
   useEffect(() => {
     const fetchTranscriptsAndNotes = async () => {
       if (!user || !user.token) return
+      console.log("fetching files")
       setShowSpinner(true)
       await dispatch(apiGetFilesByUserEmail(user))
       setShowSpinner(false)
     }
     fetchTranscriptsAndNotes()
   }, [user, dispatch])
-
 
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
