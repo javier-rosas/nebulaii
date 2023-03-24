@@ -17,6 +17,10 @@ export default function Search({ styles }: StyleProps) {
     (state: RootState) => state.processedFiles.regularList
   )
 
+
+  const ffff = useSelector(
+    (state: RootState) => state.processedFiles.filteredList
+  )
   // Returns a filtered list of files based on the query
   const filteredList =
     query === ''
@@ -27,8 +31,10 @@ export default function Search({ styles }: StyleProps) {
 
   useEffect(() => {
     if (!query) return
-    dispatch(filterFiles(filteredList))
+    if (filteredList.length === 0) dispatch(filterFiles(regularList))
+    else dispatch(filterFiles(filteredList))
   }, [query, dispatch])
+
 
   return (
     <div className={styles}>

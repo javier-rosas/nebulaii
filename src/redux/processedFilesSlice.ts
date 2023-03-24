@@ -59,6 +59,9 @@ export const processedFilesSlice = createSlice({
   reducers: {
     filterFiles: (state, action: FilterFilesAction) => {
       state.filteredList = action.payload
+    },
+    resetFilteredFiles: (state, action: FilterFilesAction) => {
+      state.filteredList = action.payload
     }
   },
   extraReducers: (builder) => {
