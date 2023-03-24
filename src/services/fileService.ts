@@ -4,7 +4,6 @@ const AWS_LAMBDA_BASE_URL = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function getFilesByUserEmail(user: User) {
   try {
-    console.log("in getFilesByUserEmail", user)
     const response = await fetch(`${AWS_LAMBDA_BASE_URL}/user/${user.email}/files`, {
       method: 'GET',
       headers: {

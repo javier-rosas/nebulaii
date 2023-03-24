@@ -21,12 +21,10 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
 
   useEffect(() => {
     if (!user || !token) return 
-
     const userData = {
       ...user,
       token
     }
-    console.log("not initial mount", userData)
     dispatch(setMongoUser(userData) as any)
     createOrUpdateUser(userData) 
     
@@ -34,9 +32,6 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>{error.message}</div>
-
-  console.log('user', user)
-  console.log('user', token)
 
   return (
     <div>
@@ -48,13 +43,9 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
 export default withPageAuthRequired(Dashboard as any)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log("context", context)
   const session = await getSession(context.req, context.res)
-  console.log("session", session)
   const user = session?.user as User
   const token = await authenticateUser(user)
-  console.log("token", token)
-
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),
