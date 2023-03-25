@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getFilesByUserEmail } from '@/services/fileService'
+import { getFilesByUserEmail, deleteFileByUserEmailAndFilename } from '@/services/fileService'
 import { User } from '@/types/User'
 import { ProcessedFiles } from '@/types/ProcessedFiles'
 import { ProcessedFilePayload } from '@/types/ProcessedFiles'
@@ -49,6 +49,22 @@ export const apiGetFilesByUserEmail = createAsyncThunk(
   }
 )
 
+/**
+ * Delete processed file by user email and filename
+ */
+export const apiDeleteFileByUserEmailAndFilename = createAsyncThunk(
+  'processedFiles/apiDeleteFileByUserEmailAndFilename',
+  async ({ user, filename }: { user: User; filename: string }, { rejectWithValue }) => {
+    try {
+      const res = await deleteFileByUserEmailAndFilename(user, filename)
+      return res
+    } catch (e: any) {
+      if (!e.response) throw e
+      return rejectWithValue(e.response.data)
+    }
+  }
+)
+
 type FilterFilesAction = {
   payload: ProcessedFilePayload[]
 }
@@ -68,6 +84,11 @@ export const processedFilesSlice = createSlice({
     builder.addCase(apiGetFilesByUserEmail.fulfilled, (state, action: any) => {
       state.regularList = action.payload
       state.filteredList = action.payload
+    })
+    builder.addCase(apiDeleteFileByUserEmailAndFilename.fulfilled, (state, action: any) => {
+      const deletedFile = action.payload
+      state.regularList = state.regularList.filter((file) => file.filename !== deletedFile.filename)
+      state.filteredList = state.filteredList.filter((file) => file.filename !== deletedFile.filename)
     })
   },
 })

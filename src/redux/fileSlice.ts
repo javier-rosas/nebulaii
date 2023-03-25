@@ -50,7 +50,7 @@ export const fileSlice = createSlice({
       state.maxSpeakerCount = null
       state.description = '';
     },
-  },
+  }
 })
 
 //action selector
