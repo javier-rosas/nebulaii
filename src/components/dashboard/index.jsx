@@ -26,7 +26,6 @@ const navigation = [
   // { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '/' },
   { name: 'Settings', href: '/' },
   { name: 'Sign out', href: '/api/auth/logout' },
 ]
@@ -40,6 +39,11 @@ export default function Main(props) {
   const Upload = props.upload
   const dispatch = useDispatch()
   const processedFiles = useSelector((state) => state.processedFiles)
+
+  const handleUserNavigation = (name) => {
+    if (name === "Sign out") dispatch(resetMongoUser())
+    else if (name === "Settings") console.log("Settings")
+  }
 
   return (
     <>
@@ -195,7 +199,7 @@ export default function Main(props) {
                       {userNavigation.map((item) => (
                         <Menu.Item 
                         key={item.name}
-                        onClick={() => {dispatch(resetMongoUser())}}
+                        onClick={() => handleUserNavigation(item.name)}
                         >
                           {({ active }) => (
                             <Link

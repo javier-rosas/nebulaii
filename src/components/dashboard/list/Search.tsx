@@ -30,8 +30,8 @@ export default function Search({ styles }: StyleProps) {
         })
 
   useEffect(() => {
-    if (!query) return
-    if (filteredList.length === 0) dispatch(filterFiles(regularList))
+    if (query === "") dispatch(filterFiles(regularList))
+    else if (filteredList.length === 0) dispatch(filterFiles([]))
     else dispatch(filterFiles(filteredList))
   }, [query, dispatch])
 

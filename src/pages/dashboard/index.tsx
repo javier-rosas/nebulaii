@@ -27,7 +27,6 @@ function Dashboard({ user, token }: any): JSX.Element | undefined {
     }
     dispatch(setMongoUser(userData) as any)
     createOrUpdateUser(userData) 
-    
   }, [user, token, dispatch])
 
   if (isLoading) return <div>Loading...</div>

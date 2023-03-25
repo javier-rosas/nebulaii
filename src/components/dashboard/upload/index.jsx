@@ -17,6 +17,8 @@ export default function Upload() {
   const dispatch = useDispatch()
   const fileState = useSelector((state) => state.file)
   const user = useSelector((state) => state.user.user)
+  const regularList = useSelector((state) => state.processedFiles.regularList)
+  const [showQuestionReplacement, setShowQuestionReplacement] = useState(false)
 
   const handleDragEnter = (e) => {
     e.preventDefault()
@@ -73,9 +75,14 @@ export default function Upload() {
     console.log(message);
   };
 
+  const doesFileExist = (file) => {
+    return regularList.find((item) => item.filename === file.name)
+  }
+
   const upload = useCallback(async (file) => {
     try {
       if (!user || !user.email || !file) return
+      if (doesFileExist(file)) setShowQuestionReplacement(true)
       await uploadAudioFile(file, user.email)
       const status = await processFile(fileState, user.token);
       logFileStatus(status)
@@ -95,6 +102,7 @@ export default function Upload() {
       dispatch(setFilename(file.name))
     }
   }, [file, dispatch])
+
 
   return (
     <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">

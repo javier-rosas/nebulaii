@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { User } from "@/types/User"
 
 type UserState = {
-  user: any
+  user: User | null
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | null
 }
@@ -13,19 +14,20 @@ const initialState: UserState = {
   error: null,
 }
 
+type ActionType = {
+  payload: User
+}
 // userSlice
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setMongoUser: (state, action) => {
+    setMongoUser: (state: UserState, action: ActionType) => {
       const user = action.payload
       state.user = user
-      state.status = 'succeeded'
     },
-    resetMongoUser: (state, action) => {
+    resetMongoUser: (state: UserState, action) => {
       state.user = null
-      state.status = 'succeeded'
     }
   },
 })
@@ -36,8 +38,8 @@ export const { resetMongoUser } = userSlice.actions
 
 
 // state selector
-export const selectUser = (state: UserState) => state.user.user
-export const getUserStatus = (state: UserState) => state.user.status
-export const getUserError = (state: UserState) => state.user.error
+export const selectUser = (state: UserState) => state?.user
+export const getUserStatus = (state: UserState) => state?.status
+export const getUserError = (state: UserState) => state?.error
 
 export default userSlice.reducer
