@@ -8,6 +8,7 @@ import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
 import Spinner from '@/components/landing/Spinner'
 import Question from './question'
+import QuestionWithReplacement from './question/QuestionWithReplacement'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
@@ -59,50 +60,54 @@ export default function Upload() {
   }
 
   async function uploadAudioFile(file, email) {
-    setShowSpinner(true);
-    await postAudioFile(file, email);
+    setShowSpinner(true)
+    await postAudioFile(file, email)
     setFile(null)
   }
 
   async function processFile(fileState, token) {
-    const audioFileObj = getAudioFileObj(fileState);
-    const res = await processAudioFile(audioFileObj, token);
-    return res.ok;
+    const audioFileObj = getAudioFileObj(fileState)
+    const res = await processAudioFile(audioFileObj, token)
+    return res.ok
   }
 
   const logFileStatus = (status) => {
-    const message = status ? 'File processed successfully.' : 'File could not be processed.';
-    console.log(message);
-  };
+    const message = status
+      ? 'File processed successfully.'
+      : 'File could not be processed.'
+    console.log(message)
+  }
 
   const doesFileExist = (file) => {
     return regularList.find((item) => item.filename === file.name)
   }
 
-  const upload = useCallback(async (file) => {
-    try {
-      if (!user || !user.email || !file) return
-      if (doesFileExist(file)) setShowQuestionReplacement(true)
-      await uploadAudioFile(file, user.email)
-      const status = await processFile(fileState, user.token);
-      logFileStatus(status)
-    } catch (e) {
-      console.error(e)
-    }
-    setShowSpinner(false)
-    await dispatch(resetFileState())
-    await dispatch(apiGetFilesByUserEmail(user))
-  }, [user, fileState, dispatch, processFile]);
+  const upload = useCallback(
+    async (file) => {
+      try {
+        if (!user || !user.email || !file) return
+        await uploadAudioFile(file, user.email)
+        const status = await processFile(fileState, user.token)
+        logFileStatus(status)
+      } catch (e) {
+        console.error(e)
+      }
+      setShowSpinner(false)
+      await dispatch(resetFileState())
+      await dispatch(apiGetFilesByUserEmail(user))
+    },
+    [user, fileState, dispatch, processFile]
+  )
 
-  
   useEffect(() => {
     if (!file) setShowUploadButton(false)
     else {
       setShowUploadButton(true)
       dispatch(setFilename(file.name))
+      if (doesFileExist(file)) setShowQuestionReplacement(true)
+      else setShowQuestionReplacement(false)
     }
-  }, [file, dispatch])
-
+  }, [file, dispatch, doesFileExist])
 
   return (
     <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">
@@ -152,7 +157,9 @@ export default function Upload() {
                   <p className="mb-2 text-center text-sm text-black">
                     <span className="font-semibold">Click to upload</span>
                     <br />
-                    <span className="hidden md:inline-block">or drag and drop</span>
+                    <span className="hidden md:inline-block">
+                      or drag and drop
+                    </span>
                   </p>
                   <p className="text-center text-xs text-black">
                     MP3, MP4, WAV or M4A (MAX. 8 hours)
@@ -168,9 +175,17 @@ export default function Upload() {
               </label>
             </div>
             <h1 className="mt-2 text-base">{file?.name}</h1>
-            {showUploadButton && file && (
-              <Question upload={upload} file={file} setFile={setFile} />
-            )}
+            {showUploadButton &&
+              file &&
+              (showQuestionReplacement ? (
+                <QuestionWithReplacement
+                  upload={upload}
+                  file={file}
+                  setFile={setFile}
+                />
+              ) : (
+                <Question upload={upload} file={file} setFile={setFile} />
+              ))}
           </div>
         )}
       </div>

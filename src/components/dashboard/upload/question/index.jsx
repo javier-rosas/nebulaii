@@ -172,7 +172,7 @@ export default function Question({ upload, file, setFile }) {
                     </button>
                   )}
                 </div>
-                <Steps index={questionTextIndex} />
+                <Steps index={questionTextIndex} showReplacementPannel={false}/>
               </Dialog.Panel>
             </Transition.Child>
           </div>

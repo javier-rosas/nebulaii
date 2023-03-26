@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getFilesByUserEmail, deleteFileByUserEmailAndFilename } from '@/services/fileService'
+import {
+  getFilesByUserEmail,
+  deleteFileByUserEmailAndFilename,
+} from '@/services/fileService'
 import { User } from '@/types/User'
 import { ProcessedFiles } from '@/types/ProcessedFiles'
 import { ProcessedFilePayload } from '@/types/ProcessedFiles'
@@ -54,7 +57,10 @@ export const apiGetFilesByUserEmail = createAsyncThunk(
  */
 export const apiDeleteFileByUserEmailAndFilename = createAsyncThunk(
   'processedFiles/apiDeleteFileByUserEmailAndFilename',
-  async ({ user, filename }: { user: User; filename: string }, { rejectWithValue }) => {    
+  async (
+    { user, filename }: { user: User; filename: string },
+    { rejectWithValue }
+  ) => {
     try {
       await deleteFileByUserEmailAndFilename(user, filename)
       return filename
@@ -78,18 +84,25 @@ export const processedFilesSlice = createSlice({
     },
     resetFilteredFiles: (state, action: FilterFilesAction) => {
       state.filteredList = action.payload
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(apiGetFilesByUserEmail.fulfilled, (state, action: any) => {
       state.regularList = action.payload
       state.filteredList = action.payload
     })
-    builder.addCase(apiDeleteFileByUserEmailAndFilename.fulfilled, (state, action: any) => {
-      const deletedFilename = action.payload
-      state.regularList = state.regularList.filter((file) => file.filename !== deletedFilename)
-      state.filteredList = state.filteredList.filter((file) => file.filename !== deletedFilename)
-    })
+    builder.addCase(
+      apiDeleteFileByUserEmailAndFilename.fulfilled,
+      (state, action: any) => {
+        const deletedFilename = action.payload
+        state.regularList = state.regularList.filter(
+          (file) => file.filename !== deletedFilename
+        )
+        state.filteredList = state.filteredList.filter(
+          (file) => file.filename !== deletedFilename
+        )
+      }
+    )
   },
 })
 

@@ -1,10 +1,17 @@
-const steps = [
+const stepsWithoutReplacement = [
   { id: 'Step 1', name: 'Number of speakers', status: 0 },
   { id: 'Step 2', name: 'Choose Language', status: 1 },
-  // { id: 'Step 3', name: 'Preview', href: '#', status: 'upcoming' },
 ]
 
-export default function Steps({index}) {
+const stepsWithReplacement = [
+  { id: 'Step 1', name: 'File Replacement', status: 0 },
+  { id: 'Step 2', name: 'Number of speakers', status: 1 },
+  { id: 'Step 2', name: 'Choose Language', status: 2 },
+]
+
+export default function Steps({index, showReplacementPannel}) {
+
+  const steps = showReplacementPannel ? stepsWithReplacement : stepsWithoutReplacement
   return (
     <nav aria-label="Progress">
       <ol role="list" className="space-y-4 md:flex md:space-y-0 md:space-x-8">

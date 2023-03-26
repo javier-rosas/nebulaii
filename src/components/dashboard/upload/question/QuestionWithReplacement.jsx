@@ -11,7 +11,7 @@ import Dropdown from './Dropdown'
 
 const questions = [
   {
-    main: 'This file already exists.',
+    main: 'A file with this name already exists.',
     description: "Do you want to replace it?"
   },
   {
@@ -96,7 +96,23 @@ export default function QuestionWithReplacement({ upload, file, setFile }) {
                     </div>
                   </div>
                 </div>
-                {questionTextIndex === 0 && (
+                {
+                  questionTextIndex === 0 && (
+                    <div className='flex justify-center mt-5 mb-5 sm:mt-6'>
+                      <button
+                      type="button"
+                      className="inline-flex w-1/2 justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:col-start-2"
+                      onClick={() => {
+                        clickNext()
+                      }}
+                      ref={cancelButtonRef}
+                    >
+                      Replace
+                    </button>
+                    </div>
+                  )
+                }
+                {questionTextIndex === 1 && (
                   <div className="mt-5 mb-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                     {!showNumberInput && (
                      <>
@@ -139,21 +155,21 @@ export default function QuestionWithReplacement({ upload, file, setFile }) {
                   </div>
                 )}
 
-                {questionTextIndex === 1 && (
+                {questionTextIndex === 2 && (
                   <div className="mt-2 mb-5 flex justify-center">
                     <Dropdown
                       setIsUploadBtnActivated={setIsUploadBtnActivated}
                     />
                   </div>
                 )}
-                {!isUploadBtnActivated && questionTextIndex === 1 && (
+                {!isUploadBtnActivated && questionTextIndex === 2 && (
                   <p className="m-3 flex justify-center text-red-400">
                     Choose a language before uploading.
                   </p>
                 )}
 
                 <div className="mb-10 flex justify-center">
-                  {questionTextIndex === 0 && showNumberInput && (
+                  {questionTextIndex === 1 && showNumberInput && (
                     <button
                       type="button"
                       onClick={() => clickNext()}
@@ -164,7 +180,7 @@ export default function QuestionWithReplacement({ upload, file, setFile }) {
                     </button>
                   )}
 
-                  {questionTextIndex === 1 && (
+                  {questionTextIndex === 2 && (
                     <button
                       disabled={!isUploadBtnActivated}
                       type="button"
@@ -176,7 +192,7 @@ export default function QuestionWithReplacement({ upload, file, setFile }) {
                     </button>
                   )}
                 </div>
-                <Steps index={questionTextIndex} />
+                <Steps index={questionTextIndex} showReplacementPannel={true}/>
               </Dialog.Panel>
             </Transition.Child>
           </div>
