@@ -2,6 +2,7 @@ import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
+import { apiDeleteFileByUserEmailAndFilename } from '@/redux/processedFilesSlice'
 import Spinner from '@/components/landing/Spinner'
 import Popup from '@/components/dashboard/list/Popup'
 import Search from './Search'
@@ -123,8 +124,8 @@ export default function List() {
                       <div className="flex justify-center sm:justify-end">
                         <button
                           type="button"
-                          onClick={ async () => {
-                            await dispatch(apiDeleteFileByUserEmailAndFilename({user, filename: processedFile.filename}))
+                          onClick={() => {
+                            dispatch(apiDeleteFileByUserEmailAndFilename({user, filename: processedFile.filename}))
                           }}
                           className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
                         >

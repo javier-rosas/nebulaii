@@ -50,7 +50,7 @@ export async function deleteFileByUserEmailAndFilename(user: User, filename: str
     if (!response.ok) {
       throw new Error('Error deleting file. Please try again later.');
     }
-    return response.json();
+    return response;
   } catch (error) {
     console.error(`Error deleting file with user email: ${user.email} and filename: ${filename}`, error);
   }

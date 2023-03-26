@@ -54,10 +54,10 @@ export const apiGetFilesByUserEmail = createAsyncThunk(
  */
 export const apiDeleteFileByUserEmailAndFilename = createAsyncThunk(
   'processedFiles/apiDeleteFileByUserEmailAndFilename',
-  async ({ user, filename }: { user: User; filename: string }, { rejectWithValue }) => {
+  async ({ user, filename }: { user: User; filename: string }, { rejectWithValue }) => {    
     try {
-      const res = await deleteFileByUserEmailAndFilename(user, filename)
-      return res
+      await deleteFileByUserEmailAndFilename(user, filename)
+      return filename
     } catch (e: any) {
       if (!e.response) throw e
       return rejectWithValue(e.response.data)
@@ -86,9 +86,9 @@ export const processedFilesSlice = createSlice({
       state.filteredList = action.payload
     })
     builder.addCase(apiDeleteFileByUserEmailAndFilename.fulfilled, (state, action: any) => {
-      const deletedFile = action.payload
-      state.regularList = state.regularList.filter((file) => file.filename !== deletedFile.filename)
-      state.filteredList = state.filteredList.filter((file) => file.filename !== deletedFile.filename)
+      const deletedFilename = action.payload
+      state.regularList = state.regularList.filter((file) => file.filename !== deletedFilename)
+      state.filteredList = state.filteredList.filter((file) => file.filename !== deletedFilename)
     })
   },
 })
