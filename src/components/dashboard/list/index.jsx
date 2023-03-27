@@ -11,12 +11,12 @@ export default function List() {
   const user = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
   const processedFiles = useSelector((state) => state.processedFiles)
-  const [showSpinner, setShowSpinner] = useState(false)
+  const [showListSpinner, setShowListSpinner] = useState(false)
+  const [showDeleteSpinner, setShowDeleteSpinner] = useState(false)
   const [showTranscriptPopup, setShowTranscriptPopup] = useState(false)
   const [showAudioPopup, setShowAudioPopup] = useState(false)
   const [showNotesPopup, setShowNotesPopup] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null) 
-  const [showSearch, setShowSearch] = useState(false)
 
   /**
    * Fetches the processed files from the API
@@ -24,9 +24,9 @@ export default function List() {
   useEffect(() => {
     const fetchTranscriptsAndNotes = async () => {
       if (!user || !user.token) return
-      setShowSpinner(true)
+      setShowListSpinner(true)
       await dispatch(apiGetFilesByUserEmail(user))
-      setShowSpinner(false)
+      setShowListSpinner(false)
     }
     fetchTranscriptsAndNotes()
   }, [user, dispatch])
@@ -36,7 +36,6 @@ export default function List() {
       <div className='flex flex-row justify-between'>
         <h2
           className="flex flex-row items-center px-4 py-4 text-2xl font-bold tracking-tight text-gray-700 sm:px-6 sm:text-3xl"
-          onClick={() => setShowSearch(true)}
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -53,12 +52,12 @@ export default function List() {
 
         <Search styles="px-4 py-4 sm:px-6"/>
       </div>
-      {showSpinner ? (
+      {showListSpinner ? (
         <Spinner />
       ) : (
         <ul role="list" className="divide-y divide-gray-200">
           {processedFiles &&
-            processedFiles.filteredList.map((processedFile) => (
+            processedFiles.filteredList?.map((processedFile) => (
               <li key={processedFile.filename}>
                 <div className="flex items-center px-4 py-4 sm:px-6">
                   <div className="flex min-w-0 flex-1 items-center">
@@ -122,15 +121,18 @@ export default function List() {
                         </div>
                       </div>
                       <div className="flex justify-center sm:justify-end">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            dispatch(apiDeleteFileByUserEmailAndFilename({user, filename: processedFile.filename}))
-                          }}
-                          className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
-                        >
-                          Delete
-                        </button>
+                      {showDeleteSpinner ? <Spinner styles={`mt-2`}/> :
+                        (<button
+                        type="button"
+                        onClick={async () => {
+                          setShowDeleteSpinner(true)
+                          await dispatch(apiDeleteFileByUserEmailAndFilename({user, filename: processedFile.filename}))
+                          setShowDeleteSpinner(false)
+                        }}
+                        className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
+                      >
+                        Delete
+                      </button>)}
                       </div>
                     </div>
                   </div>

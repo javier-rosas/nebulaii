@@ -1,8 +1,11 @@
 import React from 'react'
 
-function Spinner() {
+function Spinner({styles}) {
+
+  if (styles === undefined) styles = ""
+
   return (
-    <div className="m-5 flex w-full items-center justify-center">
+    <div className={styles ? styles : `m-5 flex w-full items-center justify-center`}>
       <div role="status">
         <svg
           aria-hidden="true"
