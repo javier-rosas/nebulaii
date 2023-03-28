@@ -6,29 +6,17 @@ import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3BottomLeftIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  FolderIcon,
+  VideoCameraIcon,
   HomeIcon,
-  UsersIcon,
   XMarkIcon,
+  Cog6ToothIcon,
+  ArrowUpOnSquareIcon,
 } from '@heroicons/react/24/outline'
-import { resetMongoUser } from "@/redux/userSlice"
+import { resetMongoUser } from '@/redux/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import Youtube from './youtube'
 
-
-const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Meetings', href: '#', icon: UsersIcon, current: false },
-  // { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  // { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  // { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  // { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
-]
-const userNavigation = [
-  { name: 'Settings', href: '/' },
-  { name: 'Sign out', href: '/api/auth/logout' },
-]
+const userNavigation = [{ name: 'Sign out', href: '/api/auth/logout' }]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -39,17 +27,35 @@ export default function Main(props) {
   const Upload = props.upload
   const dispatch = useDispatch()
   const processedFiles = useSelector((state) => state.processedFiles)
+  const [navigation, setNavigation] = useState([
+    { name: 'Upload Audio File', icon: ArrowUpOnSquareIcon, current: true },
+    { name: 'Youtube', icon: VideoCameraIcon, current: false },
+    { name: 'Settings', icon: Cog6ToothIcon, current: false },
+  ])
+  const [sideBarSelection, setSideBarSelection] = useState('Upload Audio File')
+
+  const handleSideBarSelection = (name) => {
+    setSideBarSelection(name)
+    const updatedNavigation = navigation.map((item) => {
+      if (item.name === name) return { ...item, current: true }
+      else return { ...item, current: false }
+    })
+    setNavigation(updatedNavigation)
+  }
 
   const handleUserNavigation = (name) => {
-    if (name === "Sign out") dispatch(resetMongoUser())
-    else if (name === "Settings") console.log("Settings")
+    if (name === 'Sign out') dispatch(resetMongoUser())
   }
 
   return (
     <>
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-40 lg:hidden" onClose={setSidebarOpen}>
+          <Dialog
+            as="div"
+            className="relative z-40 lg:hidden"
+            onClose={setSidebarOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -72,7 +78,7 @@ export default function Main(props) {
                 leaveFrom="translate-x-0"
                 leaveTo="-translate-x-full"
               >
-                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-indigo-700 pt-5 pb-4">
+                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-indigo-700 pb-4 pt-5">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-300"
@@ -82,14 +88,17 @@ export default function Main(props) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <div className="absolute top-0 right-0 -mr-12 pt-2">
+                    <div className="absolute right-0 top-0 -mr-12 pt-2">
                       <button
                         type="button"
                         className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                         onClick={() => setSidebarOpen(false)}
                       >
                         <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </Transition.Child>
@@ -105,17 +114,22 @@ export default function Main(props) {
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">
                     <nav className="space-y-1 px-2">
                       {navigation.map((item) => (
-                        <Link
+                        <div
                           key={item.name}
-                          href={item.href}
+                          onClick={() => handleSideBarSelection(item.name)}
                           className={classNames(
-                            item.current ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:bg-indigo-600',
-                            'group flex items-center rounded-md px-2 py-2 text-base font-medium'
+                            item.current
+                              ? 'bg-indigo-800 text-white'
+                              : 'text-indigo-100 hover:bg-indigo-600',
+                            'group flex cursor-pointer items-center rounded-md px-2 py-2 text-base font-medium'
                           )}
                         >
-                          <item.icon className="mr-4 h-6 w-6 flex-shrink-0 text-indigo-300" aria-hidden="true" />
+                          <item.icon
+                            className="mr-4 h-6 w-6 flex-shrink-0 text-indigo-300"
+                            aria-hidden="true"
+                          />
                           {item.name}
-                        </Link>
+                        </div>
                       ))}
                     </nav>
                   </div>
@@ -133,24 +147,29 @@ export default function Main(props) {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex flex-grow flex-col overflow-y-auto bg-indigo-700 pt-5">
             <div className="flex flex-shrink-0 items-center px-4">
-            <Link href="#" aria-label="Home">
-              <Logo className="h-10 w-auto" />
-            </Link>
+              <Link href="/dashboard" aria-label="Home">
+                <Logo className="h-10 w-auto" />
+              </Link>
             </div>
             <div className="mt-5 flex flex-1 flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
-                  <a
+                  <div
                     key={item.name}
-                    href={item.href}
+                    onClick={() => handleSideBarSelection(item.name)}
                     className={classNames(
-                      item.current ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:bg-indigo-600',
-                      'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
+                      item.current
+                        ? 'bg-indigo-800 text-white'
+                        : 'text-indigo-100 hover:bg-indigo-600',
+                      'group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm font-medium'
                     )}
                   >
-                    <item.icon className="mr-3 h-6 w-6 flex-shrink-0 text-indigo-300" aria-hidden="true" />
+                    <item.icon
+                      className="mr-3 h-6 w-6 flex-shrink-0 text-indigo-300"
+                      aria-hidden="true"
+                    />
                     {item.name}
-                  </a>
+                  </div>
                 ))}
               </nav>
             </div>
@@ -180,10 +199,20 @@ export default function Main(props) {
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-6 w-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
                       </svg>
-
                     </Menu.Button>
                   </div>
                   <Transition
@@ -197,9 +226,9 @@ export default function Main(props) {
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {userNavigation.map((item) => (
-                        <Menu.Item 
-                        key={item.name}
-                        onClick={() => handleUserNavigation(item.name)}
+                        <Menu.Item
+                          key={item.name}
+                          onClick={() => handleUserNavigation(item.name)}
                         >
                           {({ active }) => (
                             <Link
@@ -222,8 +251,9 @@ export default function Main(props) {
           </div>
           <main>
             <div className="py-6">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex w-full items-center justify-center">
-                {Upload}
+              <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
+                {sideBarSelection === 'Upload Audio File' && Upload}
+                {sideBarSelection === 'Youtube' && <Youtube />}
               </div>
             </div>
             <List />

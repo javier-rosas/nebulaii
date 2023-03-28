@@ -16,7 +16,7 @@ export default function List() {
   const [showTranscriptPopup, setShowTranscriptPopup] = useState(false)
   const [showAudioPopup, setShowAudioPopup] = useState(false)
   const [showNotesPopup, setShowNotesPopup] = useState(false)
-  const [selectedFile, setSelectedFile] = useState(null) 
+  const [selectedFile, setSelectedFile] = useState(null)
 
   /**
    * Fetches the processed files from the API
@@ -32,25 +32,27 @@ export default function List() {
   }, [user, dispatch])
 
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-md mb-20">
-      <div className='flex flex-row justify-between'>
-        <h2
-          className="flex flex-row items-center px-4 py-4 text-2xl font-bold tracking-tight text-gray-700 sm:px-6 sm:text-3xl"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" viewBox="0 0 24 24" 
-            strokeWidth={1.5} 
-            stroke="currentColor" 
-            className="w-6 h-6 ml-4 mr-2"
+    <div className="mb-20 overflow-hidden bg-white shadow sm:rounded-md">
+      <div className="flex flex-row justify-between">
+        <h2 className="flex flex-row items-center px-4 py-4 text-2xl font-bold tracking-tight text-gray-700 sm:px-6 sm:text-3xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="ml-4 mr-2 h-6 w-6"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+            />
           </svg>
-
           Your recordings
         </h2>
 
-        <Search styles="px-4 py-4 sm:px-6"/>
+        <Search styles="px-4 py-4 sm:px-6" />
       </div>
       {showListSpinner ? (
         <Spinner />
@@ -121,18 +123,26 @@ export default function List() {
                         </div>
                       </div>
                       <div className="flex justify-center sm:justify-end">
-                      {showDeleteSpinner ? <Spinner styles={`mt-2`}/> :
-                        (<button
-                        type="button"
-                        onClick={async () => {
-                          setShowDeleteSpinner(true)
-                          await dispatch(apiDeleteFileByUserEmailAndFilename({user, filename: processedFile.filename}))
-                          setShowDeleteSpinner(false)
-                        }}
-                        className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
-                      >
-                        Delete
-                      </button>)}
+                        {showDeleteSpinner ? (
+                          <Spinner styles={`mt-2`} />
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              setShowDeleteSpinner(true)
+                              await dispatch(
+                                apiDeleteFileByUserEmailAndFilename({
+                                  user,
+                                  filename: processedFile.filename,
+                                })
+                              )
+                              setShowDeleteSpinner(false)
+                            }}
+                            className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
+                          >
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
