@@ -12,7 +12,7 @@ export default function List() {
   const dispatch = useDispatch()
   const processedFiles = useSelector((state) => state.processedFiles)
   const [showListSpinner, setShowListSpinner] = useState(false)
-  const [showDeleteSpinner, setShowDeleteSpinner] = useState(false)
+  const [deletingFile, setDeletingFile] = useState(null)
   const [showTranscriptPopup, setShowTranscriptPopup] = useState(false)
   const [showAudioPopup, setShowAudioPopup] = useState(false)
   const [showNotesPopup, setShowNotesPopup] = useState(false)
@@ -123,20 +123,20 @@ export default function List() {
                         </div>
                       </div>
                       <div className="flex justify-center sm:justify-end">
-                        {showDeleteSpinner ? (
+                        {deletingFile === processedFile.filename ? (
                           <Spinner styles={`mt-2`} />
                         ) : (
                           <button
                             type="button"
                             onClick={async () => {
-                              setShowDeleteSpinner(true)
+                              setDeletingFile(processedFile.filename)
                               await dispatch(
                                 apiDeleteFileByUserEmailAndFilename({
                                   user,
                                   filename: processedFile.filename,
                                 })
                               )
-                              setShowDeleteSpinner(false)
+                              setDeletingFile(null)
                             }}
                             className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
                           >

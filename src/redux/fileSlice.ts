@@ -1,13 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { FileState } from '@/types/FileState'
 
-type FileState = {
-  filename: string;
-  language: string;
-  enableSpeakerDiarization: boolean;
-  minSpeakerCount: number | null;
-  maxSpeakerCount: number | null;
-  description: string;
-}
 
 // initial user state
 const initialState: FileState = {
@@ -17,6 +10,8 @@ const initialState: FileState = {
   minSpeakerCount: null,
   maxSpeakerCount: null,
   description: '',
+  dateAdded: Date.now(),
+  fileType: null
 }
 
 // fileSlice
@@ -24,31 +19,35 @@ export const fileSlice = createSlice({
   name: 'file',
   initialState,
   reducers: {
-    setFilename: (state, action) => {
+    setFilename: (state: FileState, action: PayloadAction<string>) => {
       state.filename = action.payload
     },
-    setLanguage: (state, action) => {
+    setLanguage: (state: FileState, action: PayloadAction<string>) => {
       state.language = action.payload
     },
-    setEnableSpeakerDiarization: (state, action) => {
+    setEnableSpeakerDiarization: (state: FileState, action: PayloadAction<boolean>) => {
       state.enableSpeakerDiarization = action.payload
     },
-    setMinSpeakerCount: (state, action) => {
+    setMinSpeakerCount: (state: FileState, action: PayloadAction<number | null>) => {
       state.minSpeakerCount = action.payload
     },
-    setMaxSpeakerCount: (state, action) => {
+    setMaxSpeakerCount: (state: FileState, action: PayloadAction<number | null>) => {
       state.maxSpeakerCount = action.payload
     },
-    setDescription: (state, action) => {
+    setDescription: (state: FileState, action: PayloadAction<string>) => {
       state.description = action.payload
     },
-    resetFileState: (state, action) => {
+    setFileType: (state: FileState, action: PayloadAction<string>) => {
+      state.fileType = action.payload
+    },
+    resetFileState: (state: FileState) => {
       state.filename = ''
       state.language = ''
       state.enableSpeakerDiarization = false
       state.minSpeakerCount = null
       state.maxSpeakerCount = null
       state.description = '';
+      state.fileType = null;
     },
   }
 })
@@ -60,7 +59,7 @@ export const {
   setEnableSpeakerDiarization,
   setMinSpeakerCount,
   setMaxSpeakerCount,
-  resetFileState
+  resetFileState,
 } = fileSlice.actions
 
 // state selector

@@ -16,11 +16,7 @@ export default function Search({ styles }: StyleProps) {
   const regularList = useSelector(
     (state: RootState) => state.processedFiles.regularList
   )
-
-
-  const ffff = useSelector(
-    (state: RootState) => state.processedFiles.filteredList
-  )
+  
   // Returns a filtered list of files based on the query
   const filteredList =
     query === ''

@@ -3,12 +3,14 @@ import { postAudioFile } from '@/services/postAudioFile'
 import { processAudioFile } from '@/services/processAudioFile'
 import { useDispatch } from 'react-redux'
 import { setFilename } from '@/redux/fileSlice'
+import { setFileType } from '@/redux/fileSlice'
 import { resetFileState } from '@/redux/fileSlice'
 import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
 import Spinner from '@/components/landing/Spinner'
 import Question from './question'
 import QuestionWithReplacement from './question/QuestionWithReplacement'
+import Alert from './alert'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
@@ -20,6 +22,12 @@ export default function Upload() {
   const user = useSelector((state) => state.user.user)
   const regularList = useSelector((state) => state.processedFiles.regularList)
   const [showQuestionReplacement, setShowQuestionReplacement] = useState(false)
+  const [showFileTypeAlert, setShowFileTypeAlert] = useState(false)
+
+  const handleFileHelper = (file) => {
+    if (isFileTypeValid(file)) { setShowFileTypeAlert(false); setFile(file) }
+    else { setShowFileTypeAlert(true); setFile(null) }
+  }
 
   const handleDragEnter = (e) => {
     e.preventDefault()
@@ -43,20 +51,15 @@ export default function Upload() {
     e.stopPropagation()
     setDrag(false)
     if (!e.dataTransfer) return
-    setFile(e.dataTransfer.files[0])
+    const file = e.dataTransfer.files[0]
+    handleFileHelper(file)
   }
 
   const handleFileSelect = (event) => {
     event.preventDefault()
     if (!event.target.files) return
-    setFile(event.target.files[0])
-  }
-
-  const getAudioFileObj = (fileState) => {
-    return {
-      ...fileState,
-      dateAdded: new Date(),
-    }
+    const file = event.target.files[0]
+    handleFileHelper(file)
   }
 
   async function uploadAudioFile(file, email) {
@@ -65,17 +68,16 @@ export default function Upload() {
     setFile(null)
   }
 
-  async function processFile(fileState, token) {
-    const audioFileObj = getAudioFileObj(fileState)
-    const res = await processAudioFile(audioFileObj, token)
-    return res.ok
-  }
-
   const logFileStatus = (status) => {
-    const message = status
+    const message = status.ok
       ? 'File processed successfully.'
       : 'File could not be processed.'
     console.log(message)
+  }
+
+  const isFileTypeValid = (file) => {
+    const allowedTypes = ['audio/mp3', 'audio/mp4', 'audio/wav', 'audio/m4a']
+    return allowedTypes.includes(file.type)
   }
 
   const doesFileExist = (file) => {
@@ -84,10 +86,10 @@ export default function Upload() {
 
   const upload = useCallback(
     async (file) => {
+      if (!user || !user.email || !file) return
       try {
-        if (!user || !user.email || !file) return
         await uploadAudioFile(file, user.email)
-        const status = await processFile(fileState, user.token)
+        const status = await processAudioFile(fileState, user.token)
         logFileStatus(status)
       } catch (e) {
         console.error(e)
@@ -96,7 +98,7 @@ export default function Upload() {
       await dispatch(resetFileState())
       await dispatch(apiGetFilesByUserEmail(user))
     },
-    [user, fileState, dispatch, processFile]
+    [user, fileState, dispatch, processAudioFile]
   )
 
   useEffect(() => {
@@ -104,10 +106,12 @@ export default function Upload() {
     else {
       setShowUploadButton(true)
       dispatch(setFilename(file.name))
+      dispatch(setFileType(file.type))
       if (doesFileExist(file)) setShowQuestionReplacement(true)
       else setShowQuestionReplacement(false)
     }
   }, [file, dispatch, doesFileExist])
+
 
   return (
     <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">
@@ -162,12 +166,12 @@ export default function Upload() {
                     </span>
                   </p>
                   <p className="text-center text-xs text-black">
-                    MP3, MP4, WAV or M4A (MAX. 8 hours)
+                    MP3, MOV, WAV or M4A (MAX. 8 hours)
                   </p>
                 </div>
                 <input
                   id="dropzone-file"
-                  accept=".mp3,.mp4,.wav,.m4a"
+                  accept=".mp3,.mov,.wav,.m4a"
                   type="file"
                   className="hidden"
                   onChange={handleFileSelect}
@@ -175,6 +179,9 @@ export default function Upload() {
               </label>
             </div>
             <h1 className="mt-2 text-base">{file?.name}</h1>
+            {showFileTypeAlert && (
+              <Alert setShowFileTypeAlert={setShowFileTypeAlert}/>
+            )}
             {showUploadButton &&
               file &&
               (showQuestionReplacement ? (

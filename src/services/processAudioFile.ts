@@ -1,16 +1,20 @@
-import { AudioFile } from '@/types/AudioFile'
+import { FileState } from '@/types/FileState'
 
 const AWS_LAMBDA_BASE_URL = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
-export async function processAudioFile(audioFileObj: AudioFile, token: string) {
+export async function processAudioFile(fileState: FileState, token: string) {
   try {
+    fileState = {
+      ...fileState,
+      dateAdded: Date.now(),
+    }
     const response = await fetch(`${AWS_LAMBDA_BASE_URL}/process-audio-file`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: token
       },
-      body: JSON.stringify(audioFileObj),
+      body: JSON.stringify(fileState),
     })
     if (!response.ok) {
       throw new Error('Failed to process audio file. Please try again later.')
