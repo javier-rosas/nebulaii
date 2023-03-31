@@ -60,6 +60,7 @@ export const {
   setMinSpeakerCount,
   setMaxSpeakerCount,
   resetFileState,
+  setFileType
 } = fileSlice.actions
 
 // state selector

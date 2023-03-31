@@ -69,6 +69,7 @@ export default function Upload() {
   }
 
   const logFileStatus = (status) => {
+    console.log(status)
     const message = status.ok
       ? 'File processed successfully.'
       : 'File could not be processed.'
@@ -76,7 +77,7 @@ export default function Upload() {
   }
 
   const isFileTypeValid = (file) => {
-    const allowedTypes = ['audio/mp3', 'audio/mp4', 'audio/wav', 'audio/m4a']
+    const allowedTypes = ['audio/mpeg','audio/mp3', 'audio/mp4', 'audio/wav', 'audio/m4a']
     return allowedTypes.includes(file.type)
   }
 

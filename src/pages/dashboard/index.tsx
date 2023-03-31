@@ -45,6 +45,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context.req, context.res)
   const user = session?.user as User
   const token = await authenticateUser(user)
+  
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),
