@@ -69,7 +69,6 @@ export default function Upload() {
   }
 
   const logFileStatus = (status) => {
-    console.log(status)
     const message = status.ok
       ? 'File processed successfully.'
       : 'File could not be processed.'

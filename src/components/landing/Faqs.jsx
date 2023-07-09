@@ -1,58 +1,41 @@
 import Image from 'next/image'
-
+import Link from 'next/link'
 import { Container } from '@/components/landing/Container'
 import backgroundImage from '@/images/background-faqs.jpg'
 
 const faqs = [
   [
     {
-      question: 'Does TaxPal handle VAT?',
+      question: 'What should my data look like?',
       answer:
-        'Well no, but if you move your company offshore you can probably ignore it.',
+        'You can upload one or multiple files in 1 datastore (PDF, CSV, JSON, Text, PowerPoint, Word, Excel), or add a link to your website to be scraped. 1 chatbot is associated with 1 datastore.',
     },
     {
-      question: 'Can I pay for my subscription via purchase order?',
-      answer: 'Absolutely, we are happy to take your money in all forms.',
+      question: 'Does it use ChatGPT?',
+      answer:
+        'Yes, your chatbot uses ChatGPT (gpt-4). We are planning to support other models in the future.',
     },
     {
-      question: 'How do I apply for a job at TaxPal?',
+      question: 'Where is my data stored?',
       answer:
-        'We only hire our customers, so subscribe for a minimum of 6 months and then let’s talk.',
+        'The content of the documents is hosted on secure AWS servers in Virginia, USA.',
     },
   ],
   [
     {
-      question: 'What was that testimonial about tax fraud all about?',
+      question: 'Does it support other languages?',
       answer:
-        'TaxPal is just a software application, ultimately your books are your responsibility.',
+        'Yes, Nebulaii supports Spanish and English. You can have your sources in any language and ask it questions in any language.',
     },
     {
-      question:
-        'TaxPal sounds horrible but why do I still feel compelled to purchase?',
+      question: 'How can I add my chatbot to my website?',
       answer:
-        'This is the power of excellent visual design. You just can’t resist it, no matter how poorly it actually functions.',
+        'You can embed an iframe or add a chat bubble to the bottom right/left of your website.',
     },
     {
-      question:
-        'I found other companies called TaxPal, are you sure you can use this name?',
+      question: 'Can I give my chatbots instructions?',
       answer:
-        'Honestly not sure at all. We haven’t actually incorporated or anything, we just thought it sounded cool and made this website.',
-    },
-  ],
-  [
-    {
-      question: 'How do you generate reports?',
-      answer:
-        'You just tell us what data you need a report for, and we get our kids to create beautiful charts for you using only the finest crayons.',
-    },
-    {
-      question: 'Can we expect more inventory features?',
-      answer: 'In life it’s really better to never expect anything at all.',
-    },
-    {
-      question: 'I lost my password, how do I get into my account?',
-      answer:
-        'Send us an email and we will send you a copy of our latest password spreadsheet so you can find your information.',
+        'Yes, you can edit the base prompt and give your chatbot a name, personality traits and instructions on how to answer questions ex. (only answer in French).',
     },
   ],
 ]
@@ -65,7 +48,7 @@ export function Faqs() {
       className="relative overflow-hidden bg-slate-50 py-20 sm:py-32"
     >
       <Image
-        className="absolute top-0 left-1/2 max-w-none translate-x-[-30%] -translate-y-1/4"
+        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%]"
         src={backgroundImage}
         alt=""
         width={1558}
@@ -82,12 +65,15 @@ export function Faqs() {
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
             If you can’t find what you’re looking for, email our support team
-            and if you’re lucky someone will get back to you.
+            and if you’re lucky someone will get back to you:
           </p>
+          <Link className="text-indigo-500" href="mailto:javier@nebulaii.com">
+            javier@nebulaii.com
+          </Link>
         </div>
         <ul
           role="list"
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2"
         >
           {faqs.map((column, columnIndex) => (
             <li key={columnIndex}>

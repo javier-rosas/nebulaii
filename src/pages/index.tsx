@@ -7,7 +7,7 @@ import { Hero } from '@/components/landing/Hero'
 import { Pricing } from '@/components/landing/Pricing'
 import { PrimaryFeatures } from '@/components/landing/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/landing/SecondaryFeatures'
-import { Testimonials } from '@/components/landing/Testimonials'
+// import { Testimonials } from '@/components/landing/Testimonials'
 import { useRouter } from 'next/router'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { UserContext } from '@auth0/nextjs-auth0/client'
@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Nebulaii - AI note taker. </title>
+        <title>Nebulaii</title>
         <meta
           name="description"
           content="Our AI is so good, it's like having a personal secretary that never takes a coffee break"
@@ -37,9 +37,9 @@ export default function Home() {
         <Hero />
         <PrimaryFeatures />
         <SecondaryFeatures />
-        <CallToAction />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <Pricing />
+        <CallToAction />
         <Faqs />
       </main>
       <Footer />

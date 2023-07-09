@@ -11,9 +11,8 @@ import screenshotProfitLoss from '@/images/screenshots/profit-loss.png'
 const features = [
   {
     name: 'Reporting',
-    summary: 'Stay on top of things with always up-to-date reporting features.',
-    description:
-      'We talked about reporting in the section above but we needed three items here, so mentioning it one more time for posterity.',
+    summary: 'Load data from any source',
+    description: "Easily upload documents you'd like to chat with.",
     image: screenshotProfitLoss,
     icon: function ReportingIcon() {
       let id = useId()
@@ -45,10 +44,9 @@ const features = [
   },
   {
     name: 'Inventory',
-    summary:
-      'Never lose track of what’s in stock with accurate inventory tracking.',
+    summary: 'Instant answers',
     description:
-      'We don’t offer this as part of our software but that statement is inarguably true. Accurate inventory tracking would help you for sure.',
+      'Ask questions, extract information, and summarize documents with AI.',
     image: screenshotInventory,
     icon: function InventoryIcon() {
       return (
@@ -73,10 +71,9 @@ const features = [
   },
   {
     name: 'Contacts',
-    summary:
-      'Organize all of your contacts, service providers, and invoices in one place.',
+    summary: 'Sources included',
     description:
-      'This also isn’t actually a feature, it’s just some friendly advice. We definitely recommend that you do this, you’ll feel really organized and professional.',
+      'Every response is backed by sources extracted from the uploaded document.',
     image: screenshotContacts,
     icon: function ContactsIcon() {
       return (
@@ -96,30 +93,17 @@ const features = [
   },
 ]
 
-function Feature({ feature, isActive, className, ...props }) {
+function Feature({ feature, className, ...props }) {
   return (
     <div
-      className={clsx(className, !isActive && 'opacity-75 hover:opacity-100')}
+      className={clsx(className && 'opacity-75 hover:opacity-100')}
       {...props}
     >
-      <div
-        className={clsx(
-          'w-9 rounded-lg',
-          isActive ? 'bg-blue-600' : 'bg-slate-500'
-        )}
-      >
+      <div className={clsx('w-9 rounded-lg bg-slate-500')}>
         <svg aria-hidden="true" className="h-9 w-9" fill="none">
           <feature.icon />
         </svg>
       </div>
-      <h3
-        className={clsx(
-          'mt-6 text-sm font-medium',
-          isActive ? 'text-blue-600' : 'text-slate-600'
-        )}
-      >
-        {feature.name}
-      </h3>
       <p className="mt-2 font-display text-xl text-slate-900">
         {feature.summary}
       </p>
@@ -134,7 +118,7 @@ function FeaturesMobile() {
       {features.map((feature) => (
         <div key={feature.name}>
           <Feature feature={feature} className="mx-auto max-w-2xl" isActive />
-          <div className="relative mt-10 pb-10">
+          {/* <div className="relative mt-10 pb-10">
             <div className="absolute -inset-x-4 bottom-0 top-8 bg-slate-200 sm:-inset-x-6" />
             <div className="relative mx-auto w-[52.75rem] overflow-hidden rounded-xl bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-500/10">
               <Image
@@ -144,7 +128,7 @@ function FeaturesMobile() {
                 sizes="52.75rem"
               />
             </div>
-          </div>
+          </div> */}
         </div>
       ))}
     </div>
@@ -162,19 +146,13 @@ function FeaturesDesktop() {
                 key={feature.name}
                 feature={{
                   ...feature,
-                  name: (
-                    <Tab className="[&:not(:focus-visible)]:focus:outline-none">
-                      <span className="absolute inset-0" />
-                      {feature.name}
-                    </Tab>
-                  ),
                 }}
                 isActive={featureIndex === selectedIndex}
                 className="relative"
               />
             ))}
           </Tab.List>
-          <Tab.Panels className="relative mt-20 overflow-hidden rounded-4xl bg-slate-200 px-14 py-16 xl:px-16">
+          {/* <Tab.Panels className="relative mt-20 overflow-hidden rounded-4xl bg-slate-200 px-14 py-16 xl:px-16">
             <div className="-mx-5 flex">
               {features.map((feature, featureIndex) => (
                 <Tab.Panel
@@ -199,7 +177,7 @@ function FeaturesDesktop() {
               ))}
             </div>
             <div className="pointer-events-none absolute inset-0 rounded-4xl ring-1 ring-inset ring-slate-900/10" />
-          </Tab.Panels>
+          </Tab.Panels> */}
         </>
       )}
     </Tab.Group>
@@ -211,17 +189,13 @@ export function SecondaryFeatures() {
     <section
       id="secondary-features"
       aria-label="Features for simplifying everyday business tasks"
-      className="pt-20 pb-14 sm:pb-20 sm:pt-32 lg:pb-32"
+      className="pb-14 pt-20 sm:pb-20 sm:pt-32 lg:pb-32"
     >
       <Container>
         <div className="mx-auto max-w-2xl md:text-center">
           <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
             Simplify everyday business tasks.
           </h2>
-          <p className="mt-4 text-lg tracking-tight text-slate-700">
-            Because you’d probably be a little confused if we suggested you
-            complicate your everyday business tasks instead.
-          </p>
         </div>
         <FeaturesMobile />
         <FeaturesDesktop />
