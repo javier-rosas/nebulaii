@@ -43,9 +43,11 @@ export function Hero() {
       </h1>
 
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-        Create custom AI chatbots instantly with our no-code platform. Boost
-        customer support and team onboarding with ease!
+        {
+          'Create custom AI chatbots instantly with our no-code platform. Boost customer support and team onboarding with ease!'
+        }
       </p>
+
       <div className="ml-10 mr-10 mt-10 flex justify-center rounded-lg p-2">
         <div>
           <YoutubeEmbed
