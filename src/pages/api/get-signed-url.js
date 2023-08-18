@@ -16,13 +16,11 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { fileName, fileType } = req.body
-
       if (!fileName || !fileType) {
         return res
           .status(400)
           .json({ error: 'fileName and fileType are required' })
       }
-
       const params = {
         Bucket: AWS_BUCKET,
         Key: fileName,
@@ -30,14 +28,12 @@ export default async function handler(req, res) {
         ContentType: fileType,
         ACL: 'public-read', // If you want the uploaded file to be publicly accessible
       }
-
       s3.getSignedUrl('putObject', params, (error, url) => {
         if (error) {
           return res
             .status(500)
             .json({ error: 'Failed to generate signed URL' })
         }
-
         res.status(200).json({ signedUrl: url })
       })
     } catch (error) {

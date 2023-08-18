@@ -21,19 +21,21 @@ const generateSignedUrl = async (
       )
     }
     const data = await response.json()
-    return data.url
+    console.log(data)
+    return data.signedUrl
   } catch (error) {
     console.error('Error while generating signed URL:', error)
   }
 }
 
-export async function postDocument(
+export async function putDocInS3(
   file: File,
   userEmail: string,
   documentName: string
 ) {
   try {
     const signedUrl = await generateSignedUrl(file, userEmail, documentName)
+    if (!signedUrl) throw new Error('Failed to post doc. Signed URL is empty.')
     const requestOptions = {
       method: 'PUT',
       headers: {
@@ -45,6 +47,7 @@ export async function postDocument(
     if (!response.ok) {
       throw new Error('Failed to post audio file. Please try again later.')
     }
+    return response.ok
   } catch (error) {
     console.error('Error while uploading file:', error)
   }

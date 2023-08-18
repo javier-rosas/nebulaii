@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { postDocument } from '@/services/postDocument'
+import { putDocInS3 } from '@/services/putDocInS3'
 import { processAudioFile } from '@/services/processAudioFile'
 import { useDispatch } from 'react-redux'
 import { setFilename } from '@/redux/fileSlice'
@@ -67,7 +67,7 @@ export default function Upload() {
 
   async function uploadDocument(file, email) {
     setShowSpinner(true)
-    await postDocument(file, email)
+    await putDocInS3(file, email)
     setFile(null)
   }
 
@@ -114,14 +114,15 @@ export default function Upload() {
   )
 
   useEffect(() => {
+    console.log('file', file)
     if (!file) setShowUploadButton(false)
     else {
       setShowUploadButton(true)
       dispatch(setFilename(file.name))
       dispatch(setFileType(file.type))
-      upload(file)
       if (doesFileExist(file)) setShowQuestionReplacement(true)
       else setShowQuestionReplacement(false)
+      upload(file)
     }
   }, [file, dispatch, doesFileExist])
 
