@@ -2,8 +2,8 @@ import Link from 'next/link'
 
 export default function VerifyEmail() {
   return (
-    <div className="bg-white flex justify-center">
-      <div className="mx-auto max-w-7xl py-24 px-6 sm:py-32 lg:px-8">
+    <div className="flex justify-center bg-white">
+      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Check your email for a verification link.
           <br />

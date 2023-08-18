@@ -11,23 +11,22 @@ import { authenticateUser } from '@/services/userService'
 import { setMongoUser } from '@/redux/userSlice'
 import { useDispatch } from 'react-redux'
 import { User } from '@/types/User'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { createOrUpdateUser } from '@/services/userService'
 
-function Dashboard({ user, token }: any): JSX.Element | undefined {
-
+function Dashboard({ user }: any): JSX.Element | undefined {
   const { error, isLoading }: UserContext = useUser()
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!user || !token) return 
-    const userData = {
-      ...user,
-      token
-    }
-    dispatch(setMongoUser(userData) as any)
-    createOrUpdateUser(userData) 
-  }, [user, token, dispatch])
+    if (!user) return
+
+    // Set the token in local storage
+    localStorage.setItem('user', user)
+
+    dispatch(setMongoUser(user) as any)
+    createOrUpdateUser(user)
+  }, [user, dispatch])
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>{error.message}</div>
@@ -45,11 +44,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context.req, context.res)
   const user = session?.user as User
   const token = await authenticateUser(user)
-  
+  user.token = token
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),
-      token: JSON.parse(JSON.stringify(token)),
     },
   }
 }

@@ -25,8 +25,13 @@ export default function Upload() {
   const [showFileTypeAlert, setShowFileTypeAlert] = useState(false)
 
   const handleFileHelper = (file) => {
-    if (isFileTypeValid(file)) { setShowFileTypeAlert(false); setFile(file) }
-    else { setShowFileTypeAlert(true); setFile(null) }
+    if (isFileTypeValid(file)) {
+      setShowFileTypeAlert(false)
+      setFile(file)
+    } else {
+      setShowFileTypeAlert(true)
+      setFile(null)
+    }
   }
 
   const handleDragEnter = (e) => {
@@ -72,11 +77,16 @@ export default function Upload() {
     const message = status.ok
       ? 'File processed successfully.'
       : 'File could not be processed.'
-    console.log(message)
   }
 
   const isFileTypeValid = (file) => {
-    const allowedTypes = ['audio/mpeg','audio/mp3', 'audio/mp4', 'audio/wav', 'audio/m4a']
+    const allowedTypes = [
+      'audio/mpeg',
+      'audio/mp3',
+      'audio/mp4',
+      'audio/wav',
+      'audio/m4a',
+    ]
     return allowedTypes.includes(file.type)
   }
 
@@ -111,7 +121,6 @@ export default function Upload() {
       else setShowQuestionReplacement(false)
     }
   }, [file, dispatch, doesFileExist])
-
 
   return (
     <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">
@@ -180,7 +189,7 @@ export default function Upload() {
             </div>
             <h1 className="mt-2 text-base">{file?.name}</h1>
             {showFileTypeAlert && (
-              <Alert setShowFileTypeAlert={setShowFileTypeAlert}/>
+              <Alert setShowFileTypeAlert={setShowFileTypeAlert} />
             )}
             {showUploadButton &&
               file &&

@@ -4,7 +4,7 @@ const AWS_LAMBDA_BASE_URL = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
 export async function authenticateUser(userData: any) {
   try {
-    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/users/authenticate`, {
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/auth`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -21,18 +21,20 @@ export async function authenticateUser(userData: any) {
   }
 }
 
-export async function createOrUpdateUser(userData: User) {
+export async function createOrUpdateUser(user: User) {
   try {
-    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/user`, {
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/mongo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: userData.token
+        Authorization: user.token,
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(user),
     })
     if (!response.ok) {
-      throw new Error('Failed to create or update user. Please try again later.')
+      throw new Error(
+        'Failed to create or update user. Please try again later.'
+      )
     }
     const data = await response.json()
     return data

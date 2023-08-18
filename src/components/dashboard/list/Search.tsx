@@ -3,8 +3,7 @@ import { Combobox } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import { filterFiles } from '@/redux/processedFilesSlice'
-
+import { setFilteredFiles } from '@/redux/processedFilesSlice'
 
 type StyleProps = {
   styles: string
@@ -16,7 +15,7 @@ export default function Search({ styles }: StyleProps) {
   const regularList = useSelector(
     (state: RootState) => state.processedFiles.regularList
   )
-  
+
   // Returns a filtered list of files based on the query
   const filteredList =
     query === ''
@@ -26,18 +25,17 @@ export default function Search({ styles }: StyleProps) {
         })
 
   useEffect(() => {
-    if (query === "") dispatch(filterFiles(regularList))
-    else if (filteredList.length === 0) dispatch(filterFiles([]))
-    else dispatch(filterFiles(filteredList))
+    if (query === '') dispatch(setFilteredFiles(regularList))
+    else if (filteredList.length === 0) dispatch(setFilteredFiles([]))
+    else dispatch(setFilteredFiles(filteredList))
   }, [query, dispatch])
-
 
   return (
     <div className={styles}>
       <Combobox>
         <div className="relative">
           <MagnifyingGlassIcon
-            className="pointer-events-none absolute top-3.5 left-4 h-5 w-5 text-gray-400"
+            className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400"
             aria-hidden="true"
           />
           <Combobox.Input
