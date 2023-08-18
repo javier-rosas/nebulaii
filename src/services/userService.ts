@@ -23,7 +23,7 @@ export async function authenticateUser(userData: any) {
 
 export async function createOrUpdateUser(user: User) {
   try {
-    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/mongo`, {
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

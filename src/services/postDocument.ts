@@ -1,18 +1,24 @@
-const generateSignedUrl = async (file: File, userEmail: string) => {
+const generateSignedUrl = async (
+  file: File,
+  userEmail: string,
+  documentName: string
+) => {
   try {
+    const fileName = `${userEmail}/${documentName}/${file.name}`
     const response = await fetch('/api/get-signed-url', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
-        fileName: file.name, 
-        contentType: file.type,
-        userEmail
+      body: JSON.stringify({
+        fileName,
+        fileType: file.type,
       }),
     })
     if (!response.ok) {
-      throw new Error('Failed to get generate signed url. Please try again later.')
+      throw new Error(
+        'Failed to get generate signed url. Please try again later.'
+      )
     }
     const data = await response.json()
     return data.url
@@ -21,9 +27,13 @@ const generateSignedUrl = async (file: File, userEmail: string) => {
   }
 }
 
-export async function postAudioFile(file: File, userEmail: string) {
+export async function postDocument(
+  file: File,
+  userEmail: string,
+  documentName: string
+) {
   try {
-    const signedUrl = await generateSignedUrl(file, userEmail)
+    const signedUrl = await generateSignedUrl(file, userEmail, documentName)
     const requestOptions = {
       method: 'PUT',
       headers: {

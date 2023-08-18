@@ -1,18 +1,12 @@
 import { Fragment, useRef, useState, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import Spinner from '@/components/landing/Spinner'
-import { getTranscriptByUserEmailAndFilename } from '@/services/transcriptService'
-import { getDiarizedTranscriptByUserEmailAndFilename } from '@/services/diarizedTranscriptService'
-import { getNotesByUserEmailAndFilename } from '@/services/notesService'
+import { getFileByUserEmailAndFilename } from '@/services/fileService'
 import { useSelector } from 'react-redux'
+import Spinner from '@/components/landing/Spinner'
 
 export default function Popup({
-  setShowTranscriptPopup,
-  setShowAudioPopup,
-  setShowNotesPopup,
-  showTranscriptPopup,
-  showNotesPopup,
-  showAudioPopup,
+  setShowDocumentPopup,
+  showDocumentPopup,
   selectedFile,
 }) {
   const [open, setOpen] = useState(true)
@@ -24,70 +18,36 @@ export default function Popup({
   const cancelButtonRef = useRef(null)
 
   const closePopup = (isClosed) => {
-    setShowTranscriptPopup(false)
-    setShowAudioPopup(false)
-    setShowNotesPopup(false)
+    setShowDocumentPopup(false)
     setOpen(isClosed)
   }
 
-  const formatArray = (arr) => {
-    if (!arr) return
-    let result = ''
-    for (let i = 0; i < arr.length; i++) {
-      result += `<strong>Speaker ${arr[i].speakerTag}</strong>: ${arr[i].sentence}\n\n`
-    }
-    return result
-  }
-
-  const extractNum = (str) => {
-    const numStr = str.match(/-?\d+/g)?.pop() // match the last sequence of digits
-    return numStr ? parseInt(numStr) : undefined // convert to number or return undefined
-  }
-
   const handlePopupShow = useCallback(
-    (isDiarized, res, notes) => {
+    (res) => {
       switch (true) {
-        case showTranscriptPopup:
-          const text = isDiarized ? formatArray(res.transcript) : res.transcript
+        case showDocumentPopup:
+          const text = res.document
           setText(text)
-          setTitle('Transcript')
+          setTitle('Document')
           break
-
-        case showNotesPopup:
-          setText(notes.notes)
-          setTitle('Notes')
-          break
-
-        case showAudioPopup:
-          setTitle('Audio')
-          break
-
         default:
           break
       }
     },
-    [showTranscriptPopup, showNotesPopup, showAudioPopup]
+    [showDocumentPopup]
   )
 
   const getData = useCallback(async () => {
     if (!selectedFile || !user) {
       return
     }
-    const isDiarized = extractNum(selectedFile.description) > 1
-    const res = await (isDiarized
-      ? getDiarizedTranscriptByUserEmailAndFilename(user, selectedFile.filename)
-      : getTranscriptByUserEmailAndFilename(user, selectedFile.filename))
-    const notes = await getNotesByUserEmailAndFilename(
-      user,
-      selectedFile.filename
-    )
-
-    handlePopupShow(isDiarized, res, notes)
-  }, [user, selectedFile, setTitle, setText, handlePopupShow])
+    const res = await getFileByUserEmailAndFilename(user, selectedFile.filename)
+    handlePopupShow(res)
+  }, [user, selectedFile, setText, handlePopupShow])
 
   useEffect(() => {
     getData()
-  }, [selectedFile, showNotesPopup, showTranscriptPopup, getData])
+  }, [selectedFile, showDocumentPopup, getData])
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -120,7 +80,7 @@ export default function Popup({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div>
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title

@@ -1,46 +1,49 @@
-import { Storage } from '@google-cloud/storage'
-const storage = new Storage({
-  projectId: process.env.project_id,
-  credentials: {
-    type: process.env.type,
-    project_id: process.env.project_id,
-    private_key_id: process.env.private_key_id,
-    private_key: process.env.private_key,
-    client_email: process.env.client_email,
-    client_id: process.env.client_id,
-    auth_uri: process.env.auth_uri,
-    token_uri: process.env.token_uri,
-    auth_provider_x509_cert_url: process.env.auth_provider_x509_cert_url,
-    client_x509_cert_url: process.env.client_x509_cert_url,
-    }
-})
+import { S3 } from 'aws-sdk'
 
-const bucketName = process.env.GCP_BUCKET_NAME
+const AWS_BUCKET = process.env.AWS_BUCKET
+const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY
+const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY
+const AWS_REGION = process.env.AWS_REGION
+
+const s3 = new S3({
+  accessKeyId: AWS_ACCESS_KEY,
+  secretAccessKey: AWS_SECRET_KEY,
+  region: AWS_REGION,
+})
 
 // Generate signed URL
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { fileName, contentType, userEmail } = req.body
-
     try {
-      const options = {
-        version: 'v4',
-        action: 'write',
-        expires: Date.now() + 10000 * 60 * 1000, // 10,000 minutes or 7 days (max)
-        contentType: contentType,
+      const { fileName, fileType } = req.body
+
+      if (!fileName || !fileType) {
+        return res
+          .status(400)
+          .json({ error: 'fileName and fileType are required' })
       }
 
-      const signedUrl = await storage
-        .bucket(bucketName)
-        .file(`${userEmail}/${fileName}`)
-        .getSignedUrl(options)
+      const params = {
+        Bucket: AWS_BUCKET,
+        Key: fileName,
+        Expires: 60 * 5, // URL will be valid for 5 minutes
+        ContentType: fileType,
+        ACL: 'public-read', // If you want the uploaded file to be publicly accessible
+      }
 
-      res.status(200).json({ url: signedUrl[0] })
+      s3.getSignedUrl('putObject', params, (error, url) => {
+        if (error) {
+          return res
+            .status(500)
+            .json({ error: 'Failed to generate signed URL' })
+        }
+
+        res.status(200).json({ signedUrl: url })
+      })
     } catch (error) {
-      console.error(error)
-      res.status(500).json({ error: 'Error generating signed URL' })
+      return res.status(500).json({ error: 'Internal server error' })
     }
   } else {
-    res.status(405).json({ error: 'Method not allowed' })
+    return res.status(405).json({ error: 'Method not allowed' })
   }
 }

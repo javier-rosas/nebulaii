@@ -4,7 +4,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useDispatch } from 'react-redux'
 import { resetFileState } from '@/redux/fileSlice'
 
-export default function Alert({setShowFileTypeAlert}) {
+export default function Alert({ setShowFileTypeAlert }) {
   const [open, setOpen] = useState(true)
   const dispatch = useDispatch()
 
@@ -43,15 +43,22 @@ export default function Alert({setShowFileTypeAlert}) {
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <div>
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-400">
-                    <ExclamationTriangleIcon className="h-6 w-6 text-black" aria-hidden="true" />
+                    <ExclamationTriangleIcon
+                      className="h-6 w-6 text-black"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="mt-3 text-center sm:mt-5">
-                    <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-base font-semibold leading-6 text-gray-900"
+                    >
                       Incorrect File Type
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Only .wav, .mov, .mp3 or .m4a file types allowed.
+                        Only .pdf, .docx, .doc, .txt, .pptx, .ppt, .xlsx, .xls,
+                        .csv files are supported.
                       </p>
                     </div>
                   </div>

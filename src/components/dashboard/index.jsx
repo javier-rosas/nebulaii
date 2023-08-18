@@ -27,7 +27,6 @@ export default function Main(props) {
   const processedFiles = useSelector((state) => state.processedFiles)
   const [navigation, setNavigation] = useState([
     { name: 'Upload Audio File', icon: ArrowUpOnSquareIcon, current: true },
-    { name: 'Youtube', icon: VideoCameraIcon, current: false },
     { name: 'Settings', icon: Cog6ToothIcon, current: false },
   ])
   const [sideBarSelection, setSideBarSelection] = useState('Upload Audio File')
@@ -251,7 +250,7 @@ export default function Main(props) {
             <div className="py-6">
               <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
                 {sideBarSelection === 'Upload Audio File' && Upload}
-                {sideBarSelection === 'Youtube' && <Youtube />}
+                {/* {sideBarSelection === 'Youtube' && <Youtube />} */}
               </div>
             </div>
             <List />

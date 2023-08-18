@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { postAudioFile } from '@/services/postAudioFile'
+import { postDocument } from '@/services/postDocument'
 import { processAudioFile } from '@/services/processAudioFile'
 import { useDispatch } from 'react-redux'
 import { setFilename } from '@/redux/fileSlice'
@@ -8,8 +8,6 @@ import { resetFileState } from '@/redux/fileSlice'
 import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
 import Spinner from '@/components/landing/Spinner'
-import Question from './question'
-import QuestionWithReplacement from './question/QuestionWithReplacement'
 import Alert from './alert'
 
 export default function Upload() {
@@ -67,9 +65,9 @@ export default function Upload() {
     handleFileHelper(file)
   }
 
-  async function uploadAudioFile(file, email) {
+  async function uploadDocument(file, email) {
     setShowSpinner(true)
-    await postAudioFile(file, email)
+    await postDocument(file, email)
     setFile(null)
   }
 
@@ -81,11 +79,15 @@ export default function Upload() {
 
   const isFileTypeValid = (file) => {
     const allowedTypes = [
-      'audio/mpeg',
-      'audio/mp3',
-      'audio/mp4',
-      'audio/wav',
-      'audio/m4a',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      'application/pdf',
+      'text/csv',
+      'text/plain',
     ]
     return allowedTypes.includes(file.type)
   }
@@ -98,7 +100,7 @@ export default function Upload() {
     async (file) => {
       if (!user || !user.email || !file) return
       try {
-        await uploadAudioFile(file, user.email)
+        await uploadDocument(file, user.email)
         const status = await processAudioFile(fileState, user.token)
         logFileStatus(status)
       } catch (e) {
@@ -117,6 +119,7 @@ export default function Upload() {
       setShowUploadButton(true)
       dispatch(setFilename(file.name))
       dispatch(setFileType(file.type))
+      upload(file)
       if (doesFileExist(file)) setShowQuestionReplacement(true)
       else setShowQuestionReplacement(false)
     }
@@ -129,10 +132,7 @@ export default function Upload() {
           Upload any audio file!
         </h3>
         <div className="mt-2 max-w-xl text-sm text-gray-500">
-          <p>
-            Once you upload the file, our AI will transcribe and summarize it in
-            minutes.
-          </p>
+          <p>Once you upload the file, our AI will process it seconds.</p>
         </div>
         {showSpinner ? (
           <Spinner />
@@ -175,12 +175,12 @@ export default function Upload() {
                     </span>
                   </p>
                   <p className="text-center text-xs text-black">
-                    MP3, MOV, WAV or M4A (MAX. 8 hours)
+                    PDF, DOCX, DOC, TXT, PPTX, PPT, XLSX, XLS, CSV
                   </p>
                 </div>
                 <input
                   id="dropzone-file"
-                  accept=".mp3,.mov,.wav,.m4a"
+                  accept=".docx,.doc,.pptx,.txt,.ppt,.xlsx,.xls,.csv"
                   type="file"
                   className="hidden"
                   onChange={handleFileSelect}
@@ -191,7 +191,7 @@ export default function Upload() {
             {showFileTypeAlert && (
               <Alert setShowFileTypeAlert={setShowFileTypeAlert} />
             )}
-            {showUploadButton &&
+            {/* {showUploadButton &&
               file &&
               (showQuestionReplacement ? (
                 <QuestionWithReplacement
@@ -201,7 +201,7 @@ export default function Upload() {
                 />
               ) : (
                 <Question upload={upload} file={file} setFile={setFile} />
-              ))}
+              ))} */}
           </div>
         )}
       </div>

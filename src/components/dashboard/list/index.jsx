@@ -13,22 +13,20 @@ export default function List() {
   const processedFiles = useSelector((state) => state.processedFiles)
   const [showListSpinner, setShowListSpinner] = useState(false)
   const [deletingFile, setDeletingFile] = useState(null)
-  const [showTranscriptPopup, setShowTranscriptPopup] = useState(false)
-  const [showAudioPopup, setShowAudioPopup] = useState(false)
-  const [showNotesPopup, setShowNotesPopup] = useState(false)
+  const [showDocumentPopup, setShowDocumentPopup] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
 
   /**
    * Fetches the processed files from the API
    */
   useEffect(() => {
-    const fetchTranscriptsAndNotes = async () => {
+    const fetchDocuments = async () => {
       if (!user || !user.token) return
       setShowListSpinner(true)
       await dispatch(apiGetFilesByUserEmail(user))
       setShowListSpinner(false)
     }
-    fetchTranscriptsAndNotes()
+    fetchDocuments()
   }, [user, dispatch])
 
   return (
@@ -78,32 +76,12 @@ export default function List() {
                         <button
                           type="button"
                           onClick={() => {
-                            setShowTranscriptPopup(true)
+                            setShowDocumentPopup(true)
                             setSelectedFile(processedFile)
                           }}
                           className="h-12 w-28  rounded-md bg-white px-1 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
                         >
-                          Transcript
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowNotesPopup(true)
-                            setSelectedFile(processedFile)
-                          }}
-                          className="h-12 w-28 rounded-md bg-white px-1 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
-                        >
-                          Notes
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowAudioPopup(true)
-                            setSelectedFile(processedFile)
-                          }}
-                          className="h-12 w-28 rounded-md bg-white px-1 py-2 text-sm font-semibold text-black shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
-                        >
-                          Audio
+                          Document
                         </button>
                       </div>
                       <div className="hidden md:block">
@@ -147,14 +125,10 @@ export default function List() {
                     </div>
                   </div>
                 </div>
-                {(showTranscriptPopup || showNotesPopup || showAudioPopup) && (
+                {showDocumentPopup && (
                   <Popup
-                    setShowAudioPopup={setShowAudioPopup}
-                    showAudioPopup={showAudioPopup}
-                    showTranscriptPopup={showTranscriptPopup}
-                    showNotesPopup={showNotesPopup}
-                    setShowNotesPopup={setShowNotesPopup}
-                    setShowTranscriptPopup={setShowTranscriptPopup}
+                    showDocumentPopup={showDocumentPopup}
+                    setShowDocumentPopup={setShowDocumentPopup}
                     selectedFile={selectedFile}
                   />
                 )}
