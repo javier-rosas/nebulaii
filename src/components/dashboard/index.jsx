@@ -7,12 +7,10 @@ import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3BottomLeftIcon,
   VideoCameraIcon,
-  HomeIcon,
   XMarkIcon,
   Cog6ToothIcon,
   ArrowUpOnSquareIcon,
 } from '@heroicons/react/24/outline'
-import { resetMongoUser } from '@/redux/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Youtube from './youtube'
 
@@ -44,7 +42,7 @@ export default function Main(props) {
   }
 
   const handleUserNavigation = (name) => {
-    if (name === 'Sign out') dispatch(resetMongoUser())
+    if (name === 'Sign out') localStorage.setItem('user', null)
   }
 
   return (

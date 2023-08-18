@@ -58,6 +58,14 @@ export const processedFilesSlice = createSlice({
     setFilteredFiles: (state, action: FilterFilesAction) => {
       state.filteredList = action.payload
     },
+    setFiles: (state, action: FilterFilesAction) => {
+      state.filteredList = action.payload
+      state.regularList = action.payload
+    },
+    deleteFile: (state, action: { payload: string }) => {
+      state.regularList = filterFiles(state.regularList, action.payload)
+      state.filteredList = filterFiles(state.filteredList, action.payload)
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(apiGetFilesByUserEmail.fulfilled, (state, action: any) => {
@@ -76,7 +84,8 @@ export const processedFilesSlice = createSlice({
 })
 
 // action creators
-export const { setFilteredFiles } = processedFilesSlice.actions
+export const { setFilteredFiles, setFiles, deleteFile } =
+  processedFilesSlice.actions
 
 // state selector
 export const selectProccesedFiles = (state: ProcessedFiles) => state
