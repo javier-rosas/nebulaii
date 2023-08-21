@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         Key: fileName,
         Expires: 60 * 5, // URL will be valid for 5 minutes
         ContentType: fileType,
-        ACL: 'public-read', // If you want the uploaded file to be publicly accessible
+        // ACL: 'public-read', // If you want the uploaded file to be publicly accessible
       }
       s3.getSignedUrl('putObject', params, (error, url) => {
         if (error) {

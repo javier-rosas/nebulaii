@@ -7,6 +7,10 @@ import { setFileType } from '@/redux/fileSlice'
 import { resetFileState } from '@/redux/fileSlice'
 import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
+import {
+  allowedMimeTypesList,
+  allowedFileExtensionsStr,
+} from '@/utils/constants'
 import Spinner from '@/components/landing/Spinner'
 import Alert from './alert'
 
@@ -65,12 +69,6 @@ export default function Upload() {
     handleFileHelper(file)
   }
 
-  async function uploadDocument(file, email) {
-    setShowSpinner(true)
-    await putDocInS3(file, email)
-    setFile(null)
-  }
-
   const logFileStatus = (status) => {
     const message = status.ok
       ? 'File processed successfully.'
@@ -78,17 +76,7 @@ export default function Upload() {
   }
 
   const isFileTypeValid = (file) => {
-    const allowedTypes = [
-      'application/vnd.ms-excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/vnd.ms-powerpoint',
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      'application/pdf',
-      'text/csv',
-      'text/plain',
-    ]
+    const allowedTypes = allowedMimeTypesList()
     return allowedTypes.includes(file.type)
   }
 
@@ -96,22 +84,25 @@ export default function Upload() {
     return regularList.find((item) => item.filename === file.name)
   }
 
-  const upload = useCallback(
-    async (file) => {
-      if (!user || !user.email || !file) return
-      try {
-        await uploadDocument(file, user.email)
-        const status = await processAudioFile(fileState, user.token)
-        logFileStatus(status)
-      } catch (e) {
-        console.error(e)
-      }
-      setShowSpinner(false)
-      await dispatch(resetFileState())
-      await dispatch(apiGetFilesByUserEmail(user))
-    },
-    [user, fileState, dispatch, processAudioFile]
-  )
+  async function uploadDocument(file, email) {
+    setShowSpinner(true)
+    await putDocInS3(file, email)
+    setFile(null)
+  }
+
+  const upload = async (file) => {
+    if (!user || !user.email || !file) return
+    try {
+      await uploadDocument(file, user.email)
+      const status = await processAudioFile(fileState, user.token)
+      logFileStatus(status)
+    } catch (e) {
+      console.error(e)
+    }
+    setShowSpinner(false)
+    await dispatch(resetFileState())
+    await dispatch(apiGetFilesByUserEmail(user))
+  }
 
   useEffect(() => {
     console.log('file', file)
@@ -124,7 +115,7 @@ export default function Upload() {
       else setShowQuestionReplacement(false)
       upload(file)
     }
-  }, [file, dispatch, doesFileExist])
+  }, [file])
 
   return (
     <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">
@@ -176,12 +167,12 @@ export default function Upload() {
                     </span>
                   </p>
                   <p className="text-center text-xs text-black">
-                    PDF, DOCX, DOC, TXT, PPTX, PPT, XLSX, XLS, CSV
+                    {allowedFileExtensionsStr()}
                   </p>
                 </div>
                 <input
                   id="dropzone-file"
-                  accept=".docx,.doc,.pptx,.txt,.ppt,.xlsx,.xls,.csv"
+                  accept={allowedFileExtensionsStr()}
                   type="file"
                   className="hidden"
                   onChange={handleFileSelect}

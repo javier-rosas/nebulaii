@@ -57,8 +57,7 @@ export default function Alert({ setShowFileTypeAlert }) {
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Only .pdf, .docx, .doc, .txt, .pptx, .ppt, .xlsx, .xls,
-                        .csv files are supported.
+                        Only {allowedFileExtensionsStr()} files are supported.
                       </p>
                     </div>
                   </div>

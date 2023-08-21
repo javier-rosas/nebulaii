@@ -1,10 +1,7 @@
-const generateSignedUrl = async (
-  file: File,
-  userEmail: string,
-  documentName: string
-) => {
+// This function generates a signed URL for a file to be uploaded to S3.
+const generateSignedUrl = async (file: File, userEmail: string) => {
   try {
-    const fileName = `${userEmail}/${documentName}/${file.name}`
+    const fileName = `${userEmail}/${file.name}`
     const response = await fetch('/api/get-signed-url', {
       method: 'POST',
       headers: {
@@ -21,20 +18,15 @@ const generateSignedUrl = async (
       )
     }
     const data = await response.json()
-    console.log(data)
     return data.signedUrl
   } catch (error) {
     console.error('Error while generating signed URL:', error)
   }
 }
 
-export async function putDocInS3(
-  file: File,
-  userEmail: string,
-  documentName: string
-) {
+export async function putDocInS3(file: File, userEmail: string) {
   try {
-    const signedUrl = await generateSignedUrl(file, userEmail, documentName)
+    const signedUrl = await generateSignedUrl(file, userEmail)
     if (!signedUrl) throw new Error('Failed to post doc. Signed URL is empty.')
     const requestOptions = {
       method: 'PUT',
