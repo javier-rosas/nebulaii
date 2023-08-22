@@ -1,21 +1,24 @@
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
-import { apiDeleteFileByUserEmailAndFilename } from '@/redux/processedFilesSlice'
+import { setFiles, deleteFile } from '@/redux/processedFilesSlice'
+import {
+  getFilesByUserEmail,
+  deleteFileByUserEmailAndFilename,
+} from '@/services/fileService'
+import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 import Spinner from '@/components/landing/Spinner'
 import Popup from '@/components/dashboard/list/Popup'
 import Search from './Search'
 
 export default function List() {
-  const user = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
   const processedFiles = useSelector((state) => state.processedFiles)
   const [showListSpinner, setShowListSpinner] = useState(false)
   const [deletingFile, setDeletingFile] = useState(null)
   const [showDocumentPopup, setShowDocumentPopup] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
-
+  const user = useLocalStorageUser()
   /**
    * Fetches the processed files from the API
    */
@@ -23,11 +26,12 @@ export default function List() {
     const fetchDocuments = async () => {
       if (!user || !user.token) return
       setShowListSpinner(true)
-      await dispatch(apiGetFilesByUserEmail(user))
+      const files = await getFilesByUserEmail(user)
+      dispatch(setFiles(files))
       setShowListSpinner(false)
     }
     fetchDocuments()
-  }, [user, dispatch])
+  }, [user])
 
   return (
     <div className="mb-20 overflow-hidden bg-white shadow sm:rounded-md">
@@ -108,12 +112,11 @@ export default function List() {
                             type="button"
                             onClick={async () => {
                               setDeletingFile(processedFile.filename)
-                              await dispatch(
-                                apiDeleteFileByUserEmailAndFilename({
-                                  user,
-                                  filename: processedFile.filename,
-                                })
+                              await deleteFileByUserEmailAndFilename(
+                                user,
+                                processedFile.filename
                               )
+                              dispatch(deleteFile(processedFile.filename))
                               setDeletingFile(null)
                             }}
                             className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"

@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { putDocInS3 } from '@/services/putDocInS3'
 import { processAudioFile } from '@/services/processAudioFile'
+import { getFilesByUserEmail } from '@/services/fileService'
 import { useDispatch } from 'react-redux'
-import { setFilename } from '@/redux/fileSlice'
-import { setFileType } from '@/redux/fileSlice'
-import { resetFileState } from '@/redux/fileSlice'
-import { apiGetFilesByUserEmail } from '@/redux/processedFilesSlice'
+import { setFilename, setFileType, resetFileState } from '@/redux/fileSlice'
+import { setFiles } from '@/redux/processedFilesSlice'
 import { useSelector } from 'react-redux'
 import {
   allowedMimeTypesList,
@@ -13,17 +12,15 @@ import {
 } from '@/utils/constants'
 import Spinner from '@/components/landing/Spinner'
 import Alert from './alert'
+import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
   const [file, setFile] = useState(null)
-  const [showUploadButton, setShowUploadButton] = useState(false)
   const [showSpinner, setShowSpinner] = useState(false)
   const dispatch = useDispatch()
   const fileState = useSelector((state) => state.file)
-  const user = useSelector((state) => state.user.user)
-  const regularList = useSelector((state) => state.processedFiles.regularList)
-  const [showQuestionReplacement, setShowQuestionReplacement] = useState(false)
+  const user = useLocalStorageUser()
   const [showFileTypeAlert, setShowFileTypeAlert] = useState(false)
 
   const handleFileHelper = (file) => {
@@ -69,21 +66,10 @@ export default function Upload() {
     handleFileHelper(file)
   }
 
-  const logFileStatus = (status) => {
-    const message = status.ok
-      ? 'File processed successfully.'
-      : 'File could not be processed.'
-  }
-
   const isFileTypeValid = (file) => {
     const allowedTypes = allowedMimeTypesList()
     return allowedTypes.includes(file.type)
   }
-
-  const doesFileExist = (file) => {
-    return regularList.find((item) => item.filename === file.name)
-  }
-
   async function uploadDocument(file, email) {
     setShowSpinner(true)
     await putDocInS3(file, email)
@@ -94,27 +80,21 @@ export default function Upload() {
     if (!user || !user.email || !file) return
     try {
       await uploadDocument(file, user.email)
-      const status = await processAudioFile(fileState, user.token)
-      logFileStatus(status)
+      await processAudioFile(fileState, user.token)
     } catch (e) {
       console.error(e)
     }
     setShowSpinner(false)
-    await dispatch(resetFileState())
-    await dispatch(apiGetFilesByUserEmail(user))
+    dispatch(resetFileState())
+    const files = await getFilesByUserEmail(user)
+    dispatch(setFiles(files))
   }
 
   useEffect(() => {
-    console.log('file', file)
-    if (!file) setShowUploadButton(false)
-    else {
-      setShowUploadButton(true)
-      dispatch(setFilename(file.name))
-      dispatch(setFileType(file.type))
-      if (doesFileExist(file)) setShowQuestionReplacement(true)
-      else setShowQuestionReplacement(false)
-      upload(file)
-    }
+    if (!file) return
+    dispatch(setFilename(file.name))
+    dispatch(setFileType(file.type))
+    upload(file)
   }, [file])
 
   return (
@@ -183,17 +163,6 @@ export default function Upload() {
             {showFileTypeAlert && (
               <Alert setShowFileTypeAlert={setShowFileTypeAlert} />
             )}
-            {/* {showUploadButton &&
-              file &&
-              (showQuestionReplacement ? (
-                <QuestionWithReplacement
-                  upload={upload}
-                  file={file}
-                  setFile={setFile}
-                />
-              ) : (
-                <Question upload={upload} file={file} setFile={setFile} />
-              ))} */}
           </div>
         )}
       </div>

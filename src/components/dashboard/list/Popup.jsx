@@ -1,8 +1,8 @@
 import { Fragment, useRef, useState, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { getFileByUserEmailAndFilename } from '@/services/fileService'
-import { useSelector } from 'react-redux'
 import Spinner from '@/components/landing/Spinner'
+import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 
 export default function Popup({
   setShowDocumentPopup,
@@ -13,7 +13,7 @@ export default function Popup({
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
 
-  const user = useSelector((state) => state.user.user)
+  const user = useLocalStorageUser()
 
   const cancelButtonRef = useRef(null)
 
@@ -22,28 +22,25 @@ export default function Popup({
     setOpen(isClosed)
   }
 
-  const handlePopupShow = useCallback(
-    (res) => {
-      switch (true) {
-        case showDocumentPopup:
-          const text = res.document
-          setText(text)
-          setTitle('Document')
-          break
-        default:
-          break
-      }
-    },
-    [showDocumentPopup]
-  )
+  const handlePopupShow = (res) => {
+    switch (true) {
+      case showDocumentPopup:
+        const text = res.document
+        setText(text)
+        setTitle('Document')
+        break
+      default:
+        break
+    }
+  }
 
-  const getData = useCallback(async () => {
+  const getData = async () => {
     if (!selectedFile || !user) {
       return
     }
     const res = await getFileByUserEmailAndFilename(user, selectedFile.filename)
     handlePopupShow(res)
-  }, [user, selectedFile, setText, handlePopupShow])
+  }
 
   useEffect(() => {
     getData()
