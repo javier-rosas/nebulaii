@@ -3,9 +3,9 @@ import { useEffect, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFiles, deleteFile } from '@/redux/processedFilesSlice'
 import {
-  getFilesByUserEmail,
-  deleteFileByUserEmailAndFilename,
-} from '@/services/fileService'
+  getDocumentsByUserEmail,
+  deleteDocumentByUserEmailAndDocumentName,
+} from '@/services/documentService'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 import Spinner from '@/components/landing/Spinner'
 import Popup from '@/components/dashboard/list/Popup'
@@ -26,7 +26,7 @@ export default function List() {
     const fetchDocuments = async () => {
       if (!user || !user.token) return
       setShowListSpinner(true)
-      const files = await getFilesByUserEmail(user)
+      const files = await getDocumentsByUserEmail(user)
       dispatch(setFiles(files))
       setShowListSpinner(false)
     }
@@ -112,7 +112,7 @@ export default function List() {
                             type="button"
                             onClick={async () => {
                               setDeletingFile(processedFile.filename)
-                              await deleteFileByUserEmailAndFilename(
+                              await deleteDocumentByUserEmailAndDocumentName(
                                 user,
                                 processedFile.filename
                               )

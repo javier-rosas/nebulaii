@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { putDocInS3 } from '@/services/putDocInS3'
 import { processAudioFile } from '@/services/processAudioFile'
-import { getFilesByUserEmail } from '@/services/fileService'
+import { getDocumentsByUserEmail } from '@/services/documentService'
 import { useDispatch } from 'react-redux'
 import { setFilename, setFileType, resetFileState } from '@/redux/fileSlice'
 import { setFiles } from '@/redux/processedFilesSlice'
@@ -86,7 +86,7 @@ export default function Upload() {
     }
     setShowSpinner(false)
     dispatch(resetFileState())
-    const files = await getFilesByUserEmail(user)
+    const files = await getDocumentsByUserEmail(user)
     dispatch(setFiles(files))
   }
 

@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { getFileByUserEmailAndFilename } from '@/services/fileService'
+import { getDocumentByUserEmailAndDocumentName } from '@/services/documentService'
 import Spinner from '@/components/landing/Spinner'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 
@@ -38,7 +38,10 @@ export default function Popup({
     if (!selectedFile || !user) {
       return
     }
-    const res = await getFileByUserEmailAndFilename(user, selectedFile.filename)
+    const res = await getDocumentByUserEmailAndDocumentName(
+      user,
+      selectedFile.filename
+    )
     handlePopupShow(res)
   }
 
