@@ -1,7 +1,8 @@
-import { Fragment, useRef, useState, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { getDocumentByUserEmailAndDocumentName } from '@/services/documentService'
+import { Fragment, useRef, useState } from 'react'
+
 import Spinner from '@/components/landing/Spinner'
+import { getDocumentByUserEmailAndDocumentName } from '@/services/documentService'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 
 export default function Popup({

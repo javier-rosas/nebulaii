@@ -14,16 +14,19 @@ export const documentSlice = createSlice({
   name: 'document',
   initialState,
   reducers: {
-    setFilename: (state: DocumentState, action: PayloadAction<string>) => {
+    setDocumentName: (state: DocumentState, action: PayloadAction<string>) => {
       state.documentName = action.payload
     },
     setDescription: (state: DocumentState, action: PayloadAction<string>) => {
       state.description = action.payload
     },
-    setFileType: (state: DocumentState, action: PayloadAction<string>) => {
+    setDocumentType: (
+      state: DocumentState,
+      action: PayloadAction<string | null>
+    ) => {
       state.documentType = action.payload
     },
-    resetFileState: (state: DocumentState) => {
+    resetDocumentState: (state: DocumentState) => {
       state.documentName = ''
       state.description = ''
       state.documentType = null
@@ -32,8 +35,12 @@ export const documentSlice = createSlice({
 })
 
 //action selector
-export const { setFilename, resetFileState, setFileType } =
-  documentSlice.actions
+export const {
+  setDocumentName,
+  setDescription,
+  resetDocumentState,
+  setDocumentType,
+} = documentSlice.actions
 
 // state selector
 export const selectFile = (state: DocumentState) => state

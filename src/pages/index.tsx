@@ -1,17 +1,17 @@
-import Head from 'next/head'
 import { CallToAction } from '@/components/landing/CallToAction'
 import { Faqs } from '@/components/landing/Faqs'
 import { Footer } from '@/components/landing/Footer'
+import Head from 'next/head'
 import { Header } from '@/components/landing/Header'
 import { Hero } from '@/components/landing/Hero'
 import { Pricing } from '@/components/landing/Pricing'
 import { PrimaryFeatures } from '@/components/landing/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/landing/SecondaryFeatures'
+import { UserContext } from '@auth0/nextjs-auth0/client'
+import { useEffect } from 'react'
 // import { Testimonials } from '@/components/landing/Testimonials'
 import { useRouter } from 'next/router'
 import { useUser } from '@auth0/nextjs-auth0/client'
-import { UserContext } from '@auth0/nextjs-auth0/client'
-import { useEffect } from 'react'
 
 export default function Home() {
   const { user }: UserContext = useUser()

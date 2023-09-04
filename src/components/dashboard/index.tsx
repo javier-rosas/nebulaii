@@ -1,15 +1,17 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import List from './list'
-import Logo from '@/components/landing/Logo'
-import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
-  Bars3BottomLeftIcon,
-  XMarkIcon,
-  Cog6ToothIcon,
   ArrowUpOnSquareIcon,
+  Bars3BottomLeftIcon,
+  Cog6ToothIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline'
+import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react'
+
+import Image from 'next/image'
+import Link from 'next/link'
+import List from './list'
+import { Logo } from '@/components/landing/Logo'
+
 const userNavigation = [{ name: 'Sign out', href: '/api/auth/logout' }]
 
 function classNames(...classes: (string | undefined | null | boolean)[]) {

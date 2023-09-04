@@ -1,83 +1,100 @@
-import { useState, useEffect } from 'react'
-import { putDocInS3 } from '@/services/putDocInS3'
 import {
-  processDocument,
-  getDocumentsByUserEmail,
-} from '@/services/documentService'
-import { useDispatch } from 'react-redux'
-import { setFilename, setFileType, resetFileState } from '@/redux/documentSlice'
-import { setFiles } from '@/redux/processedDocumentSlice'
-import { useSelector } from 'react-redux'
-import {
-  allowedMimeTypesList,
   allowedFileExtensionsStr,
+  allowedMimeTypesList,
 } from '@/utils/constants'
-import Spinner from '@/components/landing/Spinner'
+import {
+  getDocumentsByUserEmail,
+  processDocument,
+} from '@/services/documentService'
+import {
+  resetDocumentState,
+  setDocumentName,
+  setDocumentType,
+} from '@/redux/documentSlice'
+import { useEffect, useState } from 'react'
+
 import Alert from './alert'
+import { DocumentState } from '@/types/DocumentState'
+import Spinner from '@/components/landing/Spinner'
+import { putDocInS3 } from '@/services/putDocInS3'
+import { setDocuments } from '@/redux/processedDocumentSlice'
+import { useDispatch } from 'react-redux'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
-  const [file, setFile] = useState(null)
+  const [document, setDocument] = useState<DocumentState | null>(null)
   const [showSpinner, setShowSpinner] = useState(false)
   const dispatch = useDispatch()
-  const fileState = useSelector((state) => state.file)
+  const [file, setFile] = useState<File | null>(null)
   const user = useLocalStorageUser()
   const [showFileTypeAlert, setShowFileTypeAlert] = useState(false)
 
-  const handleFileHelper = (file) => {
-    if (isFileTypeValid(file)) {
+  const handleFileHelper = (document: DocumentState) => {
+    if (isFileTypeValid(document)) {
       setShowFileTypeAlert(false)
-      setFile(file)
+      setDocument(document)
     } else {
       setShowFileTypeAlert(true)
-      setFile(null)
+      setDocument(null)
     }
   }
 
-  const handleDragEnter = (e) => {
+  const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDrag(true)
   }
 
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDrag(false)
   }
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
   }
 
-  const handleDrop = (e) => {
+  const fileToDocumentState = (file: File): DocumentState => ({
+    documentName: file.name,
+    description: '', // Use logic or another method to get this if needed
+    dateAdded: Date.now(),
+    documentType: file.type, // Use logic to get the correct document type if possible
+  })
+
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDrag(false)
-    if (!e.dataTransfer) return
-    const file = e.dataTransfer.files[0]
-    handleFileHelper(file)
+
+    const droppedFile = e.dataTransfer?.files[0]
+    setFile(droppedFile)
+    if (droppedFile) {
+      handleFileHelper(fileToDocumentState(droppedFile))
+    }
   }
 
-  const handleFileSelect = (event) => {
-    event.preventDefault()
-    if (!event.target.files) return
-    const file = event.target.files[0]
-    handleFileHelper(file)
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const selectedFile = e.target.files?.[0] || null
+    setFile(selectedFile)
+    if (selectedFile) {
+      handleFileHelper(fileToDocumentState(selectedFile))
+    }
   }
 
-  const isFileTypeValid = (file) => {
+  const isFileTypeValid = (file: DocumentState) => {
     const allowedTypes = allowedMimeTypesList()
-    return allowedTypes.includes(file.type)
+    return file.documentType ? allowedTypes.includes(file.documentType) : false
   }
 
-  const upload = async (file) => {
+  const upload = async (file: File) => {
     if (!user || !user.email || !file) return
     try {
       setShowSpinner(true)
-      setFile(null)
+      setDocument(null)
       await putDocInS3(file, user.email)
       const res = await processDocument(user.email, file.name, user.token)
       console.log('processRes', res)
@@ -85,17 +102,17 @@ export default function Upload() {
       console.error(e)
     }
     setShowSpinner(false)
-    dispatch(resetFileState())
+    dispatch(resetDocumentState())
     const files = await getDocumentsByUserEmail(user)
-    dispatch(setFiles(files))
+    dispatch(setDocuments(files))
   }
 
   useEffect(() => {
-    if (!file) return
-    dispatch(setFilename(file.name))
-    dispatch(setFileType(file.type))
+    if (!document || !file) return // Check if the file is not null
+    dispatch(setDocumentName(document.documentName))
+    dispatch(setDocumentType(document.documentType))
     upload(file)
-  }, [file])
+  }, [document, file])
 
   return (
     <div className="h-1/6 w-1/2 overflow-auto bg-white shadow sm:rounded-lg">
@@ -159,7 +176,7 @@ export default function Upload() {
                 />
               </label>
             </div>
-            <h1 className="mt-2 text-base">{file?.name}</h1>
+            <h1 className="mt-2 text-base">{document?.documentName}</h1>
             {showFileTypeAlert && (
               <Alert setShowFileTypeAlert={setShowFileTypeAlert} />
             )}

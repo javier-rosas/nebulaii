@@ -1,17 +1,18 @@
-import { CheckCircleIcon } from '@heroicons/react/20/solid'
-import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { setDocuments, deleteDocument } from '@/redux/processedDocumentSlice'
+import { deleteDocument, setDocuments } from '@/redux/processedDocumentSlice'
 import {
-  getDocumentsByUserEmail,
   deleteDocumentByUserEmailAndDocumentName,
+  getDocumentsByUserEmail,
 } from '@/services/documentService'
-import useLocalStorageUser from '@/hooks/useLocalStorageUser'
-import Spinner from '@/components/landing/Spinner'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import Popup from '@/components/dashboard/list/Popup'
-import Search from './Search'
-import { RootState } from '@/redux/store'
 import { ProcessedDocumentPayload } from '@/types/ProcessedDocuments'
+import { RootState } from '@/redux/store'
+import Search from './Search'
+import Spinner from '@/components/landing/Spinner'
+import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 
 export default function List() {
   const dispatch = useDispatch()

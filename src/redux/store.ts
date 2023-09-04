@@ -4,7 +4,7 @@ import processedDocumentReducer from './processedDocumentSlice'
 
 export const store = configureStore({
   reducer: {
-    file: documentReducer,
+    document: documentReducer,
     processedDocuments: processedDocumentReducer,
   },
 })

@@ -1,8 +1,9 @@
-import Link from 'next/link'
-import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
+
 import { Button } from '@/components/landing/Button'
 import { Container } from '@/components/landing/Container'
+import { Fragment } from 'react'
+import Link from 'next/link'
 import { Logo } from '@/components/landing/Logo'
 import { NavLink } from '@/components/landing/NavLink'
 import clsx from 'clsx'

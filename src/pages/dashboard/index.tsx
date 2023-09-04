@@ -1,16 +1,17 @@
 import {
+  UserContext,
   useUser,
   withPageAuthRequired,
-  UserContext,
 } from '@auth0/nextjs-auth0/client'
-import { getSession } from '@auth0/nextjs-auth0'
-import Upload from '@/components/dashboard/upload'
-import Main from '@/components/dashboard'
+
 import { GetServerSidePropsContext } from 'next'
-import { authenticateUser } from '@/services/userService'
+import Main from '@/components/dashboard'
+import Upload from '@/components/dashboard/upload'
 import { User } from '@/types/User'
-import { useEffect } from 'react'
+import { authenticateUser } from '@/services/userService'
 import { createOrUpdateUser } from '@/services/userService'
+import { getSession } from '@auth0/nextjs-auth0'
+import { useEffect } from 'react'
 
 function Dashboard({ user }: any): JSX.Element | undefined {
   const { error, isLoading }: UserContext = useUser()
