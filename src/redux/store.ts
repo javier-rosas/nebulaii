@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import fileReducer from './fileSlice'
-import processedFileReducer from './processedFilesSlice'
+import documentReducer from './documentSlice'
+import processedDocumentReducer from './processedDocumentSlice'
 
 export const store = configureStore({
   reducer: {
-    file: fileReducer,
-    processedFiles: processedFileReducer,
+    file: documentReducer,
+    processedDocuments: processedDocumentReducer,
   },
 })
 

@@ -3,7 +3,7 @@ import { Combobox } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import { setFilteredFiles } from '@/redux/processedFilesSlice'
+import { setFilteredDocuments } from '@/redux/processedDocumentSlice'
 
 type StyleProps = {
   styles: string
@@ -13,21 +13,23 @@ export default function Search({ styles }: StyleProps) {
   const [query, setQuery] = useState('')
   const dispatch = useDispatch()
   const regularList = useSelector(
-    (state: RootState) => state.processedFiles.regularList
+    (state: RootState) => state.processedDocuments.regularList
   )
 
   // Returns a filtered list of files based on the query
   const filteredList =
     query === ''
       ? []
-      : regularList.filter((file) => {
-          return file.filename.toLowerCase().includes(query.toLowerCase())
+      : regularList.filter((document) => {
+          return document.documentName
+            .toLowerCase()
+            .includes(query.toLowerCase())
         })
 
   useEffect(() => {
-    if (query === '') dispatch(setFilteredFiles(regularList))
-    else if (filteredList.length === 0) dispatch(setFilteredFiles([]))
-    else dispatch(setFilteredFiles(filteredList))
+    if (query === '') dispatch(setFilteredDocuments(regularList))
+    else if (filteredList.length === 0) dispatch(setFilteredDocuments([]))
+    else dispatch(setFilteredDocuments(filteredList))
   }, [query, dispatch])
 
   return (

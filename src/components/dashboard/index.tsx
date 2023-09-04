@@ -1,37 +1,31 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import List from './list'
-import { Logo } from '@/components/landing/Logo'
+import Logo from '@/components/landing/Logo'
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3BottomLeftIcon,
-  VideoCameraIcon,
   XMarkIcon,
   Cog6ToothIcon,
   ArrowUpOnSquareIcon,
 } from '@heroicons/react/24/outline'
-import { useDispatch, useSelector } from 'react-redux'
-import Youtube from './youtube'
-
 const userNavigation = [{ name: 'Sign out', href: '/api/auth/logout' }]
 
-function classNames(...classes) {
+function classNames(...classes: (string | undefined | null | boolean)[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Main(props) {
+export default function Main(props: { upload: React.ReactElement }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const Upload = props.upload
-  const dispatch = useDispatch()
-  const processedFiles = useSelector((state) => state.processedFiles)
   const [navigation, setNavigation] = useState([
     { name: 'Upload Audio File', icon: ArrowUpOnSquareIcon, current: true },
     { name: 'Settings', icon: Cog6ToothIcon, current: false },
   ])
   const [sideBarSelection, setSideBarSelection] = useState('Upload Audio File')
 
-  const handleSideBarSelection = (name) => {
+  const handleSideBarSelection = (name: string) => {
     setSideBarSelection(name)
     const updatedNavigation = navigation.map((item) => {
       if (item.name === name) return { ...item, current: true }
@@ -40,8 +34,8 @@ export default function Main(props) {
     setNavigation(updatedNavigation)
   }
 
-  const handleUserNavigation = (name) => {
-    if (name === 'Sign out') localStorage.setItem('user', null)
+  const handleUserNavigation = (name: string) => {
+    if (name === 'Sign out') localStorage.setItem('user', JSON.stringify(null))
   }
 
   return (
@@ -223,12 +217,10 @@ export default function Main(props) {
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {userNavigation.map((item) => (
-                        <Menu.Item
-                          key={item.name}
-                          onClick={() => handleUserNavigation(item.name)}
-                        >
+                        <Menu.Item key={item.name}>
                           {({ active }) => (
                             <Link
+                              onClick={() => handleUserNavigation(item.name)}
                               href={item.href}
                               className={classNames(
                                 active ? 'bg-gray-100' : '',

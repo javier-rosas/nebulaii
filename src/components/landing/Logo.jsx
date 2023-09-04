@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 
-export function Logo(props) {
-
-  const router = useRouter();
+export default function Logo(props) {
+  const router = useRouter()
 
   if (router.pathname === '/') {
     // You are in the about page
@@ -16,10 +15,12 @@ export function Logo(props) {
             fill="#2563EB"
           />
         </svg>
-        <h1 className="font-display tracking-tight text-slate-900 font-medium text-center">Nebulaii</h1>
+        <h1 className="text-center font-display font-medium tracking-tight text-slate-900">
+          Nebulaii
+        </h1>
       </div>
     )
-  } else if (router.pathname === '/dashboard'){
+  } else if (router.pathname === '/dashboard') {
     // You are in the dashboard page
     return (
       <div className="flex flex-row items-center	">
@@ -31,8 +32,12 @@ export function Logo(props) {
             fill="#FFFFFF"
           />
         </svg>
-        <h1 className="font-display tracking-tight text-white font-medium text-center">Nebulaii</h1>
+        <h1 className="text-center font-display font-medium tracking-tight text-white">
+          Nebulaii
+        </h1>
       </div>
     )
+  } else {
+    return null // or return a default logo if you want
   }
 }

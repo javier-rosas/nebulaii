@@ -5,8 +5,8 @@ import {
   getDocumentsByUserEmail,
 } from '@/services/documentService'
 import { useDispatch } from 'react-redux'
-import { setFilename, setFileType, resetFileState } from '@/redux/fileSlice'
-import { setFiles } from '@/redux/processedFilesSlice'
+import { setFilename, setFileType, resetFileState } from '@/redux/documentSlice'
+import { setFiles } from '@/redux/processedDocumentSlice'
 import { useSelector } from 'react-redux'
 import {
   allowedMimeTypesList,

@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useDispatch } from 'react-redux'
-import { resetFileState } from '@/redux/fileSlice'
+import { resetFileState } from '@/redux/documentSlice'
 
 export default function Alert({ setShowFileTypeAlert }) {
   const [open, setOpen] = useState(true)
