@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { putDocInS3 } from '@/services/putDocInS3'
-import { processAudioFile } from '@/services/processAudioFile'
-import { getDocumentsByUserEmail } from '@/services/documentService'
+import {
+  processDocument,
+  getDocumentsByUserEmail,
+} from '@/services/documentService'
 import { useDispatch } from 'react-redux'
 import { setFilename, setFileType, resetFileState } from '@/redux/fileSlice'
 import { setFiles } from '@/redux/processedFilesSlice'
@@ -70,17 +72,15 @@ export default function Upload() {
     const allowedTypes = allowedMimeTypesList()
     return allowedTypes.includes(file.type)
   }
-  async function uploadDocument(file, email) {
-    setShowSpinner(true)
-    await putDocInS3(file, email)
-    setFile(null)
-  }
 
   const upload = async (file) => {
     if (!user || !user.email || !file) return
     try {
-      await uploadDocument(file, user.email)
-      await processAudioFile(fileState, user.token)
+      setShowSpinner(true)
+      setFile(null)
+      await putDocInS3(file, user.email)
+      const res = await processDocument(user.email, file.name, user.token)
+      console.log('processRes', res)
     } catch (e) {
       console.error(e)
     }
