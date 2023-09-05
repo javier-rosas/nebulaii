@@ -1,13 +1,13 @@
 import { S3 } from 'aws-sdk'
 
 const AWS_BUCKET = process.env.AWS_BUCKET
-const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY
-const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY
+const AWS_NEBULAII_ACCESS_KEY = process.env.AWS_NEBULAII_ACCESS_KEY
+const AWS_NEBULAII_SECRET_KEY = process.env.AWS_NEBULAII_SECRET_KEY
 const AWS_REGION = process.env.AWS_REGION
 
 const s3 = new S3({
-  accessKeyId: AWS_ACCESS_KEY,
-  secretAccessKey: AWS_SECRET_KEY,
+  accessKeyId: AWS_NEBULAII_ACCESS_KEY,
+  secretAccessKey: AWS_NEBULAII_SECRET_KEY,
   region: AWS_REGION,
 })
 
