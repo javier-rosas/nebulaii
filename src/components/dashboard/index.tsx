@@ -2,6 +2,7 @@ import {
   ArrowUpOnSquareIcon,
   Bars3BottomLeftIcon,
   Cog6ToothIcon,
+  MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { Dialog, Menu, Transition } from '@headlessui/react'
@@ -9,8 +10,8 @@ import { Fragment, useState } from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
-import List from './list'
 import { Logo } from '@/components/landing/Logo'
+import Search from '@/components/dashboard/search'
 
 const userNavigation = [{ name: 'Sign out', href: '/api/auth/logout' }]
 
@@ -23,6 +24,7 @@ export default function Main(props: { upload: React.ReactElement }) {
   const Upload = props.upload
   const [navigation, setNavigation] = useState([
     { name: 'Upload Document', icon: ArrowUpOnSquareIcon, current: true },
+    { name: 'Ask Question', icon: MagnifyingGlassIcon, current: false },
     { name: 'Settings', icon: Cog6ToothIcon, current: false },
   ])
   const [sideBarSelection, setSideBarSelection] = useState('Upload Audio File')
@@ -241,14 +243,14 @@ export default function Main(props: { upload: React.ReactElement }) {
             </div>
           </div>
           <main>
-            <div className="py-6">
+            <div key={sideBarSelection} className="py-6">
               <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
-                {sideBarSelection === 'Upload Audio File' && Upload}
-                {/* {sideBarSelection === 'Youtube' && <Youtube />} */}
+                {sideBarSelection === 'Upload Document' && Upload}
+                {sideBarSelection === 'Ask Question' && <Search />}
               </div>
             </div>
-            <List />
           </main>
+          {/* <List /> */}
         </div>
       </div>
     </>

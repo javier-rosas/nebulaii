@@ -132,13 +132,13 @@ export default function List() {
                   </div>
                 </div>
 
-                {showDocumentPopup && (
+                {/* {showDocumentPopup && (
                   <Popup
                     showDocumentPopup={showDocumentPopup}
                     setShowDocumentPopup={setShowDocumentPopup}
                     selectedFile={selectedFile}
                   />
-                )}
+                )} */}
               </li>
             )
           )}

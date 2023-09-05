@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 import Spinner from '@/components/landing/Spinner'
 import { getDocumentByUserEmailAndDocumentName } from '@/services/documentService'
