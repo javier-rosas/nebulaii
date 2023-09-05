@@ -27,7 +27,7 @@ export default function Main(props: { upload: React.ReactElement }) {
     { name: 'Ask Question', icon: MagnifyingGlassIcon, current: false },
     { name: 'Settings', icon: Cog6ToothIcon, current: false },
   ])
-  const [sideBarSelection, setSideBarSelection] = useState('Upload Audio File')
+  const [sideBarSelection, setSideBarSelection] = useState('Upload Document')
 
   const handleSideBarSelection = (name: string) => {
     setSideBarSelection(name)
