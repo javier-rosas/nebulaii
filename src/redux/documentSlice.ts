@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+
 import { DocumentState } from '@/types/DocumentState'
 
 // initial user state
@@ -43,6 +44,6 @@ export const {
 } = documentSlice.actions
 
 // state selector
-export const selectFile = (state: DocumentState) => state
+export const selectDocument = (state: DocumentState) => state
 
 export default documentSlice.reducer

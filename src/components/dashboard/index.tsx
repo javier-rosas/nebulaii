@@ -22,7 +22,7 @@ export default function Main(props: { upload: React.ReactElement }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const Upload = props.upload
   const [navigation, setNavigation] = useState([
-    { name: 'Upload Audio File', icon: ArrowUpOnSquareIcon, current: true },
+    { name: 'Upload Document', icon: ArrowUpOnSquareIcon, current: true },
     { name: 'Settings', icon: Cog6ToothIcon, current: false },
   ])
   const [sideBarSelection, setSideBarSelection] = useState('Upload Audio File')

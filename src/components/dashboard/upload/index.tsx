@@ -92,15 +92,10 @@ export default function Upload() {
 
   const upload = async (file: File) => {
     if (!user || !user.email || !file) return
-    try {
-      setShowSpinner(true)
-      setDocument(null)
-      await putDocInS3(file, user.email)
-      const res = await processDocument(user.email, file.name, user.token)
-      console.log('processRes', res)
-    } catch (e) {
-      console.error(e)
-    }
+    setShowSpinner(true)
+    await putDocInS3(file, user.email)
+    setDocument(null)
+    await processDocument(user.email, file.name, user.token)
     setShowSpinner(false)
     dispatch(resetDocumentState())
     const files = await getDocumentsByUserEmail(user)
@@ -108,7 +103,7 @@ export default function Upload() {
   }
 
   useEffect(() => {
-    if (!document || !file) return // Check if the file is not null
+    if (!document || !file) return
     dispatch(setDocumentName(document.documentName))
     dispatch(setDocumentType(document.documentType))
     upload(file)
@@ -163,7 +158,10 @@ export default function Upload() {
                       or drag and drop
                     </span>
                   </p>
-                  <p className="text-center text-xs text-black">
+                  <p
+                    className="hidden overflow-hidden truncate text-center text-xs text-black md:block"
+                    style={{ textOverflow: 'ellipsis' }}
+                  >
                     {allowedFileExtensionsStr()}
                   </p>
                 </div>
