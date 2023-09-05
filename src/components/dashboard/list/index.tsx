@@ -39,7 +39,7 @@ export default function List() {
       setShowListSpinner(false)
     }
     fetchDocuments()
-  }, [user])
+  }, [])
 
   return (
     <div className="mb-20 overflow-hidden bg-white shadow sm:rounded-md">

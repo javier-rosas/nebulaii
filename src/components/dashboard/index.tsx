@@ -245,8 +245,8 @@ export default function Main(props: { upload: React.ReactElement }) {
           <main>
             <div key={sideBarSelection} className="py-6">
               <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
-                {sideBarSelection === 'Upload Document' && Upload}
-                {sideBarSelection === 'Ask Question' && <Search />}
+                {!!(sideBarSelection === 'Upload Document') && Upload}
+                {!!(sideBarSelection === 'Ask Question') && <Search />}
               </div>
             </div>
           </main>
