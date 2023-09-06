@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
-import Popup from '@/components/dashboard/list/Popup'
+// import Popup from '@/components/dashboard/list/Popup'
 import { ProcessedDocumentPayload } from '@/types/ProcessedDocuments'
 import { RootState } from '@/redux/store'
 import Search from './Search'
@@ -61,7 +61,6 @@ export default function List() {
           </svg>
           Your Documents
         </h2>
-
         <Search styles="px-4 py-4 sm:px-6" />
       </div>
       {showListSpinner ? (

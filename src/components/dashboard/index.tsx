@@ -8,10 +8,10 @@ import {
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
+import AskQuestion from '@/components/dashboard/ask-question'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Logo } from '@/components/landing/Logo'
-import Search from '@/components/dashboard/search'
 
 const userNavigation = [{ name: 'Sign out', href: '/api/auth/logout' }]
 
@@ -138,7 +138,7 @@ export default function Main(props: { upload: React.ReactElement }) {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
+        <div className="z-20 hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex flex-grow flex-col overflow-y-auto bg-indigo-700 pt-5">
             <div className="flex flex-shrink-0 items-center px-4">
@@ -171,7 +171,7 @@ export default function Main(props: { upload: React.ReactElement }) {
           </div>
         </div>
         <div className="flex flex-1 flex-col lg:pl-64">
-          <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
+          <div className="sticky top-0 z-20 flex h-16 flex-shrink-0 bg-white shadow">
             <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden"
@@ -242,11 +242,12 @@ export default function Main(props: { upload: React.ReactElement }) {
               </div>
             </div>
           </div>
-          <main>
-            <div key={sideBarSelection} className="py-6">
+          <main className="pt-14">
+            {/* assuming the height of your search bar is around 3.5rem (56px), adjust if different */}
+            <div key={sideBarSelection} className="sticky top-16 z-10 py-6">
               <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
                 {!!(sideBarSelection === 'Upload Document') && Upload}
-                {!!(sideBarSelection === 'Ask Question') && <Search />}
+                {!!(sideBarSelection === 'Ask Question') && <AskQuestion />}
               </div>
             </div>
           </main>
