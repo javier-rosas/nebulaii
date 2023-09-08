@@ -17,10 +17,11 @@ function classNames(...classes: (string | undefined | null | boolean)[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ComboBox() {
+export default function ComboBox({
+  selectedDocument,
+  setSelectedDocument,
+}: any) {
   const [query, setQuery] = useState('')
-  const [selectedDocument, setSelectedDocument] =
-    useState<ProcessedDocumentPayload | null>(null)
 
   const filteredDocuments =
     query === ''
