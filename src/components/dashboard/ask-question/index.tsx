@@ -1,16 +1,30 @@
+import { useEffect, useRef, useState } from 'react'
+
 import ComboBox from './ComboBox'
-import { useState } from 'react'
+
+type Chat = {
+  message: string
+  isBot: boolean
+}
 
 export default function AskQuestion() {
   const [selectedDocument, setSelectedDocument] = useState<string | null>(null)
   const [currentQuestion, setCurrentQuestion] = useState<string>('')
-  const [chatHistory, setChatHistory] = useState<string[]>([])
+  const [chatHistory, setChatHistory] = useState<Chat[]>([])
+  const ref = useRef<HTMLDivElement | null>(null)
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
     if (currentQuestion.trim() !== '') {
-      const userMessage = `You: ${currentQuestion}`
-      const botResponse = `Bot: This is a sample response. q = ${currentQuestion}`
+      const userMessage: Chat = {
+        message: `You: ${currentQuestion}`,
+        isBot: false,
+      }
+
+      const botResponse: Chat = {
+        message: `Bot: This is a sample response. q = ${currentQuestion}`,
+        isBot: true,
+      }
 
       // Update chatHistory with user's message and then bot's response
       setChatHistory((prevChat) => [userMessage, ...prevChat])
@@ -23,9 +37,17 @@ export default function AskQuestion() {
     }
   }
 
+  useEffect(() => {
+    const scrollToLastMessage = () => {
+      const lastChildElement = ref.current?.lastElementChild
+      lastChildElement?.scrollIntoView({ behavior: 'smooth' })
+    }
+    scrollToLastMessage()
+  }, [chatHistory])
+
   return (
     <div className="flex h-screen flex-col">
-      <div className="fixed top-24">
+      <div>
         <ComboBox
           selectedDocument={selectedDocument}
           setSelectedDocument={setSelectedDocument}
@@ -35,13 +57,19 @@ export default function AskQuestion() {
       {/* Wrapper for Chat and Search Bar */}
       <div className="flex flex-grow flex-col items-center justify-between">
         {/* Chat History */}
-        <div className="flex w-full max-w-4xl flex-grow flex-col-reverse overflow-y-auto p-4 pb-20">
+        <div
+          ref={ref}
+          className="flex w-full max-w-xs flex-grow flex-col-reverse overflow-y-auto p-4 pb-20 sm:max-w-4xl"
+        >
           {chatHistory.map((message, index) => (
             <div
               key={index}
-              className="overflow-wrap break-word m-1 w-full break-words rounded-md bg-white p-2 shadow-sm"
+              className={`
+                overflow-wrap break-word m-1 w-full break-words rounded-md p-2 shadow-sm 
+                ${message.isBot ? 'bg-blue-200' : 'bg-gray-200'}
+            `}
             >
-              {message}
+              {message.message}
             </div>
           ))}
         </div>
