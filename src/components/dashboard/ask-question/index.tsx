@@ -38,11 +38,8 @@ export default function AskQuestion() {
   }
 
   useEffect(() => {
-    const scrollToLastMessage = () => {
-      const lastChildElement = ref.current?.lastElementChild
-      lastChildElement?.scrollIntoView({ behavior: 'smooth' })
-    }
-    scrollToLastMessage()
+    const lastChildElement = ref.current?.lastElementChild
+    lastChildElement?.scrollIntoView({ behavior: 'smooth' })
   }, [chatHistory])
 
   return (
