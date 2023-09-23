@@ -3,14 +3,14 @@ import {
   deleteDocumentByUserEmailAndDocumentName,
   getDocumentsByUserEmail,
 } from '@/services/documentService'
-import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { CheckCircleIcon } from '@heroicons/react/20/solid'
-// import Popup from '@/components/dashboard/list/Popup'
-import { ProcessedDocumentPayload } from '@/types/ProcessedDocuments'
 import { RootState } from '@/redux/store'
+import { ProcessedDocumentPayload } from '@/types/ProcessedDocuments'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import Search from './Search'
+// import Popup from '@/components/dashboard/list/Popup'
 import Spinner from '@/components/landing/Spinner'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 
@@ -19,6 +19,11 @@ export default function List() {
   const processedDocuments = useSelector(
     (state: RootState) => state.processedDocuments
   )
+
+  const listSpinner = useSelector(
+    (state: RootState) => state.listSpinner.listSpinner
+  )
+
   const [showListSpinner, setShowListSpinner] = useState(false)
   const [deletingFile, setDeletingFile] = useState<string | null>(null)
   const [showDocumentPopup, setShowDocumentPopup] = useState(false)
@@ -34,13 +39,18 @@ export default function List() {
       if (!user || !user.token) return
       setShowListSpinner(true)
       const documents = await getDocumentsByUserEmail(user)
-      console.log(documents)
       dispatch(setDocuments(documents))
       setShowListSpinner(false)
     }
     fetchDocuments()
   }, [])
 
+  const handleDelete = async (documentName: string) => {
+    setDeletingFile(documentName)
+    await deleteDocumentByUserEmailAndDocumentName(user, documentName)
+    dispatch(deleteDocument(documentName))
+    setDeletingFile(null)
+  }
   return (
     <div className="mb-20 overflow-hidden bg-white shadow sm:rounded-md">
       <div className="flex flex-row justify-between">
@@ -63,7 +73,7 @@ export default function List() {
         </h2>
         <Search styles="px-4 py-4 sm:px-6" />
       </div>
-      {showListSpinner ? (
+      {showListSpinner || listSpinner ? (
         <Spinner />
       ) : (
         <ul role="list" className="divide-y divide-gray-200">
@@ -112,17 +122,9 @@ export default function List() {
                     ) : (
                       <button
                         type="button"
-                        onClick={async () => {
-                          setDeletingFile(processedDocument.documentName)
-                          await deleteDocumentByUserEmailAndDocumentName(
-                            user,
-                            processedDocument.documentName
-                          )
-                          dispatch(
-                            deleteDocument(processedDocument.documentName)
-                          )
-                          setDeletingFile(null)
-                        }}
+                        onClick={() =>
+                          handleDelete(processedDocument.documentName)
+                        }
                         className="mt-2 h-12 w-28 rounded-md bg-red-600 px-1 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-600 hover:text-white sm:col-start-1 sm:mt-0"
                       >
                         Delete

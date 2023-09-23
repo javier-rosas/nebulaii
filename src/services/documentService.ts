@@ -79,28 +79,3 @@ export async function deleteDocumentByUserEmailAndDocumentName(
     )
   }
 }
-
-export async function processDocument(
-  userEmail: string,
-  documentName: string,
-  token: string
-) {
-  try {
-    const response = await fetch(
-      `${AWS_LAMBDA_BASE_URL}/users/${userEmail}/documents/${documentName}/process-doc`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-      }
-    )
-    if (!response.ok) {
-      throw new Error('Failed to process audio file. Please try again later.')
-    }
-    return response
-  } catch (error) {
-    throw error
-  }
-}

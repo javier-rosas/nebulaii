@@ -1,26 +1,25 @@
 import {
-  allowedFileExtensionsStr,
-  allowedMimeTypesList,
-} from '@/utils/constants'
-import {
-  getDocumentsByUserEmail,
-  processDocument,
-} from '@/services/documentService'
-import {
   resetDocumentState,
   setDocumentName,
   setDocumentType,
 } from '@/redux/documentSlice'
+import { checkForJobCompletion, startJob } from '@/services/jobService'
+import {
+  allowedFileExtensionsStr,
+  allowedMimeTypesList,
+} from '@/utils/constants'
 import { useEffect, useState } from 'react'
 
-import Alert from './alert'
-import { DocumentState } from '@/types/DocumentState'
 import List from '@/components/dashboard/list'
 import Spinner from '@/components/landing/Spinner'
-import { putDocInS3 } from '@/services/putDocInS3'
-import { setDocuments } from '@/redux/processedDocumentSlice'
-import { useDispatch } from 'react-redux'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
+import { setListSpinner } from '@/redux/listSpinnerSlice'
+import { setDocuments } from '@/redux/processedDocumentSlice'
+import { getDocumentsByUserEmail } from '@/services/documentService'
+import { putDocInS3 } from '@/services/putDocInS3'
+import { DocumentState } from '@/types/DocumentState'
+import { useDispatch } from 'react-redux'
+import Alert from './alert'
 
 export default function Upload() {
   const [drag, setDrag] = useState(false)
@@ -96,11 +95,16 @@ export default function Upload() {
     setShowSpinner(true)
     await putDocInS3(file, user.email)
     setDocument(null)
-    await processDocument(user.email, file.name, user.token)
+    await startJob(user.email, file.name, user.token)
     setShowSpinner(false)
     dispatch(resetDocumentState())
-    const files = await getDocumentsByUserEmail(user)
-    dispatch(setDocuments(files))
+    dispatch(setListSpinner(true))
+    const jobStatus = await checkForJobCompletion(user, file.name)
+    if (jobStatus === 'SUCCESS' || jobStatus === 'FAILED') {
+      const files = await getDocumentsByUserEmail(user)
+      await dispatch(setDocuments(files))
+      dispatch(setListSpinner(false))
+    }
   }
 
   useEffect(() => {
