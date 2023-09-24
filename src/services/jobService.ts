@@ -1,5 +1,7 @@
 const AWS_LAMBDA_BASE_URL = process.env.NEXT_PUBLIC_AWS_LAMBDA_BASE_URL
 
+import { showErrorToast, showSuccessToast } from '@/utils/helpers'
+
 import { User } from '../types/User'
 
 export async function startJob(
@@ -26,6 +28,7 @@ export async function startJob(
     throw error
   }
 }
+
 export async function checkForJobCompletion(
   user: User,
   documentName: string
@@ -54,10 +57,12 @@ export async function checkForJobCompletion(
         return fetchJobStatus(timeout * 2)
       } else if (data.status === 'SUCCESS') {
         console.log('Job completed successfully.')
+        showSuccessToast('Job completed successfully.')
         return 'SUCCESS'
-      } else if (data.status === 'FAILED') {
-        console.error('Job failed.')
-        return 'FAILED'
+      } else if (data.status === 'ERR') {
+        showErrorToast('Job failed.', 2000)
+        console.log('Job failed.')
+        return 'ERR'
       } else {
         console.error('Unexpected job status:', data.status)
         return 'UNKNOWN' // Signal an unexpected job status

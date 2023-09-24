@@ -30,6 +30,7 @@ export default function Upload() {
   const user = useLocalStorageUser()
   const [showFileTypeAlert, setShowFileTypeAlert] = useState(false)
 
+  // Check if file type is valid
   const handleFileHelper = (document: DocumentState) => {
     if (isFileTypeValid(document)) {
       setShowFileTypeAlert(false)
@@ -40,35 +41,39 @@ export default function Upload() {
     }
   }
 
+  // Prevent default behavior
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDrag(true)
   }
 
+  // Reset drag state
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDrag(false)
   }
 
+  // Prevent default behavior
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
   }
 
+  // Convert file to document state
   const fileToDocumentState = (file: File): DocumentState => ({
     documentName: file.name,
-    description: '', // Use logic or another method to get this if needed
+    description: '',
     dateAdded: Date.now(),
-    documentType: file.type, // Use logic to get the correct document type if possible
+    documentType: file.type,
   })
 
+  // Handle file drop
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDrag(false)
-
     const droppedFile = e.dataTransfer?.files[0]
     setFile(droppedFile)
     if (droppedFile) {
@@ -76,6 +81,7 @@ export default function Upload() {
     }
   }
 
+  // Handle file select
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const selectedFile = e.target.files?.[0] || null
@@ -85,11 +91,13 @@ export default function Upload() {
     }
   }
 
+  // Check if file type is valid
   const isFileTypeValid = (file: DocumentState) => {
     const allowedTypes = allowedMimeTypesList()
     return file.documentType ? allowedTypes.includes(file.documentType) : false
   }
 
+  // Upload file to S3 and start job
   const upload = async (file: File) => {
     if (!user || !user.email || !file) return
     setShowSpinner(true)
@@ -100,13 +108,14 @@ export default function Upload() {
     dispatch(resetDocumentState())
     dispatch(setListSpinner(true))
     const jobStatus = await checkForJobCompletion(user, file.name)
-    if (jobStatus === 'SUCCESS' || jobStatus === 'FAILED') {
+    if (jobStatus === 'SUCCESS' || jobStatus === 'ERR') {
       const files = await getDocumentsByUserEmail(user)
-      await dispatch(setDocuments(files))
       dispatch(setListSpinner(false))
+      await dispatch(setDocuments(files))
     }
   }
 
+  // Upload file when document and file are set
   useEffect(() => {
     if (!document || !file) return
     dispatch(setDocumentName(document.documentName))

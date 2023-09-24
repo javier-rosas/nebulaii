@@ -13,6 +13,7 @@ import Search from './Search'
 // import Popup from '@/components/dashboard/list/Popup'
 import Spinner from '@/components/landing/Spinner'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
+import { selectListSpinner } from '@/redux/listSpinnerSlice'
 
 export default function List() {
   const dispatch = useDispatch()
@@ -20,9 +21,7 @@ export default function List() {
     (state: RootState) => state.processedDocuments
   )
 
-  const listSpinner = useSelector(
-    (state: RootState) => state.listSpinner.listSpinner
-  )
+  const listSpinner = useSelector(selectListSpinner)
 
   const [showListSpinner, setShowListSpinner] = useState(false)
   const [deletingFile, setDeletingFile] = useState<string | null>(null)
@@ -31,9 +30,7 @@ export default function List() {
     useState<ProcessedDocumentPayload | null>(null)
   const user = useLocalStorageUser()
 
-  /**
-   * Fetches the processed files from the API
-   */
+  // Fetch documents on page load
   useEffect(() => {
     const fetchDocuments = async () => {
       if (!user || !user.token) return
@@ -45,6 +42,7 @@ export default function List() {
     fetchDocuments()
   }, [])
 
+  // Delete document
   const handleDelete = async (documentName: string) => {
     setDeletingFile(documentName)
     await deleteDocumentByUserEmailAndDocumentName(user, documentName)

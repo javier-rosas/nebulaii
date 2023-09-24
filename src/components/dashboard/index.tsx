@@ -1,3 +1,6 @@
+import 'react-toastify/dist/ReactToastify.css'
+
+import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   ArrowUpOnSquareIcon,
   Bars3BottomLeftIcon,
@@ -5,13 +8,13 @@ import {
   MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { Dialog, Menu, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
 import AskQuestion from '@/components/dashboard/ask-question'
+import { Logo } from '@/components/landing/Logo'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Logo } from '@/components/landing/Logo'
+import { ToastContainer } from 'react-toastify'
 
 const userNavigation = [{ name: 'Sign out', href: '/api/auth/logout' }]
 
@@ -250,6 +253,17 @@ export default function Main(props: { upload: React.ReactElement }) {
                 {!!(sideBarSelection === 'Ask Question') && <AskQuestion />}
               </div>
             </div>
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
           </main>
           {/* <List /> */}
         </div>
