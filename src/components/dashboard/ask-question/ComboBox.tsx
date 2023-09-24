@@ -1,8 +1,10 @@
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
-import { Combobox } from '@headlessui/react'
+import { selectProccesedFiles } from '@/redux/processedDocumentSlice'
 import { ProcessedDocumentPayload } from '@/types/ProcessedDocuments'
+import { Combobox } from '@headlessui/react'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const docs = [
   { id: 1, documentName: 'Leslie Alexander', online: true },
@@ -22,18 +24,24 @@ export default function ComboBox({
   setSelectedDocument,
 }: any) {
   const [query, setQuery] = useState('')
+  const documents = useSelector(selectProccesedFiles).regularList
 
   const filteredDocuments =
     query === ''
-      ? docs
-      : docs.filter((document) => {
+      ? documents
+      : documents.filter((document: ProcessedDocumentPayload) => {
           return document.documentName
             .toLowerCase()
             .includes(query.toLowerCase())
         })
 
+  console.log(selectedDocument)
   return (
-    <Combobox as="div" value={selectedDocument} onChange={setSelectedDocument}>
+    <Combobox
+      as="div"
+      value={selectedDocument}
+      onChange={(value) => setSelectedDocument(value)}
+    >
       <Combobox.Label className="block text-sm font-medium leading-6 text-gray-900">
         Pick a document
       </Combobox.Label>
@@ -41,9 +49,7 @@ export default function ComboBox({
         <Combobox.Input
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
-          displayValue={(person: ProcessedDocumentPayload | null) =>
-            person?.documentName || ''
-          }
+          value={selectedDocument || ''}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
           <ChevronUpDownIcon
@@ -54,10 +60,10 @@ export default function ComboBox({
 
         {filteredDocuments.length > 0 && (
           <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {filteredDocuments.map((document) => (
+            {filteredDocuments.map((document, index) => (
               <Combobox.Option
-                key={document.id}
-                value={document}
+                key={index.toString()}
+                value={document.documentName}
                 className={({ active }) =>
                   classNames(
                     'relative cursor-default select-none py-2 pl-3 pr-9',
@@ -70,8 +76,7 @@ export default function ComboBox({
                     <div className="flex items-center">
                       <span
                         className={classNames(
-                          'inline-block h-2 w-2 flex-shrink-0 rounded-full',
-                          document.online ? 'bg-green-400' : 'bg-gray-200'
+                          'inline-block h-2 w-2 flex-shrink-0 rounded-full'
                         )}
                         aria-hidden="true"
                       />
@@ -82,10 +87,6 @@ export default function ComboBox({
                         )}
                       >
                         {document.documentName}
-                        <span className="sr-only">
-                          {' '}
-                          is {document.online ? 'online' : 'offline'}
-                        </span>
                       </span>
                     </div>
 

@@ -1,8 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit'
 import {
-  ProcessedDocuments,
   ProcessedDocumentPayload,
+  ProcessedDocuments,
 } from '@/types/ProcessedDocuments'
+
+import { RootState } from '@/redux/store'
+import { createSlice } from '@reduxjs/toolkit'
 
 // initial user state
 const initialState: ProcessedDocuments = {
@@ -48,6 +50,7 @@ export const { setFilteredDocuments, setDocuments, deleteDocument } =
   processedDocumentSlice.actions
 
 // state selector
-export const selectProccesedFiles = (state: ProcessedDocuments) => state
+export const selectProccesedFiles = (state: RootState) =>
+  state.processedDocuments
 
 export default processedDocumentSlice.reducer

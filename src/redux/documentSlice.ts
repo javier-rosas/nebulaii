@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { RootState } from '@/redux/store'
 import { DocumentState } from '@/types/DocumentState'
 
 // initial user state
@@ -44,6 +45,6 @@ export const {
 } = documentSlice.actions
 
 // state selector
-export const selectDocument = (state: DocumentState) => state
+export const selectDocument = (state: RootState) => state.document
 
 export default documentSlice.reducer
