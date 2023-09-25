@@ -54,7 +54,7 @@ export async function checkForJobCompletion(
       )
       const data = await response.json()
       if (data.status === 'RUNNING') {
-        return fetchJobStatus(timeout * 2)
+        return fetchJobStatus(timeout + 10000)
       } else if (data.status === 'SUCCESS') {
         console.log('Job completed successfully.')
         showSuccessToast('Job completed successfully.')

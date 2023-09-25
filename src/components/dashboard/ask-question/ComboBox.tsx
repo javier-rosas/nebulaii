@@ -35,7 +35,6 @@ export default function ComboBox({
             .includes(query.toLowerCase())
         })
 
-  console.log(selectedDocument)
   return (
     <Combobox
       as="div"
