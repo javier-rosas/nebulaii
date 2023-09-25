@@ -29,6 +29,32 @@ export async function startJob(
   }
 }
 
+export async function deleteJob(
+  userEmail: string,
+  documentName: string,
+  token: string
+): Promise<Response> {
+  try {
+    const response = await fetch(
+      `${AWS_LAMBDA_BASE_URL}/users/${userEmail}/jobs/${documentName}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      }
+    )
+    if (!response.ok) {
+      throw new Error('Failed to delete the job. Please try again later.')
+    }
+    return response
+  } catch (error) {
+    console.error('Error deleting job:', error)
+    throw error
+  }
+}
+
 export async function checkForJobCompletion(
   user: User,
   documentName: string
@@ -58,6 +84,7 @@ export async function checkForJobCompletion(
       } else if (data.status === 'SUCCESS') {
         console.log('Job completed successfully.')
         showSuccessToast('Job completed successfully.')
+        await deleteJob(user.email, documentName, user.token)
         return 'SUCCESS'
       } else if (data.status === 'ERR') {
         showErrorToast('Job failed.', 2000)
