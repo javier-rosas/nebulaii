@@ -1,5 +1,11 @@
+import {
+  addMessageToChat,
+  createOrUpdateChat,
+  getChat,
+} from '@/services/chatService'
 import { useEffect, useRef, useState } from 'react'
 
+import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 import ComboBox from './ComboBox'
 
 type Chat = {
@@ -12,29 +18,33 @@ export default function AskQuestion() {
   const [currentQuestion, setCurrentQuestion] = useState<string>('')
   const [chatHistory, setChatHistory] = useState<Chat[]>([])
   const ref = useRef<HTMLDivElement | null>(null)
+  const user = useLocalStorageUser()
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
-    if (currentQuestion.trim() !== '') {
-      const userMessage: Chat = {
-        message: `You: ${currentQuestion}`,
-        isBot: false,
-      }
+    if (!user || !selectedDocument || currentQuestion.trim() === '') return
 
-      const botResponse: Chat = {
-        message: `Bot: This is a sample response. q = ${currentQuestion}`,
-        isBot: true,
-      }
-
-      // Update chatHistory with user's message and then bot's response
-      setChatHistory((prevChat) => [userMessage, ...prevChat])
-      setCurrentQuestion('') // Resetting the input
-
-      // Simulate a response after a delay
-      setTimeout(() => {
-        setChatHistory((prevChat) => [botResponse, ...prevChat])
-      }, 1000) // Delayed by 1 second for demo purposes
+    const userMessage: Chat = {
+      message: `You: ${currentQuestion}`,
+      isBot: false,
     }
+
+    const res = await addMessageToChat(user, selectedDocument, userMessage)
+    if (!res._id) console.log("Couldn't add message to chat")
+
+    // const botResponse: Chat = {
+    //   message: `Bot: This is a sample response. q = ${currentQuestion}`,
+    //   isBot: true,
+    // }
+
+    // Update chatHistory with user's message and then bot's response
+    setChatHistory((prevChat) => [userMessage, ...prevChat])
+    setCurrentQuestion('') // Resetting the input
+
+    // Simulate a response after a delay
+    // setTimeout(() => {
+    //   setChatHistory((prevChat) => [botResponse, ...prevChat])
+    // }, 1000) // Delayed by 1 second for demo purposes
   }
 
   useEffect(() => {
@@ -42,6 +52,17 @@ export default function AskQuestion() {
     lastChildElement?.scrollIntoView({ behavior: 'smooth' })
   }, [chatHistory])
 
+  useEffect(() => {
+    const fetchChat = async () => {
+      if (!user || !selectedDocument) return
+      const chat = await getChat(user, selectedDocument)
+      if (chat === null) await createOrUpdateChat(user, selectedDocument)
+      else setChatHistory(chat.chat)
+    }
+    fetchChat()
+  }, [selectedDocument])
+
+  console.log(chatHistory)
   return (
     <div className="flex h-screen flex-col">
       <div>

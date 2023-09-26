@@ -4,18 +4,14 @@ import { User } from '@/types/User'
 
 export async function createOrUpdateChat(user: User, documentName: string) {
   try {
-    const response = await fetch(
-      `${AWS_LAMBDA_BASE_URL}/users/${user.email}/chats/${documentName}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: user.token,
-        },
-        body: JSON.stringify({ userEmail: user.email, documentName }),
-      }
-    )
-
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/chats`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: user.token,
+      },
+      body: JSON.stringify({ userEmail: user.email, documentName, chat: [] }),
+    })
     if (!response.ok) {
       throw new Error(
         'Failed to create or update chat. Please try again later.'
@@ -83,21 +79,17 @@ export async function getChat(user: User, documentName: string) {
 export async function addMessageToChat(
   user: User,
   documentName: string,
-  message: { bot: string; user: string }
+  message: { isBot: boolean; message: string }
 ) {
   try {
-    const response = await fetch(
-      `${AWS_LAMBDA_BASE_URL}/users/${user.email}/chats/${documentName}/message`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: user.token,
-        },
-        body: JSON.stringify(message),
-      }
-    )
-
+    const response = await fetch(`${AWS_LAMBDA_BASE_URL}/chats`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: user.token,
+      },
+      body: JSON.stringify({ userEmail: user.email, documentName, message }),
+    })
     if (!response.ok) {
       throw new Error('Failed to add message to chat. Please try again later.')
     }

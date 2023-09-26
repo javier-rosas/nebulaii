@@ -59,9 +59,9 @@ export async function checkForJobCompletion(
   user: User,
   documentName: string
 ): Promise<string> {
-  const initialTimeout = 3000
+  const initialTimeout = 10_000
   async function fetchJobStatus(timeout: number): Promise<string> {
-    if (timeout > 128000) {
+    if (timeout > 200_000) {
       console.error('Job status check exceeded 128 seconds. Exiting.')
       return 'TIMEOUT' // Signal that the timeout was exceeded
     }
@@ -87,8 +87,8 @@ export async function checkForJobCompletion(
         await deleteJob(user.email, documentName, user.token)
         return 'SUCCESS'
       } else if (data.status === 'ERR') {
-        showErrorToast('Job failed.', 2000)
         console.log('Job failed.')
+        showErrorToast('Job failed.', 2000)
         return 'ERR'
       } else {
         console.error('Unexpected job status:', data.status)
