@@ -2,9 +2,11 @@ import {
   addMessageToChat,
   createOrUpdateChat,
   getChat,
+  search,
 } from '@/services/chatService'
 import { useEffect, useRef, useState } from 'react'
 
+import Spinner from '@/components/landing/Spinner'
 import useLocalStorageUser from '@/hooks/useLocalStorageUser'
 import ComboBox from './ComboBox'
 
@@ -19,7 +21,7 @@ export default function AskQuestion() {
   const [chatHistory, setChatHistory] = useState<Chat[]>([])
   const ref = useRef<HTMLDivElement | null>(null)
   const user = useLocalStorageUser()
-
+  const [spinner, setSpinner] = useState<boolean>(false)
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     if (!user || !selectedDocument || currentQuestion.trim() === '') return
@@ -29,22 +31,31 @@ export default function AskQuestion() {
       isBot: false,
     }
 
-    const res = await addMessageToChat(user, selectedDocument, userMessage)
-    if (!res._id) console.log("Couldn't add message to chat")
-
-    // const botResponse: Chat = {
-    //   message: `Bot: This is a sample response. q = ${currentQuestion}`,
-    //   isBot: true,
-    // }
+    const userMessageRes = await addMessageToChat(
+      user,
+      selectedDocument,
+      userMessage
+    )
+    if (!userMessageRes._id) console.log("Couldn't add message to chat")
 
     // Update chatHistory with user's message and then bot's response
     setChatHistory((prevChat) => [userMessage, ...prevChat])
     setCurrentQuestion('') // Resetting the input
 
-    // Simulate a response after a delay
-    // setTimeout(() => {
-    //   setChatHistory((prevChat) => [botResponse, ...prevChat])
-    // }, 1000) // Delayed by 1 second for demo purposes
+    setSpinner(true)
+    const response = await search(user, selectedDocument, currentQuestion)
+    const botResponse: Chat = {
+      message: `Bot: ${response}`,
+      isBot: true,
+    }
+    setSpinner(false)
+    setChatHistory((prevChat) => [botResponse, ...prevChat])
+    const botMessageRes = await addMessageToChat(
+      user,
+      selectedDocument,
+      botResponse
+    )
+    console.log(botMessageRes)
   }
 
   useEffect(() => {
@@ -56,8 +67,12 @@ export default function AskQuestion() {
     const fetchChat = async () => {
       if (!user || !selectedDocument) return
       const chat = await getChat(user, selectedDocument)
-      if (chat === null) await createOrUpdateChat(user, selectedDocument)
-      else setChatHistory(chat.chat)
+      if (chat === null) {
+        await createOrUpdateChat(user, selectedDocument)
+      } else {
+        const reversedChat = chat.chat.reverse()
+        setChatHistory(reversedChat)
+      }
     }
     fetchChat()
   }, [selectedDocument])
@@ -75,23 +90,26 @@ export default function AskQuestion() {
       {/* Wrapper for Chat and Search Bar */}
       <div className="flex flex-grow flex-col items-center justify-between">
         {/* Chat History */}
-        <div
-          ref={ref}
-          className="flex w-full max-w-xs flex-grow flex-col-reverse overflow-y-auto p-4 pb-20 sm:max-w-4xl"
-        >
-          {chatHistory.map((message, index) => (
-            <div
-              key={index}
-              className={`
+        {spinner ? (
+          <Spinner />
+        ) : (
+          <div
+            ref={ref}
+            className="flex w-full max-w-xs flex-grow flex-col-reverse overflow-y-auto p-4 pb-20 sm:max-w-4xl"
+          >
+            {chatHistory.map((message, index) => (
+              <div
+                key={index}
+                className={`
                 overflow-wrap break-word m-1 w-full break-words rounded-md p-2 shadow-sm 
                 ${message.isBot ? 'bg-blue-200' : 'bg-gray-200'}
             `}
-            >
-              {message.message}
-            </div>
-          ))}
-        </div>
-
+              >
+                {message.message}
+              </div>
+            ))}
+          </div>
+        )}
         {/* Text Area and Button */}
         <div className="fixed bottom-0 left-0 right-0 mx-auto w-full max-w-4xl bg-white p-4 shadow-md lg:left-64">
           <form

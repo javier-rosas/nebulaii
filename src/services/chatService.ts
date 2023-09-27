@@ -101,3 +101,32 @@ export async function addMessageToChat(
     )
   }
 }
+
+export async function search(
+  user: User,
+  documentName: string,
+  question: string
+) {
+  try {
+    const response = await fetch(
+      `${AWS_LAMBDA_BASE_URL}/users/${user.email}/documents/${documentName}/search`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: user.token,
+        },
+        body: JSON.stringify({ question }),
+      }
+    )
+    if (!response.ok) {
+      throw new Error('Failed to add message to chat. Please try again later.')
+    }
+    return response.json()
+  } catch (error) {
+    console.error(
+      `Error adding message to chat for user email: ${user.email} and document name: ${documentName}.`,
+      error
+    )
+  }
+}
