@@ -74,10 +74,11 @@ export default function AskQuestion() {
         setChatHistory(reversedChat)
       }
     }
+    setSpinner(true)
     fetchChat()
+    setSpinner(false)
   }, [selectedDocument])
 
-  console.log(chatHistory)
   return (
     <div className="flex h-screen flex-col">
       <div>
